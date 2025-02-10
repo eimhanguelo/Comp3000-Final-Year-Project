@@ -1,0 +1,401 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block network %}
+<div class="pagetitle">
+    <h1>Lan Transfer Ins.</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Users</a></li>
+            <li class="breadcrumb-item">IT Forms</li>
+            <li class="breadcrumb-item">Lan Transfer Ins</li>
+            <li class="breadcrumb-item active">Details</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="d-flex flex-column flex-md-row align-items-center mb-3">
+                        <!-- Title Section -->
+                        <h5 class="card-title d-flex align-items-center mb-0">
+                            <i class="bi bi-envelope me-2 text-primary"></i>
+                            Request for Instrument LAN Connectivity Transfer
+                        </h5>
+                        <h6 class="eticket-reference ms-md-auto" style="font-weight: bold;">
+                            <i class="fas fa-file-alt me-1"></i>
+                            <span style="text-decoration: underline;">Form No:</span> 
+                            <strong class="btn btn-info btn-sm mb-1 border-light border-1 ">
+                                <strong>{{ object }}</strong>
+                            </strong>
+                        </h6>
+
+                        <!-- E-Ticket Reference (only shown if eticket is available) -->
+                        {% if eticket %}
+                        <h6 class="eticket-reference ms-md-auto" style="font-weight: bold;">
+                            <i class="fas fa-file-alt me-1"></i>
+                            <span style="text-decoration: underline;">E-Ticket Ref:</span> 
+                            <strong class="btn btn-warning btn-sm mb-1 border-light border-1 ">
+                                <a href="{{ ticket_link }}" class="text-dark">
+                                    {{ formatted_ticket_id }}
+                                </a>
+                            </strong>
+                        </h6>
+                        {% endif %}
+
+                        <div class="btn-group" role="group">
+                            {% if signer_history == 'not_signed' or object.laninstrument_sign.sign_type == "Disagreed" %}
+                                <a type="button" class="btn btn-primary" href="{% url 'lantransferinstrument-update' object.id %}">Update</a>
+                            {% else %}
+                                <a type="button" class="btn btn-primary" disabled>Update</a>
+                            {% endif %}
+                            <a type="button" class="btn btn-success" href="{% url 'lantransferinstrument-pdf' object.id %}" target="_blank">View PDF</a>
+                        </div>
+                    </div>
+
+                    <!-- User Details Section -->
+                    <div>
+                        <h5 class="card-title">
+                            <i class="fas fa-user"></i> <!-- User icon -->
+                            User Details
+                        </h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered">
+                                <tr>
+                                    <th>Name :</th>
+                                    <td>{{ user_history.first_name }}</td>
+                                    <th>Email :</th>
+                                    <td>{{ user_history.email }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Department :</th>
+                                    <td>{{ profile_history.0.department }}</td>
+                                    <th>Designation :</th>
+                                    <td>{{ profile_history.0.position }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Employee ID :</th>
+                                    <td>{{ profile_history.0.emp_id }}</td>
+                                    <th>Contact :</th>
+                                    <td>{{ profile_history.0.phone }} || {{ profile_history.0.ext }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Address :</th>
+                                    <td>{{ profile_history.0.location }}, {{ profile_history.0.floor }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Form Details Section -->
+                    <div>
+                        <h5 class="card-title">
+                            <i class="fas fa-clipboard"></i> <!-- Form-related icon -->
+                            Form Details
+                        </h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered">
+                                <tr>
+                                    <th>Instrument/Printer Name:</th>
+                                    <td>{{ object.current_ip_address.instrument_id }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Instrument ID/Model:</th>
+                                    <td>{{ object.current_ip_address.instrument_name }}</td>
+                                </tr>
+                
+                                <tr>
+                                    <th>Current IP Address :</th>
+                                    <td>{{ object.current_ip_address }}</td>
+                                </tr>
+                
+                                <tr>
+                                    <th>Current Plant</th>
+                                    <td>{{ object.current_location }}, {{ object.current_floor }}</td>
+                                </tr>
+                
+                                <tr>
+                                    <th>Department:</th>
+                                    <td>{{ object.current_department}}</td>
+                                </tr>
+                                
+                                <tr>
+                                    <th>Transfer/Plant</th>
+                                    <td>{{ object.new_location }}, {{ object.new_floor }} - {{ object.new_department }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Contact Person Name</th>
+                                    <td>{{ object.contact_person.first_name }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Mobile No:</th>
+                                    <td>Phone: {{ object.contact_person.profile.phone }} ; Ext: {{ object.contact_person.profile.ext }}</td>
+                                </tr>
+                
+                                <tr>
+                                    <th>Justification:</th>
+                                    <td>{{ object.purpose_of_transfer }}</td>
+                                </tr>
+                
+                
+                                <tr>
+                                    <th>Head of Department:</th>
+                                    <td>{{ object.recommended_hod.first_name }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Head of HRD</th>
+                                    <td>
+                                        {% for hr_user in object.recommended_hr.all %}
+                                            {{ hr_user.first_name }}{% if not forloop.last %}, {% endif %}
+                                        {% empty %}
+                                            None
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                                
+                               
+                                <tr>
+                                    <th>Created Date :</th>
+                                    <td><small class="text-muted">{{ object.date_posted|date:"d M' Y P" }}</small></td>
+                                </tr>
+                
+                                
+                               <tr>
+                                {% if object.date_posted|date:"d M Y P" == object.date_updated|date:"d M Y P" %}
+                                {% else %}
+                                    <th>Updated Date : </th>
+                                    <td><small class="text-muted">{{ object.date_updated|date:"d M Y P" }}</small></td>
+                                {% endif %}
+                            </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Approval & Signature Section -->
+                    <div>
+                        <h5 class="card-title">
+                            <i class="fas fa-file-signature"></i> <!-- Icon for review and signing -->
+                            Approval & Signature
+                        </h5>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <tr style="color: dodgerblue; border-bottom: 1px solid gray">
+                                    <th>Title</th>
+                                    <th>Signer Name</th>
+                                    <th>Sign Type</th>
+                                    <th>Comment</th>
+                                    <th>Sign Date</th>
+                                </tr>
+                                <tr>
+                                    <th>Created By:</th>
+                                    <th>{{ user_history.first_name  }}</th>
+                                    <td>Created</td>
+                                    <td>Proceed</td>
+                                    <td>{{ object.date_posted|date:"d M' Y P" }}</td>
+                                </tr>
+                                
+                                <tr>
+                                    <th>Recommended By(HOD):</th>
+                        
+                                    {% if hod_history != 'not_signed' %}
+                                        <th>{{ hod_history.first_name }}</th>
+                                        {% if object.lantransfer_hod.sign_type == 'Agreed' %}
+                                            <td style="color: rgb(0, 128, 0); font-weight: bold;">{{ object.lantransfer_hod.sign_type }}</td>
+                                        {% else %}
+                                            <td style="color: rgb(255, 0, 0); font-weight: bold;">{{ object.lantransfer_hod.sign_type }}</td>
+                                        {% endif %}
+                                        <td>{{ object.lantransfer_hod.comment }}</td>
+                                        <td>{{ object.lantransfer_hod.date_updated|date:"d M' Y P" }}</td>
+                                    {% else %}
+                                        <td colspan="4" style="color: #f44336; font-weight: bold;">Pending Recommended By HOD</td>
+                                    {% endif %}
+                                </tr>
+                        
+                                <tr>
+                                    <th>Approved By(HRD):</th>
+                        
+                                    {% if hr_history != 'not_signed' %}
+                                        <th>{{ hr_history.first_name }}</th>
+                                        {% if object.lantransfer_hr.sign_type == 'Agreed' %}
+                                            <td style="color: rgb(0, 128, 0); font-weight: bold;">{{ object.lantransfer_hr.sign_type }}</td>
+                                        {% else %}
+                                            <td style="color: rgb(255, 0, 0); font-weight: bold;">{{ object.lantransfer_hr.sign_type }}</td>
+                                        {% endif %}
+                                        <td>{{ object.lantransfer_hr.comment }}</td>
+                                        <td>{{ object.lantransfer_hr.date_updated|date:"d M' Y P" }}</td>
+                                    {% else %}
+                                        <td colspan="4" style="color: #f44336; font-weight: bold;">Pending Approved By HRD</td>
+                                    {% endif %}
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- HOD Approval Section -->
+                    <div>
+                        {% if user == object.recommended_hod %}
+                            {% if hod_history == 'not_signed' %}
+                                <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'lantransferinstrument_hod-create' object.id %}">Recommended By(HOD) Sign</a>
+                            {% else %}
+                                {% if hr_history == 'not_signed' %}
+                                    <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'lantransferinstrument_hod-update' object.lantransfer_hod.id %}">Update Recommended By(HOD)</a>
+                                {% else %}
+                                    <p>You are not allowed to update Recommended By(HOD) Sign</p>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                
+                        {% if user in object.recommended_hr.all %}
+                            {% if hod_sign == 'yes' %}
+                                {% if hr_history == 'not_signed' %}
+                                    <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'lantransferinstrument_hr-create' object.id %}">Approved By(HRD) Sign</a>
+                                {% else %}
+                                    {% if admin_history == 'not_signed' %}
+                                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'lantransferinstrument_hr-update' object.lantransfer_hr.id %}">Update Approved By(HRD) Sign</a>
+                                    {% else %}
+                                        <p>You are not allowed to update Approved By(HRD) Sign</p>
+                                    {% endif %}
+                                {% endif %}
+                            {% else %}
+                                <p>Wait Until HOD Sign is completed..!!!</p>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+
+                    <!-- E-Ticket Information Section -->
+                    {% if eticket %}
+                    <div>
+                        <h5 class="card-title">
+                            <i class="fas fa-file-signature"></i> <!-- Icon for review and signing -->
+                            E-Ticket Information
+                        </h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered">
+                                <tr>
+                                    <th>Ticket Reference</th>
+                                    <td style="font-weight: bold; text-align: center; vertical-align: middle; padding: 15px;">
+                                        <a href="{{ ticket_link }}" class="form-link" aria-label="View ticket with reference {{ formatted_ticket_id }}">
+                                          <b>{{ formatted_ticket_id }}</b> 
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <tr style="color: dodgerblue; border-bottom: 1px solid gray">
+                                <th>eTicket will auto-generate after approval.</th>
+                            </tr>
+                        </table>
+                    </div>
+                    {% endif %}
+
+                    {% if object.lantransfer_hr.sign_type == "Agreed" %}
+                    <div>
+                        <h5 class="card-title">
+                            <i class="fas fa-user"></i> <!-- User icon -->
+                            IT Admin Section
+                        </h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered">
+                                <tr>
+                                    <th style="width: 25%;">Provide IP Address (If Required):</th>
+                                    <td style="width: 75%; color: darkmagenta;" colspan="3"><b>{{ object.laninstrumenttransfer_it.required_ip_address }}</b></td>
+                                </tr>
+                                <tr>
+                                    <th style="width: 25%;">Instrument/Printer Name:</th>
+                                    <td style="width: 75%;" colspan="3">{{ object.laninstrumenttransfer_it.required_ip_address.instrument_name }}</td>
+                                </tr>
+                                <tr>
+                                    <th style="width: 25%;">Instrument ID/Model:</th>
+                                    <td style="width: 75%;" colspan="3">{{ object.laninstrumenttransfer_it.required_ip_address.instrument_id }}</td>
+                                </tr>
+                            
+                                <tr>
+                                    <th style="width: 25%;">Current VLAN:</th>
+                                    <td style="width: 25%;">{{ object.current_ip_address.vlan }}</td>
+                                    <th style="width: 25%;">Required VLAN:</th>
+                                    <td style="width: 25%;">{{ object.laninstrumenttransfer_it.required_ip_address.vlan }}</td>
+                                </tr>
+                                <tr>
+                                    <th style="width: 25%;">Current Switch Name:</th>
+                                    <td style="width: 25%;">{{ object.current_ip_address.switch_name }}</td>
+                                    <th style="width: 25%;">Required Switch Name:</th>
+                                    <td style="width: 25%;">{{ object.laninstrumenttransfer_it.required_ip_address.switch_name }}</td>
+                                </tr>
+                                <tr>
+                                    <th style="width: 25%;">Current Port:</th>
+                                    <td style="width: 25%;">{{ object.current_ip_address.switch_port }}</td>
+                                    <th style="width: 25%;">Required Port:</th>
+                                    <td style="width: 25%;">{{ object.laninstrumenttransfer_it.required_ip_address.switch_port }}</td>
+                                </tr>
+                                <tr>
+                                    <th style="width: 25%;">Current Cable Tag:</th>
+                                    <td style="width: 25%;">{{ object.current_ip_address.cable_tag }}</td>
+                                    <th style="width: 25%;">Required Cable Tag:</th>
+                                    <td style="width: 25%;">{{ object.laninstrumenttransfer_it.required_ip_address.cable_tag }}</td>
+                                </tr>
+                            
+                                <tr>
+                                    <th style="width: 25%;">IT Admin:</th>
+                                    <td style="width: 75%;" colspan="3"><b>{{ admin_history.first_name }}</b></td>
+                                </tr>
+                                <tr>
+                                    <th style="width: 25%;">Comment:</th>
+                                    <td style="width: 75%;" colspan="3">{{ object.laninstrumenttransfer_it.comment }}</td>
+                                </tr>
+                                <tr>
+                                    <th style="width: 25%;">Completion Date:</th>
+                                    <td style="width: 75%;" colspan="3">{{ object.laninstrumenttransfer_it.date_updated }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    {% if user.is_staff %}
+        <div class="row">
+            <div class="col-sm-6" style="text-align: center; color: cornflowerblue;">
+                <a type="button" class="btn btn-primary btn-sm btn-block" style="background-color: rgb(98, 70, 161);" 
+                href="{% url 'lan-home' %}" target="_blank">
+                Provide Old IP <span class="glyphicon glyphicon-hand-right"></span> 
+                </a>
+            </div>
+                        
+            <div class="col-sm-6" style="text-align: center; color: darkblue;" >
+                <a type="button" class="btn btn-primary btn-sm btn-block" style="background-color: rgb(162, 90, 180);"
+                href="{% url 'lan-create' %}" target="_blank">
+                    Provide New IP <span class="glyphicon glyphicon-pencil"></span> 
+                    
+                </a> 
+            </div>
+            
+        </div>
+        <br>
+
+        {% if admin_history == 'not_signed' %}           
+            <a type="button" class="btn btn-primary btn-sm btn-block" style="background-color: rgb(157, 247, 213); color: darkblue;" 
+            href="{% url 'lantransferinstrument_it-create' object.id %}">
+                    IT Admin Sign This <span class="glyphicon glyphicon-thumbs-up"></span> 
+            </a>
+        {% else %}
+            <a type="button" class="btn btn-primary btn-sm btn-block" style="background-color: rgb(157, 247, 213); color: darkblue;" 
+            href="{% url 'lantransferinstrument_it-update' object.laninstrumenttransfer_it.id %}">
+                    IT Admin Update This <span class="fas fa-edit"></span> 
+            </a>
+        {% endif %}
+              
+        {% endif %}
+    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

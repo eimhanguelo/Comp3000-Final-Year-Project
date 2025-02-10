@@ -1,0 +1,152 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block network %}
+<div class="pagetitle">
+    <h1>Requisition Management</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Users</a></li>
+            <li class="breadcrumb-item">IT Forms</li>
+            <li class="breadcrumb-item">Requisition</li>
+            <li class="breadcrumb-item active">Create</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title d-flex align-items-center">
+                        <i class="bi bi-envelope me-2 text-primary"></i> Requisition for ICT Product
+                    </h5>
+                    <form method="POST" enctype="multipart/form-data" class="p-4">
+                        {% csrf_token %}
+                        
+                        <!-- Show non-field errors -->
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {% for error in form.non_field_errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <h6 class="text-primary">Basic Information</h6>
+                        <hr class="my-3">
+
+                        <!-- Requisition Type -->
+                        <div class="row mb-3">
+                            <label for="{{ form.requisition_type.id_for_label }}" class="col-sm-4 col-form-label">
+                                <i class="bi bi-person-fill me-1 text-info"></i> Requisition Type*:
+                            </label>
+                            <div class="col-sm-7">
+                                {{ form.requisition_type|as_crispy_field }}
+                                {% if form.requisition_type.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.requisition_type.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Cost Center -->
+                        <div class="row mb-3">
+                            <label for="{{ form.cost_center.id_for_label }}" class="col-sm-4 col-form-label">
+                                <i class="bi bi-briefcase-fill me-1 text-info"></i> Cost Center*:
+                            </label>
+                            <div class="col-sm-7">
+                                {{ form.cost_center|as_crispy_field }}
+                                {% if form.cost_center.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.cost_center.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Attachment -->
+                        <div class="row mb-3">
+                            <label for="{{ form.requisition_attachment.id_for_label }}" class="col-sm-4 col-form-label">
+                                <i class="bi bi-exclamation-circle me-1 text-info"></i> Attachment (If Any):
+                            </label>
+                            <div class="col-sm-7">
+                                {{ form.requisition_attachment|as_crispy_field }}
+                                {% if form.requisition_attachment.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.requisition_attachment.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Section for Approvals -->
+                        <h6 class="text-primary mt-4">Approvals</h6>
+                        <hr class="my-3">
+
+                        <!-- Recommended By -->
+                        <div class="row mb-2">
+                            <label for="{{ form.recommended_by.id_for_label }}" class="col-sm-4 col-form-label">
+                                <i class="bi bi-person-check-fill me-1 text-info"></i> Recommended By*:
+                            </label>
+                            <div class="col-sm-7">
+                                {{ form.recommended_by|as_crispy_field }}
+                                {% if form.recommended_by.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.recommended_by.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Approved HOD -->
+                        <div class="row mb-2">
+                            <label for="{{ form.recommended_hod.id_for_label }}" class="col-sm-4 col-form-label">
+                                <i class="bi bi-person-badge-fill me-1 text-info"></i> Approved HOD*:
+                            </label>
+                            <div class="col-sm-7">
+                                {{ form.recommended_hod|as_crispy_field }}
+                                {% if form.recommended_hod.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.recommended_hod.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Submit Button Section -->
+                        <div class="text-center mt-4">
+                            <span class="badge bg-warning text-dark p-1 rounded-5">
+                                To Add ICT Product Items
+                            </span>
+                            <button type="submit" class="btn btn-success rounded-pill mt-3" aria-label="Submit Requisition Form">
+                                <i class="bi bi-check-circle me-2"></i> Click Next &gt;&gt;
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Scripts -->
+<script type="text/javascript" src="{% static 'blog/jquery-3.5.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'blog/select2.min.js' %}"></script>
+
+
+{% endblock network %}

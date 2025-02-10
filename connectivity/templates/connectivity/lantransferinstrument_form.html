@@ -1,0 +1,283 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block network %}
+
+<div class="pagetitle">
+    <h1>LAN Management</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Users</a></li>
+            <li class="breadcrumb-item">IT Forms</li>
+            <li class="breadcrumb-item">LAN Transfer</li>
+            <li class="breadcrumb-item active">Create</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title d-flex align-items-center">
+                        <i class="bi bi-envelope me-2 text-primary"></i> Instrument LAN Connectivity Transfer Form
+                    </h5>
+                    <form method="POST" class="p-4">
+                        {% csrf_token %}
+                        
+                        <h6 class="text-primary">Basic Information</h6>
+                        <hr class="my-3">
+
+                        <!-- Current IP Address and Contact Person -->
+                        <div class="row mb-3">
+                            <label for="current_ip_address" class="col-sm-2 col-form-label">
+                                <i class="bi bi-person-fill me-1 text-info"></i>Current IP Address* :
+                            </label>
+                            <div class="col-sm-4">
+                                {{ form.current_ip_address|as_crispy_field }}
+                            </div>
+                            <label for="contact_person" class="col-sm-2 col-form-label">
+                                <i class="bi bi-briefcase-fill me-1 text-info"></i>Contact Person: 
+                            </label>
+                            <div class="col-sm-4">
+                                {{ form.contact_person|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <!-- Current Location Details -->
+                        <div class="row mb-3">
+                            <label for="current_location" class="col-sm-2 col-form-label">
+                                <i class="bi bi-building me-1 text-info"></i>Current Location: 
+                            </label>
+                            <div class="col-sm-10">
+                                <div class="row g-3">
+                                    <div class="col-sm-4">
+                                        {{ form.current_department|as_crispy_field }}
+                                    </div>
+                                    <div class="col-sm-4">
+                                        {{ form.current_location|as_crispy_field }}
+                                    </div>
+                                    <div class="col-sm-4">
+                                        {{ form.current_floor|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- New Location Details -->
+                        <div class="row mb-3">
+                            <label for="new_location" class="col-sm-2 col-form-label">
+                                <i class="bi bi-building me-1 text-info"></i>New Location:
+                            </label>
+                            <div class="col-sm-10">
+                                <div class="row g-3">
+                                    <div class="col-sm-4">
+                                        {{ form.new_department|as_crispy_field }}
+                                    </div>
+                                    <div class="col-sm-4">
+                                        {{ form.new_location|as_crispy_field }}
+                                    </div>
+                                    <div class="col-sm-4">
+                                        {{ form.new_floor|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Justification -->
+                        <div class="row mb-3">
+                            <label for="purpose_of_transfer" class="col-sm-2 col-form-label">
+                                <i class="bi bi-exclamation-circle me-1 text-info"></i> Justification* : 
+                            </label>
+                            <div class="col-sm-10">
+                                {{ form.purpose_of_transfer|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Approvals -->
+                        <h6 class="text-primary mt-4">Approvals</h6>
+                        <hr class="my-3">
+                        <div class="row mb-2">
+                            <label for="recommended_hod" class="col-sm-2 col-form-label">
+                                <i class="bi bi-person-check-fill me-1 text-info"></i> Approved HOD* :
+                            </label>
+                            <div class="col-sm-10">
+                                {{ form.recommended_hod|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <!-- Submit Button Section -->
+                        <div class="text-center py-4">
+                            <button type="submit" class="btn btn-success rounded-pill" aria-label="Submit Form">
+                                <i class="bi bi-check-circle me-2"></i> Submit
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock network %}
+
+
+{% comment %} {% extends "blog/basef.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+
+
+    <div class="content-section">
+    <form method="POST">
+
+        <legend class="border-bottom mb-4" style="text-align: center; font-weight: bold; color: #3366ff;"> Instrument LAN Connectivity Transfer</legend>
+        {% csrf_token %}
+
+        <div class="form-row">
+            <div class="form-group col-md-12 mb-0">
+                {{ form.current_ip_address|as_crispy_field }}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4 mb-0">
+                {{ form.current_location|as_crispy_field }}
+            </div>
+            <div class="form-group col-md-4 mb-0">
+                {{ form.current_floor|as_crispy_field }}
+            </div>
+            <div class="form-group col-md-4 mb-0">
+                {{ form.current_department|as_crispy_field }}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4 mb-0">
+                {{ form.new_location|as_crispy_field }}
+            </div>
+            <div class="form-group col-md-4 mb-0">
+                {{ form.new_floor|as_crispy_field }}
+            </div>
+            <div class="form-group col-md-4 mb-0">
+                {{ form.new_department|as_crispy_field }}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12 mb-0">
+                {{ form.contact_person|as_crispy_field }}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12 mb-0">
+                {{ form.purpose_of_transfer|as_crispy_field }}
+            </div>
+        </div>
+       
+        
+        <div class="form-row">
+            <div class="form-group col-md-12 mb-0">
+                {{ form.recommended_hod|as_crispy_field }}
+            </div>
+        </div>
+
+        
+        <div class="form-row" style="text-align: center;">
+                <button id="send-mail-btn" class="btn btn-primary" type="submit">Submit Now</button>
+        </div>
+        
+    </form>
+</div>
+
+
+    <!-- Include JavaScript libraries -->
+    <script src="{% static 'blog/jquery-3.5.1.min.js' %}"></script>
+    <script src="{% static 'blog/select2.min.js' %}"></script>
+    <script src="{% static 'blog/jquery.multiselect.min.js' %}"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Initialize Select2 for current_ip_address
+            $('#id_current_ip_address').select2({
+                ajax: {
+                    url: '{% url 'display_ip_used' %}',
+                    dataType: 'json',
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data, function (item) {
+                                return { id: item.id, text: item.ip_address };
+                            })
+                        };
+                    }
+                },
+                minimumInputLength: 1,
+                placeholder: 'Search for an IP address',
+                allowClear: true
+            });
+
+            // Initialize Select2 for recommended_hod
+            $('#id_recommended_hod').select2({
+                ajax: {
+                    url: '{% url 'display_name' %}',
+                    dataType: 'json',
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data, function (item) {
+                                return { id: item.id, text: item.first_name };
+                            })
+                        };
+                    }
+                },
+                minimumInputLength: 1,
+                placeholder: 'Search HOD using display name',
+                allowClear: true
+            });
+
+            // Initialize Select2 for recommended_hr
+            $('#id_recommended_hr').select2({
+                ajax: {
+                    url: '{% url 'display_name_hr' %}',
+                    dataType: 'json',
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data, function (item) {
+                                return { id: item.id, text: item.first_name };
+                            })
+                        };
+                    }
+                },
+                minimumInputLength: 1,
+                placeholder: 'Search HR using display name',
+                allowClear: true
+            });
+
+
+            $(document).ready(function () {
+                $('#id_contact_person').select2({
+                    ajax: {
+                        url: '{% url 'display_name' %}',
+                        dataType: 'json',
+                        processResults: function (data) {
+                            return {
+                                results: $.map(data, function (item) {
+                                    return {id: item.id, text: item.first_name};
+                                })
+                            };
+                        }
+                    },
+                    minimumInputLength: 1,
+                    placeholder: 'Search user using display name',
+                    allowClear: true,
+                });
+            });
+
+
+            // Initialize Multiselect for transfer_list
+            $('#id_transfer_list').multiselect();
+        });
+    </script>
+
+{% endblock content %} {% endcomment %}

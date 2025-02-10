@@ -1,0 +1,526 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block network %}
+
+<div class="pagetitle">
+    <h1>LAN Management</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Users</a></li>
+            <li class="breadcrumb-item">LAN</li>
+            <li class="breadcrumb-item active">Create</li>
+        </ol>
+    </nav>
+</div>
+
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title d-flex align-items-center">
+                        <i class="fa fa-cogs me-2 text-primary"></i> Master Network Inventory Form
+                    </h5>
+                    <form method="POST" class="p-4">
+                        {% csrf_token %}
+
+                        <!-- Section: Basic Information -->
+                        <h6 class="text-primary">Basic Information</h6>
+                        <hr class="my-3">
+
+                        <div class="row mb-3">
+                            <!-- IP Address and Computer Name fields on the same row -->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_ip_address" class="form-label">
+                                            <i class="bi bi-laptop me-1 text-info"></i> IP Address*
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.ip_address|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_computer_name" class="form-label">
+                                            <i class="bi bi-device-desktop me-1 text-info"></i> Computer Name
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.computer_name|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <!-- Used By and IP Used fields on the same row -->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_used_by" class="form-label">
+                                            <i class="bi bi-person-fill me-1 text-info"></i> Used By
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.used_by|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_ip_used" class="form-label">
+                                            <i class="bi bi-card-text me-1 text-info"></i> IP Used
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.ip_used|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <!-- OS and VLAN fields on the same row -->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_os" class="form-label">
+                                            <i class="bi bi-windows me-1 text-info"></i> Select OS
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.os|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_vlan" class="form-label">
+                                            <i class="bi bi-collection me-1 text-info"></i> VLAN
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.vlan|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <!-- CPU Model and Cable Tag fields on the same row -->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_cpu_model" class="form-label">
+                                            <i class="bi bi-cpu me-1 text-info"></i>Select CPU Model
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.cpu_model|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_cable_tag" class="form-label">
+                                            <i class="bi bi-plug me-1 text-info"></i> Cable Tag
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.cable_tag|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <!-- Switch Name and Switch Port fields on the same row -->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_switch_name" class="form-label">
+                                            <i class="bi bi-arrow-right-circle me-1 text-info"></i>Select Switch Name
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.switch_name|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_switch_port" class="form-label">
+                                            <i class="bi bi-toggle-on me-1 text-info"></i> Switch Port
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.switch_port|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <!-- Printer Model and Scanner Model fields on the same row -->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_printer_model" class="form-label">
+                                            <i class="bi bi-printer me-1 text-info"></i>Select Printer Model
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.printer_model|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_scanner_model" class="form-label">
+                                            <i class="bi bi-camera  me-1 text-info"></i>Select Scanner Model
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.scanner_model|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <!-- Location and Floor fields on the same row -->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_location" class="form-label">
+                                            <i class="bi bi-geo-alt me-1 text-info"></i>Select Location
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.location|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_floor" class="form-label">
+                                            <i class="bi bi-building me-1 text-info"></i>Select Floor
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.floor|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <!-- Instrument ID and Instrument Name fields on the same row -->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_instrument_id" class="form-label">
+                                            <i class="bi bi-tag me-1 text-info"></i> Instrument ID
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.instrument_id|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_instrument_name" class="form-label">
+                                            <i class="bi bi-box-seam me-1 text-info"></i> Instrument Name
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.instrument_name|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-2">
+                                <label for="id_remarks" class="form-label">
+                                    <i class="bi bi-chat-left-dots me-1 text-info"></i> Remarks
+                                </label>
+                            </div>
+                            <div class="col-md-10">
+                                {{ form.remarks|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+                        <!-- Submit Button Section -->
+                        <div class="text-center py-4">
+                            <button type="submit" class="btn btn-success rounded-pill" aria-label="Submit Form">
+                                <i class="bi bi-check-circle me-2"></i>
+                                Submit
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#id_used_by').select2({
+            ajax: {
+                url: '{% url 'display_name' %}',
+                dataType: 'json',
+                processResults: function (data) {
+                    return {
+                        results: $.map(data, function (item) {
+                            return {id: item.id, text: item.first_name};
+                        })
+                    };
+                }
+            },
+            minimumInputLength: 1,
+            placeholder: 'Search user using display name',
+            allowClear: true,
+        });
+    });
+</script>
+
+{% endblock network %}
+
+{% comment %} {% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block network %}
+
+<div class="pagetitle">
+    <h1>LAN Management</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Users</a></li>
+            <li class="breadcrumb-item">LAN</li>
+            <li class="breadcrumb-item active">Create</li>
+        </ol>
+    </nav>
+</div>
+
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-lg-10 col-md-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title d-flex align-items-center">
+                        <i class="bi bi-envelope me-2 text-primary"></i> LAN Inventory Form
+                    </h5>
+                    <form method="POST" class="p-4">
+                        {% csrf_token %}
+
+                        <!-- Section: Basic Information -->
+                        <h6 class="text-primary">Basic Information</h6>
+                        <hr class="my-3">
+
+                        <!-- Grouping Fields in Responsive Grid -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_ip_address" class="form-label">
+                                            <i class="bi bi-laptop me-1 text-info"></i> IP Address*
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.ip_address|as_crispy_field }}
+                                    </div>
+                            </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="id_computer_name" class="form-label">
+                                    <i class="bi bi-device-desktop me-1 text-info"></i> Computer Name
+                                </label>
+                                {{ form.computer_name|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="id_used_by" class="form-label">
+                                    <i class="bi bi-person-fill me-1 text-info"></i> Used By
+                                </label>
+                                {{ form.used_by|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="id_ip_used" class="form-label">
+                                    <i class="bi bi-card-text me-1 text-info"></i> IP Used
+                                </label>
+                                {{ form.ip_used|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="id_os" class="form-label">
+                                    <i class="bi bi-windows me-1 text-info"></i> Select OS
+                                </label>
+                                {{ form.os|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="id_vlan" class="form-label">
+                                    <i class="bi bi-collection me-1 text-info"></i> VLAN
+                                </label>
+                                {{ form.vlan|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="id_cpu_model" class="form-label">
+                                    <i class="bi bi-cpu me-1 text-info"></i>Select CPU Model
+                                </label>
+                                {{ form.cpu_model|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="id_cable_tag" class="form-label">
+                                    <i class="bi bi-plug me-1 text-info"></i> Cable Tag
+                                </label>
+                                {{ form.cable_tag|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="id_switch_name" class="form-label">
+                                    <i class="bi bi-arrow-right-circle me-1 text-info"></i>Select Switch Name
+                                </label>
+                                {{ form.switch_name|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="id_switch_port" class="form-label">
+                                    <i class="bi bi-toggle-on me-1 text-info"></i> Switch Port
+                                </label>
+                                {{ form.switch_port|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="id_printer_model" class="form-label">
+                                    <i class="bi bi-printer me-1 text-info"></i>Select Printer Model
+                                </label>
+                                {{ form.printer_model|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="id_scanner_model" class="form-label">
+                                    <i class="bi bi-scanner me-1 text-info"></i>Select Scanner Model
+                                </label>
+                                {{ form.scanner_model|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="id_location" class="form-label">
+                                    <i class="bi bi-geo-alt me-1 text-info"></i>Select Location
+                                </label>
+                                {{ form.location|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="id_floor" class="form-label">
+                                    <i class="bi bi-building me-1 text-info"></i>Select Floor
+                                </label>
+                                {{ form.floor|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="id_instrument_id" class="form-label">
+                                    <i class="bi bi-tag me-1 text-info"></i> Instrument ID
+                                </label>
+                                {{ form.instrument_id|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="id_instrument_name" class="form-label">
+                                    <i class="bi bi-box-seam me-1 text-info"></i> Instrument Name
+                                </label>
+                                {{ form.instrument_name|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="id_remarks" class="form-label">
+                                    <i class="bi bi-chat-left-dots me-1 text-info"></i> Remarks
+                                </label>
+                                {{ form.remarks|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <!-- Submit Button Section -->
+                        <div class="text-center py-4">
+                            <button type="submit" class="btn btn-success rounded-pill" aria-label="Submit Form">
+                                <i class="bi bi-check-circle me-2"></i>
+                                Submit
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#id_used_by').select2({
+            ajax: {
+                url: '{% url 'display_name' %}',
+                dataType: 'json',
+                processResults: function (data) {
+                    return {
+                        results: $.map(data, function (item) {
+                            return {id: item.id, text: item.first_name};
+                        })
+                    };
+                }
+            },
+            minimumInputLength: 1,
+            placeholder: 'Search user using display name',
+            allowClear: true,
+        });
+    });
+</script>
+
+{% endblock network %} {% endcomment %}

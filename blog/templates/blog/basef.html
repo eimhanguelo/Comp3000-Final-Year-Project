@@ -1,0 +1,396 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+        <title>Square Pharma</title>
+
+            <!------------------------------- Bootstrap core CSS offline------------------->
+            <link href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+            <!-- -------------------------------------------------------------------------->
+    
+
+        <!-- Bootstrap CSS CDN -->
+        <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+
+        
+        
+
+        <link rel="stylesheet" type="text/css" href="{% static 'blog/main.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'blog/main2.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'blog/chat.css' %}">
+        
+        <link rel="stylesheet" type="text/css" href="{% static 'blog/admin_cart.css' %}">
+
+        <!-- Jquery-->
+        <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"> -->
+
+        <!-- Latest compiled and minified JavaScript -->
+        <link rel="stylesheet" type="text/css" href="{% static 'blog/fontawesome-v5.3.1.css' %}">
+        <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+              integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> -->
+
+        <!-- HTMX link -->
+        <!-- <script src="https://unpkg.com/htmx.org@1.6.1"></script> -->
+        <script type="text/javascript" src="{% static 'blog/htmx.min.js' %}"></script>
+
+
+
+        <!----------------------------select2---------------------------------->
+        <link rel="stylesheet" type="text/css" href="{% static 'blog/select2/dist/css/select2.min.css' %}">
+        
+        <!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet"/> -->
+
+
+        <!----------------------------Animation CSS---------------------------------->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+        <style>
+            #send-mail-btn {
+                background-color: #007bff; /* Primary color */
+                border: none; /* Remove default border */
+                color: white; /* Text color */
+                padding: 10px 15px; /* Padding for a larger button */
+                text-align: center; /* Centered text */
+                text-decoration: none; /* Remove underline */
+                display: inline-block; /* Display as inline-block */
+                font-size: 15px; /* Larger font size */
+                font-weight: bold; /* Bold text */
+                margin: 10px 2px; /* Margin around the button */
+                cursor: pointer; /* Pointer cursor on hover */
+                border-radius: 50px; /* Rounded corners */
+                transition: background-color 0.3s, transform 0.3s; /* Smooth transition effects */
+            }
+        
+            #send-mail-btn:hover {
+                background: linear-gradient(45deg, #2575fc, #6a11cb);
+                transform: translateY(-3px);
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            }
+        
+            #send-mail-btn:active {
+                transform: translateY(-1px);
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            }
+        </style>
+
+        {% load static %}
+        {% load notifications_tags %}
+        <script type="text/javascript" src="{% static 'notifications/notify.js' %}" ></script>
+        <script type="text/javascript" src="{% static 'blog/notify.js' %}" ></script>
+    </head>
+   <body style="background-image: url('/static/img/bg23.jpg');">
+    <!-- <body> -->
+
+        <div class="wrapper">
+            <!-- Sidebar Holder -->
+            {% if user.is_authenticated %}
+            <nav id="sidebar">
+
+
+                <div class="sidebar-header" style="align-content: center">
+
+                    <img class="account-img" src="{{ user.profile.image.url }}">
+                </div>
+
+                <ul class="list-unstyled components">
+
+                {% if user.is_staff %}
+
+                    <li>
+                        <a href="{% url 'admin-home'%}">
+                            <i class="glyphicon glyphicon-globe"></i> Admin Home </a>
+                    </li>
+
+                    <li>
+                        <a href="{% url 'ticket-engineers' user.username %}">
+                            <i class="glyphicon glyphicon-folder-open"> </i>  eTicket </a>
+                    </li>
+                    
+                    <li>
+                        <a href="{% url 'tracker_list' %}">
+                            <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                            Tracker Notes
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'lan-home' %}">
+                            <span class="glyphicon glyphicon-signal" aria-hidden="true"></span>
+                            Network Section
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'phone-home' %}">
+                            <span class="glyphicon glyphicon-phone" aria-hidden="true"></span>
+                            Phone Inventory
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'inventory-home' %}">
+                            <span class="glyphicon glyphicon-hdd" aria-hidden="true"></span>
+                            Hardware Inventory
+                        </a>
+                    </li>
+
+                {% endif %}
+
+                    <li>
+                        <a href="{% url 'user-home' user.username %}">
+                            <i class="glyphicon glyphicon-user"></i> My Home </a>
+                    </li>
+                     <li>
+                        <a href="{% url 'ticket-users' user.username %}">
+                            <i class="glyphicon glyphicon-envelope"></i>
+                                           User eTicket </a>
+                    </li> 
+
+                    <li>
+                        <a href="{% url 'user-review' user.username %}">
+                            <i class="glyphicon glyphicon-inbox"> </i> Form Review </a>
+                    </li>
+                    {% if user.profile.is_productivity_admin %}
+                    <li>
+                        <a href="{% url 'admin-suggestion-box' %}">
+                            <i class="glyphicon glyphicon-leaf"> </i> Suggestion Box </a>
+                    </li>
+                    {% endif %}
+                    <li>
+                        <a href="{% url 'profile' %}">
+                            <i class="glyphicon glyphicon-cog"> </i> Profile Update</a>
+                    </li>
+
+
+                </ul>
+            </nav>
+            {% endif %}
+
+            <!-- Page Content Holder -->
+            <div id="content" >
+
+                <nav class="navbar navbar-default div-shadow">
+                    <div class="container-fluid">
+
+
+                        <div class="navbar-header">
+                            <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+                                <i class="glyphicon glyphicon-align-left"></i>
+                                <span>Toggle Sidebar</span>
+                            </button>
+                        </div>
+
+                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+                            <ul class="nav navbar-nav navbar-right">
+                                {% if user.is_authenticated%}
+
+                                <li>
+                                    {% notifications_unread as unread_count %}
+                                    {% if unread_count %}
+                                        {% register_notify_callbacks callbacks='fill_notification_list, fill_notification_badge, my_special_notification_callback' %}
+                                        <a class="nav-link" href="{% url 'notification' %}">{% live_notify_badge %}
+                                            <i class="fas fa-bell"> </i>
+                                        </a>
+                                    {% endif %}
+                                </li>
+                                <li><a>{{ user.first_name }}</a></li>
+                                <li><a href="{% url 'logout' %}">Logout</a></li>
+
+                                {% endif %}
+                            </ul>
+
+
+                        </div>
+                    </div>
+                </nav>
+                {% if not user.profile.emp_id or not user.profile.department.name or not user.profile.location.name %}
+                    <div style="text-align: center; font-size: x-large;">
+                        <span id="blinker">
+                            <h5 style="color: #bd2130;"> 
+                                Your profile is incomplete, Update now to get started!
+                            </h5>
+                        </span>
+                    </div>
+                {% endif %}
+                
+                <div class="col-md-10 bg-text" style="margin-left: 100px">
+
+                        <div style="text-align: center; ">
+                            <span id="blinker">
+                                <h5 style="text-align: center; color: #bd2130"> 
+                                    {% if messages %}
+                                        {% for message in messages %}
+                                        <div class="alert alert-{{ message.tags }}">
+                                            {{ message }}
+                                        </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </h5>
+                            </span>
+                        </div>
+                  {% block content %} {% endblock %}
+                  
+                </div>
+                <div class="col-md-10" style="margin-left: 100px">                    
+                    {% block network %} {% endblock %}
+                  </div>
+
+
+            </div>
+        </div>
+
+             <!---------------------------blink---------------------------------------->
+             <script type="text/javascript" src="{% static 'blog/jquery-1.12.js' %}"></script>
+             <!------------------------------------------------------------------------>
+     
+              <!-- jQuery CDN -->
+           
+             <!-- -----------------------Bootstrap core JavaScript OFFLINE-------------------------- -->
+             <script src="{% static 'bootstrap/js/tests/vendor/jquery.min.js' %}"></script>
+             <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+             <!----------------------------------------------------------------------------------->
+     
+         
+             <!-- Bootstrap Js CDN -->
+             <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+             <!-- jQuery Custom Scroller CDN -->
+             <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+     
+             <script src="{% static 'blog/ajax.jquery-1.8.2.js' %}"></script>
+     
+     
+     
+     
+     
+              <!-- -------------------------Data Table Download---------------------------------------->
+              <script type="text/javascript" src="{% static 'blog/jquery-3.5.1.min.js' %}"></script>
+              <script type="text/javascript" src="{% static 'blog/jquery.dataTables.min.js' %}"></script>
+              <script type="text/javascript" src="{% static 'blog/dataTables.buttons.min.js' %}"></script>
+              <script type="text/javascript" src="{% static 'blog/buttons.colVis.min.js' %}"></script>
+      
+      
+      
+              <script type="text/javascript" src="{% static 'blog/pdfmake.min.js' %}"></script>
+              <script type="text/javascript" src="{% static 'blog/vfs_fonts.js' %}"></script>
+              <script type="text/javascript" src="{% static 'blog/datatables.min2.js' %}"></script>
+              <script type="text/javascript" src="{% static 'blog/ip-address.js' %}"></script>
+     
+              <script type="text/javascript" src="{% static 'blog/dataTables.editor.min.js' %}"></script>
+              
+     
+     
+             <!---------------------------blink---------------------------------------->
+             <script type="text/javascript" src="{% static 'blog/blink.js' %}"></script>
+             <!------------------------------------------------------------------------>
+     
+             <!---------------------------Eye drop down Collapse---------------------------------------->
+             <script type="text/javascript" src="{% static 'blog/eye-open.js' %}"></script>
+             <!------------------------------------------------------------------------>
+     
+             <!---------------------------data table---------------------------------------->
+             <script type="text/javascript" src="{% static 'blog/table.js' %}"></script>
+             <!----------------------------------------------------------------------------->
+     
+             <!---------------------------Pop over---------------------------------------->
+             <script type="text/javascript" src="{% static 'blog/popover.js' %}"></script>
+             <!----------------------------------------------------------------------------->
+     
+     
+             <!---------------------------kit awesome icon---------------------------------------->
+             <script type="text/javascript" src="{% static 'blog/fontawesome-v5.3.js' %}"></script>
+             <!----------------------------------------------------------------------------->
+     
+             <!---------------------------Number Counter---------------------------------------->
+             <script type="text/javascript" src="{% static 'blog/number_counter.js' %}"></script>
+             <!----------------------------------------------------------------------------->
+     
+        <!-- jQuery CDN -->
+
+        <!---------------------------jQuery CDN OFFLINE---------------------------------------->
+        <script type="text/javascript" src="{% static 'blog/jquery-1.12.js' %}"></script>
+        <!------------------------------------------------------------------------>
+        
+        <!-- -----------------------Bootstrap core JavaScript OFFLINE-------------------------- -->
+        <!-- <script src="{% static 'bootstrap/js/tests/vendor/jquery.min.js' %}"></script> -->
+        <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+        <!----------------------------------------------------------------------------------->
+
+        <script src="{% static 'blog/ajax.jquery-1.8.2.js' %}"></script>
+        <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script> -->
+
+
+        <!-- Bootstrap Js CDN -->
+        <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+        <!-- jQuery Custom Scroller CDN -->
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script> -->
+
+
+
+        <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> -->
+
+
+        <!--------------------------------------select2---------------------------->
+        <script type="text/javascript" src="{% static 'blog/select2/dist/js/select2.min.js' %}"></script>
+        <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script> -->
+
+
+        <!---------------------------Eye drop down Collapse------------------------->
+        <script type="text/javascript" src="{% static 'blog/eye-open.js' %}"></script>
+        <!------------------------------------------------------------------------>
+
+        <!---------------------------Pop over---------------------------------------->
+        <script type="text/javascript" src="{% static 'blog/popover.js' %}"></script>
+        <!----------------------------------------------------------------------------->
+
+
+        <!---------------------------kit awesome icon---------------------------------------->
+        <script type="text/javascript" src="{% static 'blog/fontawesome-941e3a20e9.js' %}"></script>
+        <!-- <script type="text/javascript" src="https://kit.fontawesome.com/941e3a20e9.js" crossorigin="anonymous"></script> -->
+        <!----------------------------------------------------------------------------->
+
+        <!---------------------------Number Counter---------------------------------------->
+        <script type="text/javascript" src="{% static 'blog/number_counter.js' %}"></script>
+        <!----------------------------------------------------------------------------->
+
+
+
+
+
+
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#sidebarCollapse').on('click', function () {
+                    $('#sidebar, #content').toggleClass('active');
+                    $('.collapse.in').toggleClass('in');
+                    $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+                });
+            });
+        </script>
+
+        <script>
+            $(document).ready(function () {
+
+                $('ul.sidebar > li')
+                        .click(function (e) {
+                    $('ul.sidebar components > li')
+                        .removeClass('active');
+                    $(this).addClass('active');
+                });
+            });
+        </script>
+
+        
+        <!-- --------------------------------HTMX-------------------------- -->
+
+        <script>
+            document.body.addEventListener('htmx:configRequest', (event) =>{
+                event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+            })
+        </script>
+
+        {% include 'blog/inactivity_timer.html' %} 
+
+    </body>
+</html>

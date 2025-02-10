@@ -1,0 +1,114 @@
+{% extends "blog/test.html" %}
+
+{% block title %} Test {% endblock %}
+{%  block content %}
+
+<div class="container">
+    <h1><i class="fas fa-chalkboard-teacher"></i> Test Employee Table </h1>
+    <hr>
+
+<table id="table_id" class="display" border='2' align="center"  style="width:100%">
+
+    <caption><i>Yogi Coder Class Offerings</i></caption>
+
+    <thead>
+ <tr>
+     <th>Course ID</th>
+     <th>Title</th>
+     <th>IP </th>
+     <th>Year Produced</th>
+     <th>Series</th>
+     <th >Training URL</th>
+  </tr>
+ </thead>
+        <tbody>
+            <tr>
+                <td>Tiger Nixon</td>
+                <td>System Architect</td>
+                <td>172.25.99.91</td>
+                <td>61</td>
+                <td>2011/04/25</td>
+                <td>$320,800</td>
+            </tr>
+            <tr>
+                <td>Garrett Winters</td>
+                <td>Accountant</td>
+                <td>{settings.WEB_HOST}</td>
+                <td>63</td>
+                <td>2011/07/25</td>
+                <td>$170,750</td>
+            </tr>
+            <tr>
+                <td>Ashton Cox</td>
+                <td>Junior Technical Author</td>
+                <td>172.25.99.89</td>
+                <td>66</td>
+                <td>2009/01/12</td>
+                <td>$86,000</td>
+            </tr>
+            
+            </tr>
+            <tr>
+                <td>Jonas Alexander</td>
+                <td>Developer</td>
+                <td>172.25.12.11</td>
+                <td>30</td>
+                <td>2010/07/14</td>
+                <td>$86,500</td>
+            </tr>
+            <tr>
+                <td>Shad Decker</td>
+                <td>Regional Director</td>
+                <td>172.25.12.100</td>
+                <td>51</td>
+                <td>2008/11/13</td>
+                <td>$183,000</td>
+            </tr>
+            <tr>
+                <td>Michael Bruce</td>
+                <td>Javascript Developer</td>
+                <td>172.25.12.96</td>
+                <td>29</td>
+                <td>2011/06/27</td>
+                <td>$183,000</td>
+            </tr>
+            <tr>
+                <td>Donna Snider</td>
+                <td>Customer Support</td>
+                <td>172.25.12.91</td>
+                <td>27</td>
+                <td>2011/01/25</td>
+                <td>$112,000</td>
+            </tr>
+        </tbody>
+    </table>
+    <hr>
+{% endblock %}
+ {% block js %}
+
+    <script type="text/javascript" src="https:////cdn.datatables.net/plug-ins/1.11.5/sorting/ip-address.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.0/b-1.5.2/b-colvis-1.5.2/b-flash-1.5.2/b-html5-1.5.2/b-print-1.5.2/cr-1.5.0/fh-3.1.4/r-2.2.2/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.0/b-1.5.2/b-colvis-1.5.2/b-flash-1.5.2/b-html5-1.5.2/b-print-1.5.2/cr-1.5.0/fh-3.1.4/r-2.2.2/datatables.min.js"></script>
+    <script>
+        $(document).ready( function () {
+        $('#table_id').DataTable({
+            columnDefs: [
+                { 
+                    type: 'ip-address', targets: 2 }
+                ],
+
+        // dom: 'B<"clear">lfrtip',
+            buttons: {
+                name: 'primary',
+                buttons: [ 'copy', 'csv', 'excel', 'pdf' ]
+
+                }}
+            );
+        } );
+    </script>
+    </div>
+{% endblock %}

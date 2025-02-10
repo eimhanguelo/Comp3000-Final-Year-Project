@@ -1,0 +1,232 @@
+{% load static %}
+
+<html lang="en">
+
+<head>
+	<title> {{ runset }}</title>
+
+	<style>
+
+		  @page {
+			size: a4 portrait;
+			@frame header_frame {           /* Static Frame */
+				-pdf-frame-content: header_content;
+				left: 50pt; width: 512pt; top: 30pt; height: 30pt;
+			}
+			@frame content_frame {          /* Content Frame */
+				left: 50pt; width: 512pt; top: 30pt; height: 700pt;
+			}
+			@frame footer_frame {           /* Another static Frame */
+				-pdf-frame-content: footer_content;
+				left: 50pt; width: 512pt; top: 750pt; height: 85pt;
+			}
+		}
+
+		  .center {
+			  font-size: 15px;
+			  margin: auto;
+			  width: 100%;
+			  font-weight: bold;
+			  border: 2px solid black;
+			  background-color: lightgrey;
+			  padding: 5px;
+			  text-align: center;
+			}
+
+
+		.article {
+			font-size: 10px;
+			padding: 10px;
+			border: 1px solid black;
+			background-color: #f1f1f1;
+			height: 320px;
+		}
+		#employee {
+				  font-family: Arial, Helvetica, sans-serif;
+				  border-collapse: collapse;
+				  width: 100%;
+				  font-size: 12px;
+
+				}
+
+		#employee td {
+				  border: 1px solid black;
+				  padding: 2px;
+				}
+		hr {
+		  width:90%;
+		  margin-left:0;
+		  text-align:left;
+		}
+
+
+	</style>
+
+</head>
+	<body>
+		<!-- Content for Static Frame 'header_frame' -->
+		<!-- Content for Static Frame 'header_frame' -->
+		<div style="text-align: center">
+			<table>
+				<tr>
+					<td><h5 style="color:green; font-size:200%"> IT Digitalization System</h5></td>
+		  		</tr>
+				<tr>
+					<td><h1>DigitizeIT</h1></td>
+		  		</tr>
+				<tr>
+					<td>A Smart IT Solutions</td>
+		  		</tr>
+				<tr>
+					<td style="text-align: center; font: italic small-caps bold 12px/30px Georgia, serif; color: darkslateblue">
+						<h2>Form No: {{ runset }}</h2></td>
+				</tr>
+
+			</table>
+		</div>
+
+
+		<div class="center">
+			USB Access & Administrative Permission Request Form
+		</div>
+		<br>
+
+		
+		<div class="center">EMPLOYEE INFORMATION</div>
+
+		<table id="employee">
+
+			<tr>
+				<td width="35%">Full Name</td>
+				<td width="65%" colspan="2">{{ user_history.first_name }}</td>
+			</tr>
+			
+			<tr>
+				<td width="35%">Email</td>
+				<td width="65%" colspan="2">{{ user_history.email }}</td>
+			</tr>
+
+			<tr>
+				<td width="35%">DESIGNATION</td>
+				<td width="65%" colspan="2">{{ profile_history.0.position }}</td>
+			</tr>
+			<tr>
+				<td width="35%">DEPARTMENT</td>
+				<td width="65%" colspan="2">{{ profile_history.0.department }}</td>
+			</tr>
+			<tr>
+				<td width="35%">EMPLOYEE ID</td>
+				<td width="65%" colspan="2">{{ profile_history.0.emp_id }}</td>
+			</tr>
+
+			<tr>
+				<td width="35%">Contact</td>
+				<td width="40%">Phone : {{ profile_history.0.phone }}</td>
+				<td width="25%">EXT : {{ profile_history.0.ext}}</td>
+			</tr>
+
+            <tr>
+                <td width="35%">PC Address</td>
+				<td width="33%">Name : {{ runset.computer_name }}</td>
+                <td width="34%">IP  : {{ runset.ip_address }}</td>
+		  	</tr>
+            <tr>
+				<td width="35%" >Types Of Permission</U></td>
+				<td width="65%" colspan="2">{{ runset.permission_type }}</td>
+		  	</tr>           
+		</table>
+
+		<div class="article">
+			<b>Justification : </b>{{ runset.justification }}
+		</div>
+		<br style = "line-height:7;">
+
+		<table style="font-size: medium; text-align: center">
+
+			<tr>
+				<td style="width: 75%">
+					{{ user_history.first_name  }} <br>
+					{{ runset.date_updated|date:"d M' Y | P" }}
+					<hr width="80%">
+					<b>Raised By</b>
+				</td>
+				<td style="width: 70%">
+					
+					{{ hod_history.first_name }} <br>
+					{{ runset.permission_hod.date_updated|date:"d M' Y | P" }}
+					<hr width="80%">
+					<b>Recommended By (HOD)</b>
+
+				</td>
+				<td style="width: 70%">
+					{{ hr_history.first_name }} <br>
+					{{ runset.permission_hr.date_updated|date:"d M' Y | P" }}
+					<hr width="80%">
+					<b>Approved By (HR)</b>
+
+				</td>
+
+			 </tr>
+		 </table>
+
+		<br>
+
+		<div class="center">
+			IT USE ONLY
+		</div>
+		
+		<table id="employee">
+		  	<tr>
+				<td width="30%">Comments</td>
+				<td width="70%"> {{ runset.permission_it.comment }} </td>
+		  	</tr>
+
+		</table>
+
+		<br>
+
+		<table>
+
+			<tr>
+				<td width="60%"> </td>
+				<td style=" text-align: center; width: 40%">{{ admin_history.first_name }}</td>
+			</tr>
+			<tr>
+				<td width="60%"> </td>
+				<td style=" text-align: center; width: 40%">{{ runset.permission_it.date_updated|date:"d M' Y | P" }}</td>
+			</tr>
+			<tr>
+				<td width="60%" ></td>
+				<td><hr width="100%"></td>
+			</tr>
+			<tr>
+				<td width="60%"> </td>
+				<td style=" text-align: center; width: 40%" ><br>IT Admin</td>
+			</tr>
+		</table>
+	
+		
+
+	<!-- Content for Static Frame 'footer_frame' -->
+		<div id="footer_content">
+			<hr>
+			page <pdf:pagenumber></pdf:pagenumber>
+			of <pdf:pagecount></pdf:pagecount>
+			<p style="text-align: center">This is system generated copy does not required any additional ball point writing</p>
+			<p style="text-align: center; font: italic small-caps bold 12px/30px Georgia, serif; color: darkslateblue">
+				&copy; Copyright Square InformatiX Limited. Contact: Ext: 3092/3099
+			</p>
+
+
+		</div>
+
+
+
+
+
+
+
+	</body>
+
+
+</html>

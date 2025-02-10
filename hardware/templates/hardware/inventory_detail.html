@@ -1,0 +1,159 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block network %}
+
+<div class="pagetitle">
+    <h1>Inventory Management</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Users</a></li>
+            <li class="breadcrumb-item">Inventory</li>
+            <li class="breadcrumb-item active">Create</li>
+        </ol>
+    </nav>
+</div>
+
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            <div class="card shadow">
+                <div class="card-body">
+                    <!-- Title Section -->
+                    <div class="d-flex align-items-center mb-3">
+                        <h5 class="card-title d-flex align-items-center mb-0">
+                            <i class="fa fa-cogs me-2 text-primary"></i>
+                            IT Inventory Detail - {{ object.id }}
+                        </h5>
+                        <a href="{% url 'inventory-update' object.id %}" class="ms-auto btn btn-outline-primary btn-sm">
+                            <i class="fas fa-pencil-alt"></i> Update
+                        </a>
+                    </div>
+
+                    <!-- Inventory Details Section -->
+                    <h5 class="card-title">
+                        <i class="fas fa-cogs"></i> Inventory Details
+                    </h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th>Product Name:</th>
+                                    <td>{{ object.product }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Product Model:</th>
+                                    <td>{{ object.model }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Product Quantity:</th>
+                                    <td>{{ object.quantity }} {{ object.unit_type }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Product Details:</th>
+                                    <td>{{ object.details }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Condition:</th>
+                                    <td>{{ object.product_condition }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Chalan Copy:</th>
+                                    {% if object.attachment %}
+                                        <td><a href="{{ object.attachment.url }}" download>{{ object.chalan|default:"Download" }}</a></td>
+                                    {% else %}
+                                        <td>No Chalan Copy Available</td>
+                                    {% endif %}
+                                    
+                                </tr>
+                                <tr>
+                                    <th>Reference:</th>
+                                    <td>{{ object.reference }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Last Used in Forms Section -->
+                    <h5 class="card-title">
+                        <i class="fas fa-clipboard-list"></i> Last Used in Forms
+                    </h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr class="text-primary">
+                                    <th>Form Name</th>
+                                    <th>Person</th>
+                                    <th>Department</th>
+                                    <th>Designation</th>
+                                    <th>Given Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for r in object.lanrequest_ip.all %}
+                                    <tr>
+                                        <td>
+                                            <a href="{% url 'lan1-detail' r.lanrequest.id %}" target="_blank">{{ r.lanrequest }}</a>
+                                        </td>
+                                        <td>{{ r.lanrequest.author.first_name }}</td>
+                                        <td>{{ r.lanrequest.author.profile.department }}</td>
+                                        <td>{{ r.lanrequest.author.profile.position }}</td>
+                                        <td>{{ r.lanrequest.author.profile.location }}</td>
+                                        <td>{{ r.date_signed|date:"d M' Y | P" }}</td>
+                                    </tr>
+                                {% endfor %}
+                                {% for t in object.lantransfer_ip.all %}
+                                    <tr>
+                                        <td>
+                                            <a href="{% url 'lan2-detail' t.id %}" target="_blank">
+                                                LCTF-{{ t.id }}/{{ t.author.id }}/{{ t.author.profile.emp_id }}
+                                            </a>
+                                        </td>
+                                        <td>{{ t.author.first_name }}</td>
+                                        <td>{{ t.author.profile.department }}</td>
+                                        <td>{{ t.author.profile.position }}</td>
+                                        <td>{{ t.author.profile.location }}</td>
+                                        <td>{{ t.date_posted|date:"d M' Y | P" }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- History Section -->
+                    <h5 class="card-title">
+                        <i class="fas fa-history"></i> History: Last Used
+                    </h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr class="text-primary">
+                                    <th>Modified By</th>
+                                    <th>Requisition</th>
+                                    <th>User</th>
+                                    <th>Condition</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for o in object.history.all %}
+                                    <tr>
+                                        <td>{{ o.creator.first_name }}</td>
+                                        <td>{{ o.requisition }}</td>
+                                        <td>{{ o.used_by.first_name }}</td>
+                                        <td>{{ o.product_condition }}</td>
+                                        <td>{{ o.date_updated|date:"d M' y | P" }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

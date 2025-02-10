@@ -1,0 +1,40 @@
+{% extends "blog/basep.html"%}
+
+{% block network %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
+
+    <div>
+        <h1 class="animate__animated animate__fadeInLeft" style="text-align: center; color: coral;">
+            Welcome To Admin Panel
+        </h1>
+    </div>
+
+
+    <div class="media content-section">
+            <!-- -------------------------row 1------------------------------- -->
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="card-counter" style="background-color: rgb(44, 151, 76); color: white;"> 
+                        <i class="fa fa-wpforms"></i>
+                        <span class="count-numbers">8</span>                    
+                    <span class="count-name">
+                        <a class="btn btn-lg btn-block btn-link" style="height: 100%; width: 100%;  color: rgb(217, 222, 226);" 
+                        href="{% url 'admin-it-forms' %}">Admin IT Forms</a>
+                    </span>
+                    </div>
+                    
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="card-counter" style="background-color: rgb(117, 88, 170); color: white;">
+                        <i class="fas fa-users"></i>
+                        <span class="count-numbers">{{ total_users }}</span>
+                        <span class="count-name"><a class="btn btn-lg btn-block btn-link" style="height: 100%; width: 100%;  color: rgb(217, 222, 226);" 
+                            href="{% url 'user-list' %}">SPLDU User List</a>
+                    </div>
+                </div>
+            </div>   
+    </div>
+
+     
+{% endblock %}

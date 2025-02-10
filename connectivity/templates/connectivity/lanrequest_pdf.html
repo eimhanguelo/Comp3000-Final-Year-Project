@@ -1,0 +1,239 @@
+{% load static %}
+
+<html lang="en">
+
+<head>
+	<title>{{ runset }}</title>
+
+	<style>
+		@page {
+			size: A4 portrait;
+			@frame header_frame {
+				/* Static Frame */
+				-pdf-frame-content: header_content;
+				left: 50pt;
+				width: 512pt;
+				top: 30pt;
+				height: 30pt;
+			}
+			@frame content_frame {
+				/* Content Frame */
+				left: 50pt;
+				width: 512pt;
+				top: 30pt;
+				height: 700pt;
+			}
+			@frame footer_frame {
+				/* Another static Frame */
+				-pdf-frame-content: footer_content;
+				left: 50pt;
+				width: 512pt;
+				top: 750pt;
+				height: 85pt;
+			}
+		}
+
+		.center {
+			font-size: 15px;
+			margin: auto;
+			width: 100%;
+			font-weight: bold;
+			border: 2px solid black;
+			background-color: lightgrey;
+			padding: 5px;
+			text-align: center;
+		}
+
+		.article {
+			font-size: 10px;
+			padding: 10px;
+			border: 1px solid black;
+			background-color: #f1f1f1;
+			height: 320px;
+		}
+
+		#employee {
+			font-family: Arial, Helvetica, sans-serif;
+			border-collapse: collapse;
+			width: 100%;
+			font-size: 12px;
+		}
+
+		#employee td {
+			border: 1px solid black;
+			padding: 2px;
+		}
+
+		hr {
+			width: 90%;
+			margin-left: 0;
+			text-align: left;
+		}
+	</style>
+
+</head>
+
+<body>
+	<!-- Content for Static Frame 'header_frame' -->
+	<div style="text-align: center">
+		<table>
+			<tr>
+				<td><h5 style="color:green; font-size:200%">IT Digitalization System</h5></td>
+			</tr>
+			<tr>
+				<td><h1>DigitizeIT</h1></td>
+			</tr>
+			<tr>
+				<td>A Smart IT Solutions</td>
+			</tr>
+			<tr>
+				<td style="text-align: center; font: italic small-caps bold 12px/30px Georgia, serif; color: darkslateblue">
+					<h2>Form No: {{ runset }}</h2>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<br>
+
+	<div class="center">Request for Computer LAN Connectivity</div>
+	<br><br>
+
+	<div class="center">Filled Up By User</div>
+
+	<table id="employee">
+		<tr>
+			<td width="35%">Full Name</td>
+			<td width="65%" colspan="2">{{ user_history.first_name }}</td>
+		</tr>
+		<tr>
+			<td width="35%">Email</td>
+			<td width="65%" colspan="2">{{ user_history.email }}</td>
+		</tr>
+		<tr>
+			<td width="35%">DESIGNATION</td>
+			<td width="65%" colspan="2">{{ profile_history.0.position }}</td>
+		</tr>
+		<tr>
+			<td width="35%">DEPARTMENT</td>
+			<td width="65%" colspan="2">{{ profile_history.0.department }}</td>
+		</tr>
+		<tr>
+			<td width="35%">EMPLOYEE ID</td>
+			<td width="65%" colspan="2">{{ profile_history.0.emp_id }}</td>
+		</tr>
+		<tr>
+			<td width="35%">Contact</td>
+			<td width="40%">Phone: {{ profile_history.0.phone }}</td>
+			<td width="25%">EXT: {{ profile_history.0.ext }}</td>
+		</tr>
+	</table>
+
+	<div class="article">
+		<b>Justification:</b> {{ runset.justification }}
+	</div>
+
+	<br><br>
+
+	<table style="font-size: medium; text-align: center">
+		<tr>
+			<td style="width: 75%">
+				{{ user_history.first_name }} <br>
+				{{ runset.date_updated|date:"d M' Y | P" }}
+				<hr width="80%">
+				<b>User Signature</b>
+			</td>
+
+			{% if runset.lanrequest_sign.sign_type == "Agreed" %}
+			<td style="width: 70%">
+				{{ signer_history.first_name }} <br>
+				{{ runset.lanrequest_sign.date_updated|date:"d M' Y | P" }}
+				<hr width="80%">
+				<b>Head of Department</b>
+			</td>
+			{% elif runset.lanrequest_sign.sign_type == "Disagreed" %}
+			<td style="width: 70%">
+				<b><span style="color:red;">Authorized (HOD) Unsigned</span></b>
+				<hr width="80%">
+				<b>Head of Department</b>
+			</td>
+			{% else %}
+			<td style="width: 70%">
+				<br><br>
+				<hr width="80%">
+				<b>Head of Department</b>
+			</td>
+			{% endif %}
+		</tr>
+	</table>
+
+	<br><br>
+
+	<div class="center">Filled Up By IT</div>
+
+	<table id="employee">
+		<tr>
+			<td width="25%">Computer Name:</td>
+			<td width="25%">{{ lan_history.0.computer_name }}</td>
+			<td width="25%">Operating System:</td>
+			<td width="25%">{{ lan_history.0.os }}</td>
+		</tr>
+		<tr>
+			<td width="25%">IP Address:</td>
+			<td width="25%">{{ lan_history.0.ip_address }}</td>
+			<td width="25%">VLAN</td>
+			<td width="25%">{{ lan_history.0.vlan }}</td>
+		</tr>
+		<tr>
+			<td width="25%">Switch Name:</td>
+			<td width="25%">{{ lan_history.0.switch_name }}</td>
+			<td width="25%">Switch Port:</td>
+			<td width="25%">{{ lan_history.0.switch_port }}</td>
+		</tr>
+		<tr>
+			<td width="25%">Cable Tag:</td>
+			<td width="25%">{{ lan_history.0.cable_tag }}</td>
+			<td width="25%">CPU Model:</td>
+			<td width="25%">{{ lan_history.0.cpu_model }}</td>
+		</tr>
+		<tr>
+			<td width="25%">Printer Model:</td>
+			<td width="25%">{{ lan_history.0.printer_model }}</td>
+			<td width="25%">Scanner Model:</td>
+			<td width="25%">{{ lan_history.0.scanner_model }}</td>
+		</tr>
+	</table>
+
+	<br>
+
+	<table>
+		<br><br>
+		<tr>
+			<td width="60%"></td>
+			<td style="text-align: center; width: 40%">{{ admin_history.first_name }}</td>
+		</tr>
+		<tr>
+			<td width="60%"></td>
+			<td style="text-align: center; width: 40%">{{ runset.lanrequest_it.date_updated|date:"d M' Y | P" }}</td>
+		</tr>
+		<tr>
+			<td width="60%"></td>
+			<td><hr width="100%"></td>
+		</tr>
+		<tr>
+			<td width="60%"></td>
+			<td style="text-align: center; width: 40%"><br><b>Reviewed By IT Admin</b></td>
+		</tr>
+	</table>
+
+	<!-- Content for Static Frame 'footer_frame' -->
+	<div id="footer_content" style="text-align: center; font-family: Arial, sans-serif; color: #333; padding: 20px; border-top: 1px solid #ddd;">
+		<p style="margin: 0; font-size: 14px; color: #666; line-height: 1.5;">
+			Page <pdf:pagenumber></pdf:pagenumber> of <pdf:pagecount></pdf:pagecount>
+		</p>
+		</div>
+
+
+</body>
+
+</html>

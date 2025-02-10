@@ -1,0 +1,221 @@
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Form Acceptance Notification</title>
+    <style>
+        .accepted {
+            font-weight: bold;
+            color: green;
+            font-size: 20px;
+        }
+
+        .signature {
+            color: #005cbf;
+            font-weight: bold;
+        }
+
+        .info {
+            font-weight: bold;
+            font-size: 20px;
+            color: #17A2B8;
+        }
+
+        .form {
+            font-weight: bold;
+            font-size: 20px;
+            color: #00008B;
+        }
+    </style>
+</head>
+<body>
+
+    <p>Hi {{ author }},</p>
+
+    <p>
+        Form No. <a class="form" href="{{ link }}">{{ form_id }}</a> 
+        has been 
+        <span class="accepted">Reviewed and Signed</span>. 
+    </p>
+
+    <p>
+        For more information, please refer to the form: 
+        <a class="info" href="{{ link }}">Click here</a>.
+    </p>
+
+    <p>Thank you for your understanding.</p>
+
+    <p>
+        Sincerely,<br>
+        <span class="signature">{{ signer }}</span>
+    </p>
+
+</body>
+</html> {% endcomment %}
+
+
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Added viewport for responsive design -->
+    <title>Form Acceptance Notification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif; /* Added a standard font for better readability */
+            margin: 20px; /* Added margin for better spacing */
+        }
+
+        .accepted {
+            font-weight: bold;
+            color: green;
+            font-size: 1.25em; /* Changed to em for better scalability */
+        }
+
+        .signature {
+            color: #005cbf;
+            font-weight: bold;
+        }
+
+        .info {
+            font-weight: bold;
+            font-size: 1.25em; /* Changed to em for better scalability */
+            color: #17A2B8;
+        }
+
+        .form {
+            font-weight: bold;
+            font-size: 1.25em; /* Changed to em for better scalability */
+            color: #00008B;
+        }
+    </style>
+</head>
+
+<body>
+
+    <p>Hi {{ author }},</p>
+
+    <p>
+        Form No. <a class="form" href="{{ link }}">{{ form_id }}</a>
+        has been <span class="accepted">Reviewed and Signed</span>.
+    </p>
+
+    <p>
+        For more information, please refer to the form:
+        <a class="info" href="{{ link }}">Click here</a>.
+    </p>
+
+    <p>Thank you for your understanding.</p>
+
+    <p>
+        Sincerely,<br>
+        <span class="signature">{{ signer }}</span>
+    </p>
+
+</body>
+
+</html> {% endcomment %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Added viewport for responsiveness -->
+    <title>Form Acceptance Notification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        h2 {
+            color: #005cbf;
+            text-align: center;
+            margin-bottom: 20px;
+            text-decoration: underline; /* Add this line for underline */
+        }
+
+        .accepted {
+            font-weight: bold;
+            color: green;
+            font-size: 1.2em; /* Slightly smaller for balance */
+        }
+
+        .signature {
+            color: #005cbf;
+            font-weight: bold;
+            margin-top: 20px; /* Space above signature */
+        }
+
+        .info {
+            font-weight: bold;
+            font-size: 1.2em; /* Slightly smaller for balance */
+            color: #17A2B8;
+        }
+        .article-title {
+            color: #007BFF; /* Bootstrap primary color */
+            text-decoration: underline; /* Always show underline */
+            font-weight: bold; /* Make the text bold */
+            transition: color 0.3s, text-shadow 0.3s; /* Smooth transition for effects */
+            display: inline-flex; /* Allows icon alignment */
+            align-items: center; /* Vertically center the icon */
+        }
+        .article-title:hover {
+            color: #0056b3; /* Darker shade on hover */
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Subtle shadow effect */
+        }
+        .article-title::after {
+            content: ' ➔'; /* Right arrow icon */
+            margin-left: 5px; /* Space between text and icon */
+            font-size: 0.9em; /* Slightly smaller icon */
+            opacity: 0.7; /* Slightly faded */
+        }
+
+
+        .form {
+            font-weight: bold;
+            font-size: 1.2em; /* Slightly smaller for balance */
+            color: #00008B;
+        }
+
+        a {
+            text-decoration: none; /* Remove underline */
+            color: #0056b3; /* Standard link color */
+        }
+
+        a:hover {
+            text-decoration: underline; /* Underline on hover for better interactivity */
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Form Acceptance Notification</h2>
+
+    <p>Dear <strong>{{ author }}</strong>,</p> <!-- Used <strong> for emphasis on the author's name -->
+
+    <p>
+        Your form No. <a class="article-title" href="{{ link }}">{{ form_id }}</a> 
+        has been <span class="accepted">Reviewed and Signed</span>.
+    </p>
+
+    <p>
+        For more information, please refer to the form:
+        <a class="article-title" href="{{ link }}">Click here</a>.
+    </p>
+
+    <p>Thank you for your understanding.</p>
+
+    <p class="signature">
+        Sincerely,<br>
+        <span>{{ signer }}</span>
+    </p>
+
+</body>
+
+</html>

@@ -1,0 +1,733 @@
+{% extends "blog/base.html"%}
+
+{% comment %} {% load static %}
+      
+        <!-- -----------------------Bootstrap core JavaScript OFFLINE-------------------------- -->
+        <script src="{% static 'bootstrap/js/tests/vendor/jquery.min.js' %}"></script>
+        <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+        <!--------------------------------------------------------------------------------------> {% endcomment %}
+
+
+{% block network %}
+
+<div class="pagetitle">
+    <h1>Admin IT Forms</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Admin</a></li>
+            <li class="breadcrumb-item active">IT Forms</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+{% comment %} 
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title d-flex align-items-center">
+                        <i class="bi bi-pencil-square me-5"></i> <!-- Updated icon to Bootstrap Icon -->
+                        Admin IT Forms Section
+                    </h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> {% endcomment %}
+
+<section class="section dashboard">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            <div class="row">
+                <!-- Mail/User Account Activation Card -->
+                <div class="col-xxl-6 col-md-6">
+                    <div class="card info-card sales-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Mail/User Account Activation Form<span class="badge border-success border-1 text-success">| Approved</span></h5>
+                            
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-user-plus"></i> <!-- Using FontAwesome icon for user-plus -->
+                                </div>
+                                <div class="ps-3">
+                                    <h6>{{ emp_total }}</h6> <!-- Placeholder for dynamic employee total -->
+                                </div>
+                                <div class="ps-5 d-flex align-items-center">
+                                    <button type="button" class="btn btn-outline-info rounded-pill" data-bs-toggle="modal" data-bs-target="#employeecreate">
+                                        <i class="bi bi-eye"></i>
+ VIEW
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End Mail/User Account Activation Card -->
+
+                <div class="col-xxl-6 col-md-6">
+                    <div class="card info-card sales-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Mail/User Account Modification Form<span class="badge border-success border-1 text-success">| Approved</span></h5>
+                            
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-user-edit"></i> <!-- Using FontAwesome icon for user-plus -->
+                                </div>
+                                <div class="ps-3">
+                                    <h6>{{ account_total }}</h6> <!-- Placeholder for dynamic employee total -->
+                                </div>
+                                <div class="ps-5 d-flex align-items-center">
+                                    <button type="button" class="btn btn-outline-info rounded-pill" data-bs-toggle="modal" data-bs-target="#employeemodify">
+                                        <i class="bi bi-eye"></i>
+ VIEW
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End Mail/User Account Activation Card -->
+            </div>
+
+            <div class="row">
+                <!-- Mail/User Account Activation Card -->
+                <div class="col-xxl-6 col-md-6">
+                    <div class="card info-card sales-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Request for Computer LAN Connectivity<span class="badge border-success border-1 text-success">| Approved</span></h5>
+                            
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-network-wired"></i> <!-- Using FontAwesome icon for user-plus -->
+                                </div>
+                                <div class="ps-3">
+                                    <h6>{{ lanrequest_total }}</h6> <!-- Placeholder for dynamic employee total -->
+                                </div>
+                                <div class="ps-5 d-flex align-items-center">
+                                    <button type="button" class="btn btn-outline-info rounded-pill" data-bs-toggle="modal" data-bs-target="#Userlanconnect">
+                                        <i class="bi bi-eye"></i>
+ VIEW
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End Mail/User Account Activation Card -->
+
+                <div class="col-xxl-6 col-md-6">
+                    <div class="card info-card sales-card">
+                        <div class="card-body">
+                            <h5 class="card-title">User LAN Connectivity Transfer Form<span class="badge border-success border-1 text-success">| Approved</span></h5>
+                            
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-exchange-alt"></i> <!-- Using FontAwesome icon for user-plus -->
+                                </div>
+                                <div class="ps-3">
+                                    <h6>{{ lantransfer_total }}</h6> <!-- Placeholder for dynamic employee total -->
+                                </div>
+                                <div class="ps-5 d-flex align-items-center">
+                                    <button type="button" class="btn btn-outline-info rounded-pill" data-bs-toggle="modal" data-bs-target="#Userlantransfer">
+                                        <i class="bi bi-eye"></i>
+ VIEW
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End Mail/User Account Activation Card -->
+            </div>
+            <div class="row">
+                <!-- Mail/User Account Activation Card -->
+                <div class="col-xxl-6 col-md-6">
+                    <div class="card info-card sales-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Request for Instrument LAN Connectivity<span class="badge border-success border-1 text-success">| Approved</span></h5>
+                            
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-plug"></i> <!-- Using FontAwesome icon for user-plus -->
+                                </div>
+                                <div class="ps-3">
+                                    <h6>{{ laninstrument_total }}</h6> <!-- Placeholder for dynamic employee total -->
+                                </div>
+                                <div class="ps-5 d-flex align-items-center">
+                                    <button type="button" class="btn btn-outline-info rounded-pill" data-bs-toggle="modal" data-bs-target="#Instlanconnect">
+                                        <i class="bi bi-eye"></i>
+ VIEW
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End Mail/User Account Activation Card -->
+
+                <div class="col-xxl-6 col-md-6">
+                    <div class="card info-card sales-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Instrument LAN Connectivity Transfer<span class="badge border-success border-1 text-success">| Approved</span></h5>
+                            
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-arrow-right"></i> <!-- Using FontAwesome icon for user-plus -->
+                                </div>
+                                <div class="ps-3">
+                                    <h6>{{ laninstrumenttransfer_total }}</h6> <!-- Placeholder for dynamic employee total -->
+                                </div>
+                                <div class="ps-5 d-flex align-items-center">
+                                    <button type="button" class="btn btn-outline-info rounded-pill" data-bs-toggle="modal" data-bs-target="#Instlantransfer">
+                                        <i class="bi bi-eye"></i>
+ VIEW
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End Mail/User Account Activation Card -->
+            </div>
+            <div class="row">
+                <!-- Mail/User Account Activation Card -->
+                <div class="col-xxl-6 col-md-6">
+                    <div class="card info-card sales-card">
+                        <div class="card-body">
+                            <h5 class="card-title">File Server Access Activation/ Modification Form<span class="badge border-success border-1 text-success">| Approved</span></h5>
+                            
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-server"></i> <!-- Using FontAwesome icon for user-plus -->
+                                </div>
+                                <div class="ps-3">
+                                    <h6>{{ file_total }}</h6> <!-- Placeholder for dynamic employee total -->
+                                </div>
+                                <div class="ps-5 d-flex align-items-center">
+                                    <button type="button" class="btn btn-outline-info rounded-pill" data-bs-toggle="modal" data-bs-target="#Fileaccess">
+                                        <i class="bi bi-eye"></i>
+ VIEW
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End Mail/User Account Activation Card -->
+
+                <div class="col-xxl-6 col-md-6">
+                    <div class="card info-card sales-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Requisition for ICT Product<span class="badge border-success border-1 text-success">| Approved</span></h5>
+                            
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-shopping-cart"></i> <!-- Using FontAwesome icon for user-plus -->
+                                </div>
+                                <div class="ps-3">
+                                    <h6>{{ req_total }}</h6> <!-- Placeholder for dynamic employee total -->
+                                </div>
+                                <div class="ps-5 d-flex align-items-center">
+                                    <button type="button" class="btn btn-outline-info rounded-pill d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#Requisition" aria-label="View Requisition Details">
+                                        <i class="bi bi-eye me-1"></i> <!-- Add margin to the right of the icon -->
+                                        VIEW
+                                    </button>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End Mail/User Account Activation Card -->
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-------------------------------------- Form-1: Mail/User Account Activation Form ------------------------------------>
+<div class="modal fade" id="employeecreate" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl"> 
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalLabel">
+                    <i class="fas fa-user-plus"></i> Mail/User Account Activation Form 
+                    <span class="badge bg-success ms-2">Approved</span>
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Close Modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table datatable table-hover text-center" style="width:100%;">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-center">ID</th>
+                                <th class="text-center">Emp. Name</th>
+                                <th class="text-center">Department</th>
+                                <th class="text-center">Raised By</th>
+                                <th class="text-center">Raised On</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Resolved By</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for a in employees %}
+                            {% if a.employee_hr.sign_type == 'Agreed' %}
+                                <tr>
+                                    <td class="text-center">
+                                        <a class="article-title" style="color: #5b5f97;" href="{% url 'emp-detail' a.id %}" title="View Employee Details">
+                                            <b>{{ a }}</b>
+                                        </a>
+                                    </td>
+                                    <td class="text-center">{{ a.fullname }}</td>
+                                    <td class="text-center">{{ a.department }}</td>
+                                    <td class="text-center">{{ a.author.first_name }}</td>
+                                    <td class="text-center">{{ a.date_posted|date:"d M Y h:i A" }}</td>
+                                    <td class="text-center">
+                                        <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i> Approved</b></span>
+                                      </td>
+                                    {% if a.employee_it.admin %}
+                                        <td class="text-center">
+                                            <span class="badge bg-info text-dark"><i class="bi bi-info-circle me-1"></i>{{ a.employee_it.admin.first_name }}</span>
+                                        </td>
+                                    {% else %}
+                                        <td class="text-center">
+                                            <span class="badge bg-warning text-dark"><i class="bi bi-exclamation-triangle me-1"></i>Pending</b></span>
+                                        </td>
+                                    {% endif %}
+                                </tr>
+                            {% endif %}
+                            {% endfor %}
+                        </tbody>
+                        
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-------------------------------------- Form-2: Mail/User Account Modification Form------------------------------------>
+<div class="modal fade" id="employeemodify" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl"> 
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalLabel">
+                    <i class="fas fa-user-edit"></i> Mail/User Account Modification Form
+                    <span class="badge bg-success ms-2">Approved</span>
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Close Modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table datatable table-hover text-center" style="width:100%;">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-center">ID</th>
+                                <th class="text-center">Raised By</th>
+                                <th class="text-center">Department</th>
+                                <th class="text-center">Raised On</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Resolved By</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            {% for a in accounts %}
+                            {% if a.account_hr.sign_type == 'Agreed' %}
+                                       <tr>
+                                              <td><a class="article-title" style="color: blueviolet" href="{% url 'mail-detail' a.id %}"><b>{{ a }}</b></a></td>                                  
+                                              <td>{{ a.author.first_name }}</td>
+                                              <td>{{ a.author.profile.department }}</td>
+                                              <td>{{ a.date_posted|date:"d M' Y P" }}</td>
+                                              <td class="text-center">
+                                                <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i> Approved</b></span>
+                                              </td>
+                                              {% if a.account_it.admin %}
+                                          <td class="text-center">
+                                              <span class="badge bg-info text-dark"><i class="bi bi-info-circle me-1"></i>{{  a.account_it.admin.first_name }}</span>
+                                          </td>
+                                      {% else %}
+                                          <td class="text-center">
+                                              <span class="badge bg-warning text-dark"><i class="bi bi-exclamation-triangle me-1"></i>Pending</b></span>
+                                          </td>
+                                       {% endif %}
+                                       </tr>
+                            {% endif %}
+                            {% endfor %}
+                        </tbody>
+                        
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-------------------------------------- Form-3: Request for Computer LAN Connectivity------------------------------------>
+<div class="modal fade" id="Userlanconnect" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl"> 
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalLabel">
+                    <i class="fas fa-network-wired"></i> Request for Computer LAN Connectivity
+                    <span class="badge bg-success ms-2">Approved</span>
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Close Modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table datatable table-hover text-center" style="width:100%;">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-center">ID</th>
+                                <th class="text-center">Raised By</th>
+                                <th class="text-center">Department</th>   
+                                <th class="text-center">Raised On</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Resolved By</th>
+                              
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for l in lanrequest %}
+                            {% if l.lanrequest_sign.sign_type == 'Agreed' %}
+                                   <tr>
+                                          <td><a class="article-title" style="color: blueviolet" href="{% url 'lan1-detail' l.id %}"><b>{{ l }}</b></a></td>                                  
+                                          <td>{{ l.author.first_name }}</td>
+                                          <td>{{ l.author.profile.department }}</td>
+                                          <td>{{ l.date_posted|date:"d M' Y P" }}</td>
+                                          <td class="text-center">
+                                            <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i> Approved</b></span>
+                                          </td>
+       
+                                          {% if l.lanrequest_it.admin %}
+                                               <td class="text-center">
+                                                   <span class="badge bg-info text-dark"><i class="bi bi-info-circle me-1"></i>{{  l.lanrequest_it.admin.first_name }}</span>
+                                               </td>
+                                           {% else %}
+                                               <td class="text-center">
+                                                   <span class="badge bg-warning text-dark"><i class="bi bi-exclamation-triangle me-1"></i>Pending</b></span>
+                                               </td>
+                                            {% endif %}
+                                   </tr>
+                            {% endif %}
+                        {% endfor %}
+                        </tbody>
+                        
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--------------------------------------Form-4: User LAN Connectivity Transfer Form------------------------------------>
+<div class="modal fade" id="Userlantransfer" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl"> 
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalLabel">
+                    <i class="fas fa-exchange-alt"></i> User LAN Connectivity Transfer Form
+                    <span class="badge bg-success ms-2">Approved</span>
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Close Modal"></button>
+                
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table datatable table-hover text-center" style="width:100%;">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-center">ID</th>
+                                <th class="text-center">Raised By</th>
+                                <th class="text-center">Department</th>   
+                                <th class="text-center">Raised On</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Resolved By</th>
+                              
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for l in lantransfer %}
+                          {% if l.lantransfer_hr.sign_type == 'Agreed' %}
+                            <tr>
+                                   <td><a class="article-title" style="color: blueviolet" href="{% url 'lan2-detail' l.id %}"><b>{{ l }}</b></a></td>                                  
+                                   <td>{{ l.author.first_name }}</td>
+                                   <td>{{ l.author.profile.department }}</td>
+                                   <td>{{ l.date_posted|date:"d M' Y P" }}</td>
+                                   <td class="text-center">
+                                     <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i> Approved</b></span>
+                                   </td>
+
+                                    {% if l.lantransfer_it.admin %}
+                                        <td class="text-center">
+                                            <span class="badge bg-info text-dark"><i class="bi bi-info-circle me-1"></i>{{  l.lantransfer_it.admin.first_name }}</span>
+                                        </td>
+                                    {% else %}
+                                        <td class="text-center">
+                                            <span class="badge bg-warning text-dark"><i class="bi bi-exclamation-triangle me-1"></i>Pending</b></span>
+                                        </td>
+                                     {% endif %}
+                            </tr>
+                          {% endif %}
+                        {% endfor %}
+                        </tbody>
+                        
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--------------------------------------Form-5: Request for Instrument LAN Connectivity------------------------------------>
+<div class="modal fade" id="Instlanconnect" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl"> 
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalLabel">
+                    <i class="fas fa-plug"></i> Request for Instrument LAN Connectivity
+                    <span class="badge bg-success ms-2">Approved</span>
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Close Modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table datatable table-hover text-center" style="width:100%;">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-center">ID</th>
+                                <th class="text-center">Raised By</th>
+                                <th class="text-center">Department</th>   
+                                <th class="text-center">Raised On</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Resolved By</th>
+                              
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+                            {% for l in laninstrument %}
+                             {% if l.laninstrument_sign.sign_type == 'Agreed' %}
+                                <tr>
+                                       <td><a class="article-title" style="color: blueviolet" href="{% url 'lan3-detail' l.id %}"><b>{{ l }}</b></a></td>                                  
+                                       <td>{{ l.author.first_name }}</td>
+                                       <td>{{ l.author.profile.department }}</td>
+                                       <td>{{ l.date_posted|date:"d M' Y P" }}</td>
+
+                                       <td class="text-center">
+                                           <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i> Approved</b></span>
+                                        </td>
+    
+                                        {% if l.laninstrument_it.admin %}
+                                        <td class="text-center">
+                                            <span class="badge bg-info text-dark"><i class="bi bi-info-circle me-1"></i>{{  l.laninstrument_it.admin.first_name }}</span>
+                                        </td>
+                                    {% else %}
+                                        <td class="text-center">
+                                            <span class="badge bg-warning text-dark"><i class="bi bi-exclamation-triangle me-1"></i>Pending</b></span>
+                                        </td>
+                                    {% endif %}
+
+                                    </tr>
+                               {% endif %}
+                            {% endfor %}
+    
+                            </tbody>
+                        
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--------------------------------------Form-6: Instrument LAN Connectivity Transfer------------------------------------>
+<div class="modal fade" id="Instlantransfer" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl"> 
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalLabel">
+                    <i class="fas fa-arrow-right"></i> Instrument LAN Connectivity Transfer
+                    <span class="badge bg-success ms-2">Approved</span>
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Close Modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table datatable table-hover text-center" style="width:100%;">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-center">ID</th>
+                                <th class="text-center">Raised By</th>
+                                <th class="text-center">Department</th>   
+                                <th class="text-center">Raised On</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Resolved By</th>
+                              
+                            </tr>
+                        </thead>
+                        <tbody>{% for l in laninstrumenttransfer %}
+                            {% if l.lantransfer_hr.sign_type == 'Agreed' %}
+                              <tr>
+                                     <td><a class="article-title" style="color: blueviolet" href="{% url 'lantransferinstrument-detail' l.id %}"><b>{{ l }}</b></a></td>                                  
+                                     <td>{{ l.author.first_name }}</td>
+                                     <td>{{ l.author.profile.department }}</td>
+                                     <td>{{ l.date_posted|date:"d M' Y P" }}</td>
+
+                                     <td class="text-center">
+                                        <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i> Approved</b></span>
+                                    </td>
+ 
+                                     {% if l.lantransfer_it.admin %}
+                                       <td class="text-center">
+                                           <span class="badge bg-info text-dark"><i class="bi bi-info-circle me-1"></i>{{  l.lantransfer_it.admin.first_name }}</span>
+                                       </td>
+                                   {% else %}
+                                       <td class="text-center">
+                                           <span class="badge bg-warning text-dark"><i class="bi bi-exclamation-triangle me-1"></i>Pending</b></span>
+                                       </td>
+                                   {% endif %}
+                              </tr>
+                            {% endif %}
+                          
+                          {% endfor %}
+  
+                          </tbody>
+                        
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--------------------------------------Form-7: File Server Access Activation/ Modification Form-------------------------------->
+<div class="modal fade" id="Fileaccess" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl"> 
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalLabel">
+                    <i class="fas fa-server"></i> File Server Access Activation/ Modification Form
+                    <span class="badge bg-success ms-2">Approved</span>
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Close Modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table datatable table-hover text-center" style="width:100%;">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-center">ID</th>
+                                <th class="text-center">Raised By</th>
+                                <th class="text-center">Department</th>   
+                                <th class="text-center">Raised On</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Resolved By</th>
+                              
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for f in file %}
+                               {% if f.fileaccess_hod.sign_type == 'Agreed' %}
+                                       <tr>
+                                              <td><a class="article-title" style="color: blueviolet" href="{% url 'file-detail' f.id %}"><b>{{ f }}</b></a></td>                                  
+                                              <td>{{ f.author.first_name }}</td>
+                                              <td>{{ f.author.profile.department }}</td>
+                                              <td>{{ f.date_posted|date:"d M' Y P" }}</td>
+                                              <td class="text-center">
+                                                <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i> Approved</b></span>
+                                            </td>
+                                              {% if f.fileaccess_it.admin %}
+                                                <td class="text-center">
+                                                    <span class="badge bg-info text-dark"><i class="bi bi-info-circle me-1"></i>{{ f.fileaccess_it.admin.first_name }}</span>
+                                                </td>
+                                            {% else %}
+                                                <td class="text-center">
+                                                    <span class="badge bg-warning text-dark"><i class="bi bi-exclamation-triangle me-1"></i>Pending</b></span>
+                                                </td>
+                                            {% endif %}
+                                           
+                                       </tr>
+                                {% endif %}
+                            {% endfor %}
+    
+                            </tbody>   
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--------------------------------------Form-8: Requisition for ICT Product------------------------------------>
+<div class="modal fade" id="Requisition" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl"> 
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalLabel">
+                    <i class="fas fa-shopping-cart"></i> Requisition for ICT Product 
+                    <span class="badge bg-success ms-2">Approved</span>
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Close Modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <form id="requisition-form" action="{% url 'admin-it-forms' %}" method="post">
+                        {% csrf_token %}
+                    <table class="table datatable table-hover text-center" style="width:100%;">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-center">Select</th>
+                                <th class="text-center">Form No</th>
+                                <th class="text-center">Raised By</th>
+                                <th class="text-center">Department</th>
+                                <th class="text-center">Raised On</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Resolved By</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for r in requisition %}
+                                {% if r.requisition_hod_it.sign_type == 'Agreed' %}
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" class="select-checkbox" name="selected_requisitions" value="{{ r.id }}">
+                                        </td>
+                                        <td>
+                                            <a class="article-title" style="color: blueviolet" href="{% url 'requisition-detail' r.id %}">
+                                                <b>{{ r }}</b>
+                                            </a>
+                                        </td>
+                                        <td>{{ r.author.first_name }}</td>
+                                        <td>{{ r.author.profile.department }}</td>
+                                        <td>{{ r.date_posted|date:"d M' Y P" }}</td>
+                                        <td class="text-center">
+                                            <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i> Approved</b></span>
+                                          </td>
+
+                                        {% if r.requisition_it.admin %}
+                                        <td class="text-center">
+                                            <span class="badge bg-info text-dark"><i class="bi bi-info-circle me-1"></i>{{ r.requisition_it.admin.first_name }}</span>
+                                        </td>
+                                    {% else %}
+                                        <td class="text-center">
+                                            <span class="badge bg-warning text-dark"><i class="bi bi-exclamation-triangle me-1"></i>Pending</b></span>
+                                        </td>
+                                    {% endif %}
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                        
+                    </table>
+                    <input type="hidden" name="form_id" value="{{ requisition.id }}">
+                    <button id="send-mail-to-chq-btn" type="submit" class="btn btn-outline-primary rounded-pill"><i class="bi bi-star Icon Buttons-1"></i> Send Email to CHQ</button>
+         
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

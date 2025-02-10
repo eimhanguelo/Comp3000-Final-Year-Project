@@ -1,0 +1,338 @@
+{% extends "blog/basep.html"%}
+{% load crispy_forms_tags %}
+{% block network %}
+
+    <div class="div-shadow">
+        <h3 class="border-bottom mb-4" style="text-align: center; color: darkmagenta; font-size: x-large; font-weight: bold">Review Panel: My Pending Task</h3>
+    </div>
+
+
+    <article class="media content-section">
+        <table id="table22"  class="table table-striped table-bordered display" align="center" style="width:100%">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Review Type</th>
+                <th>Status</th>
+                <th>Show PDF</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for a in employees %}
+                <tr>
+                       <td><a class="article-title" style="color: blueviolet" href="{% url 'emp-detail' a.id %}"><b>{{ a }} </b></a></td>
+                       <td><a class="mr-2" href="#">{{ a.author.first_name }}</a></td>                                        
+                       {% if user == a.recommended_by %}
+                            <td>Recommended Sign</td>
+                            {% if not a.employee_sign %}
+                                <td style="color: rgb(174, 0, 255);"><b>Working</b></td>    
+                            {% else %}
+                                <td style="color: rgb(0, 119, 128);"><b>Done</b></td>                         
+                            {% endif %}
+                       {% elif user == a.approved_hod %}
+                            <td>Recommended HOD</td>
+                            {% if a.employee_sign %}
+                                {% if not a.employee_hod %}
+                                    <td style="color: rgb(174, 0, 255);"><b>Working</b></td>   
+                                {% else %}
+                                    <td style="color: rgb(0, 119, 128);"><b>Done</b></td>                         
+                                {% endif %}
+                            {% else %}
+                                <td style="color: rgb(107, 100, 6);"><b>Signing Ongoing</b></td>                         
+                            {% endif %} 
+                       {% elif user == a.approved_hr %}
+                            <td>Recommended HR</td>
+                            {% if a.employee_hod %}
+                                {% if not a.employee_hr %}
+                                    <td style="color: rgb(174, 0, 255);"><b>Working</b></td>   
+                                {% else %}
+                                    <td style="color: rgb(0, 119, 128);"><b>Done</b></td>                         
+                                {% endif %}
+                            {% else %}
+                                <td style="color: rgb(107, 100, 6);"><b>Signing Ongoing</b></td>                         
+                            {% endif %}                     
+                       {% endif %}
+                       <td><a class="fas fa-file-pdf" href="{% url 'emp-pdf' a.id %}" target="_blank"> View</a></td>
+                </tr>
+            {% endfor %}
+
+            {% for a in accounts %}
+                <tr>
+                       <td><a class="article-title" style="color: blueviolet" href="{% url 'mail-detail' a.id %}"><b>{{ a }} </b></a></td>
+                       <td><a class="mr-2" href="#">{{ a.author.first_name }}</a></td>                                        
+                       {% if user == a.recommended_by %}
+                            <td>Recommended Sign</td>
+                            {% if not a.account_sign %}
+                                <td style="color: rgb(174, 0, 255);"><b>Working</b></td>    
+                            {% else %}
+                                <td style="color: rgb(0, 119, 128);"><b>Done</b></td>                           
+                            {% endif %}
+                       {% elif user == a.approved_hod %}
+                            <td>Recommended HOD</td>
+                            {% if a.account_sign %}
+                                {% if not a.account_hod %}
+                                    <td style="color: rgb(174, 0, 255);"><b>Working</b></td>   
+                                {% else %}
+                                    <td style="color: rgb(0, 119, 128);"><b>Done</b></td>                         
+                                {% endif %}
+                            {% else %}
+                                <td style="color: rgb(107, 100, 6);"><b>Signing Ongoing</b></td>                         
+                            {% endif %} 
+                       {% elif user == a.approved_hr %}
+                            <td>Recommended HR</td>
+                            {% if a.account_hod %}
+                                {% if not a.account_hr %}
+                                    <td style="color: rgb(174, 0, 255);"><b>Working</b></td>   
+                                {% else %}
+                                    <td style="color: rgb(0, 119, 128);"><b>Done</b></td>                         
+                                {% endif %}
+                            {% else %}
+                                <td style="color: rgb(107, 100, 6);"><b>Signing Ongoing</b></td>                         
+                            {% endif %}                     
+                       {% endif %}
+                       <td><a class="fas fa-file-pdf" href="{% url 'mail-pdf' a.id %}" target="_blank"> View</a></td>
+                </tr>
+            {% endfor %}
+
+            {% for a in lanrequest %}
+                <tr>
+                    <td><a class="article-title" style="color: blueviolet" href="{% url 'lan1-detail' a.id %}"><b>{{ a }} </b></a></td>
+                    <td><a class="mr-2" href="#">{{ a.author.first_name }}</a></td>                                        
+                    <td>Recommended HOD</td>
+                    {% if not a.lanrequest_hod %}
+                        <td style="color: rgb(174, 0, 255);"><b>Working</b></td>   
+                    {% else %}
+                        <td style="color: rgb(0, 119, 128);"><b>Done</b></td>                         
+                    {% endif %}
+                    <td><a class="fas fa-file-pdf" href="{% url 'lan1-pdf' a.id %}" target="_blank"> View</a></td>
+                </tr>
+            {% endfor %}
+            {% for a in lantransfer %}
+                <tr>
+                    <td><a class="article-title" style="color: blueviolet" href="{% url 'lan2-detail' a.id %}"><b>{{ a }} </b></a></td>
+                    <td><a class="mr-2" href="#">{{ a.author.first_name }}</a></td>                                        
+                    {% if user == a.recommended_hod %}
+                        <td>Recommended HOD</td>
+                        {% if not a.lantransfer_hod %}
+                            <td style="color: rgb(174, 0, 255);"><b>Working</b></td>   
+                        {% else %}
+                            <td style="color: rgb(0, 119, 128);"><b>Done</b></td>                           
+                        {% endif %}
+                    {% elif user == a.recommended_hr %}
+                        <td>Recommended HR</td>
+                        {% if a.lantransfer_hod %}
+                            {% if not a.lantransfer_hr %}
+                                <td style="color: rgb(174, 0, 255);"><b>Working</b></td>   
+                            {% else %}
+                                <td style="color: rgb(0, 119, 128);"><b>Done</b></td>                            
+                            {% endif %}
+                        {% else %}
+                            <td style="color: rgb(107, 100, 6);"><b>Signing Ongoing</b></td>                         
+                        {% endif %} 
+                    
+                    {% endif %}
+                    <td><a class="fas fa-file-pdf" href="{% url 'lan2-pdf' a.id %}" target="_blank"> View</a></td>
+                </tr>
+            {% endfor %}
+            {% for a in laninstrument %}
+                <tr>
+                    <td><a class="article-title" style="color: blueviolet" href="{% url 'lan3-detail' a.id %}"><b>{{ a }} </b></a></td>
+                    <td><a class="mr-2" href="#">{{ a.author.first_name }}</a></td>                                        
+                    <td>Recommended HOD</td>
+                    {% if not a.laninstrument_hod %}
+                        <td style="color: rgb(174, 0, 255);"><b>Working</b></td>   
+                    {% else %}
+                        <td style="color: rgb(0, 119, 128);"><b>Done</b></td>                         
+                    {% endif %}
+                    <td><a class="fas fa-file-pdf" href="{% url 'lan3-pdf' a.id %}" target="_blank"> View</a></td>
+                </tr>
+            {% endfor %}
+            {% for a in internet %}
+                <tr>
+                    <td><a class="article-title" style="color: blueviolet" href="{% url 'internet-detail' a.id %}"><b>{{ a }} </b></a></td>
+                    <td><a class="mr-2" href="#">{{ a.author.first_name }}</a></td>                                        
+                    {% if user == a.recommended_hod %}
+                        <td>Recommended HOD</td>
+                        {% if not a.internet_hod %}
+                            <td style="color: rgb(174, 0, 255);"><b>Working</b></td>   
+                        {% else %}
+                            <td style="color: rgb(0, 119, 128);"><b>Done</b></td>                            
+                        {% endif %}
+                    {% elif user == a.recommended_hr %}
+                        <td>Recommended HR</td>
+                        {% if a.internet_hod %}
+                            {% if not a.internet_hr %}
+                                <td style="color: rgb(174, 0, 255);"><b>Working</b></td>   
+                            {% else %}
+                                <td style="color: rgb(0, 119, 128);"><b>Done</b></td>                            
+                            {% endif %}
+                        {% else %}
+                            <td style="color: rgb(107, 100, 6);"><b>Signing Ongoing</b></td>                         
+                        {% endif %} 
+                    
+                    {% endif %}
+                    <td><a class="fas fa-file-pdf" href="{% url 'internet-pdf' a.id %}" target="_blank"> View</a></td>
+                </tr>
+            {% endfor %}
+            {% for a in permission %}
+                <tr>
+                    <td><a class="article-title" style="color: blueviolet" href="{% url 'permission-detail' a.id %}"><b>{{ a }} </b></a></td>
+                    <td><a class="mr-2" href="#">{{ a.author.first_name }}</a></td>                                     
+                    {% if user == a.recommended_hod %}
+                        <td>Recommended HOD</td>
+                        {% if not a.permission_hod %}
+                            <td style="color: rgb(174, 0, 255);"><b>Working</b></td>   
+                        {% else %}
+                            <td style="color: rgb(0, 119, 128);"><b>Done</b></td>                            
+                        {% endif %}
+                    {% elif user == a.recommended_hr %}
+                        <td>Recommended HR</td>
+                        {% if a.permission_hod %}
+                            {% if not a.permission_hr %}
+                                <td style="color: rgb(174, 0, 255);"><b>Working</b></td>   
+                            {% else %}
+                                <td style="color: rgb(0, 119, 128);"><b>Done</b></td>                            
+                            {% endif %}
+                        {% else %}
+                            <td style="color: rgb(107, 100, 6);"><b>Signing Ongoing</b></td>                         
+                        {% endif %} 
+                    
+                    {% endif %}
+                    <td><a class="fas fa-file-pdf" href="{% url 'permission-pdf' a.id %}" target="_blank"> View</a></td>
+                </tr>
+            {% endfor %}
+
+            
+
+            {% for a in requisition %}
+                <tr>
+                    <td><a class="article-title" style="color: blueviolet" href="{% url 'requisition-detail' a.id %}"><b>{{ a }} </b></a></td>
+                    <td><a class="mr-2" href="#">{{ a.author.first_name }}</a></td>
+                    {% if user == a.recommended_by %}
+                        <td>Recommended Sign</td>
+                        {% if not a.requisition_sign %}
+                            <td style="color: rgb(174, 0, 255);"><b>Working</b></td>   
+                        {% else %}
+                            <td style="color: rgb(0, 119, 128);"><b>Done</b></td>                             
+                        {% endif %}
+                    {% elif user == a.recommended_hod %}
+                        <td>Recommended HOD</td>
+                        {% if a.requisition_sign %}
+                            {% if not a.requisition_hod %}
+                                <td style="color: rgb(174, 0, 255);"><b>Working</b></td>   
+                            {% else %}
+                                <td style="color: rgb(0, 119, 128);"><b>Done</b></td>                            
+                            {% endif %}
+                        {% else %}
+                            <td style="color: rgb(107, 100, 6);"><b>Signing Ongoing</b></td>                         
+                        {% endif %}
+
+                    {% elif a.recommended_accountant %}                                     
+                        {% if user == a.recommended_accountant %}
+                            <td>Recommend Accountant</td>
+                            {% if a.requisition_hod %}
+                                {% if not a.requisition_asset %}
+                                    <td style="color: rgb(174, 0, 255);"><b>Working</b></td>   
+                                {% else %}
+                                    <td style="color: rgb(0, 119, 128);"><b>Done</b></td>                         
+                                {% endif %}
+                            {% else %}
+                                <td style="color: rgb(107, 100, 6);"><b>Signing Ongoing</b></td>                         
+                            {% endif %}
+                        {% elif user == a.recommended_by %}
+                            <td>Recommended HR</td>
+                            {% if a.requisition_asset %}
+                                {% if not a.requisition_hr %}
+                                    <td style="color: rgb(174, 0, 255);"><b>Working</b></td>   
+                                {% else %}
+                                    <td style="color: rgb(0, 119, 128);"><b>Done</b></td>                         
+                                {% endif %}
+                            {% else %}
+                                <td style="color: rgb(107, 100, 6);"><b>Signing Ongoing</b></td>                         
+                            {% endif %}                        
+                        {% endif %}
+
+                    {% elif user == a.recommended_hod_it %}
+                        <td>Recommended HOD IT</td>
+                        {% if a.requisition_check %}
+                            {% if not a.requisition_hod_it %}
+                                <td style="color: rgb(174, 0, 255);"><b>Working</b></td>   
+                            {% else %}
+                                <td style="color: rgb(0, 119, 128);"><b>Done</b></td>                         
+                            {% endif %}
+                        {% else %}
+                            <td style="color: rgb(107, 100, 6);"><b>Signing Ongoing</b></td>                         
+                        {% endif %}
+                        
+                    {% endif %}
+                    <td><a class="fas fa-file-pdf" href="{% url 'requisition-pdf' a.id %}" target="_blank"> View</a></td>
+                </tr>
+            {% endfor %}
+            {% for a in resignation %}
+                <tr>
+                    <td><a class="article-title" style="color: blueviolet" href="{% url 'resignation-detail' a.id %}"><b>{{ a }} </b></a></td>
+                    <td><a class="mr-2" href="#">{{ a.author.first_name }}</a></td>
+                    {% if user == a.computer_data_receiver %}                                      
+                        <td>Data Receiver</td>
+                        {% if not a.resignation_data %}
+                            <td style="color: rgb(174, 0, 255);"><b>Working</b></td>   
+                        {% else %}
+                            <td style="color: rgb(0, 119, 128);"><b>Done</b></td>                         
+                        {% endif %}
+                    {% elif user == a.email_archive_receiver %}                                      
+                        <td>Archive Receiver</td>
+                        {% if not a.resignation_archive %}
+                            <td style="color: rgb(174, 0, 255);"><b>Working</b></td>   
+                        {% else %}
+                            <td style="color: rgb(0, 119, 128);"><b>Done</b></td>                         
+                        {% endif %}
+                    {% elif user == a.computer_ip_receiver %}                                      
+                        <td>IP Receiver</td>
+                        {% if not a.resignation_ip%}
+                            <td style="color: rgb(174, 0, 255);"><b>Working</b></td>   
+                        {% else %}
+                            <td style="color: rgb(0, 119, 128);"><b>Done</b></td>                         
+                        {% endif %}
+                    {% elif user == a.ip_phone_receiver %}                                      
+                        <td>Phone Receiver</td>
+                        {% if not a.resignation_phone %}
+                            <td style="color: rgb(174, 0, 255);"><b>Working</b></td>   
+                        {% else %}
+                            <td style="color: rgb(0, 119, 128);"><b>Done</b></td>                         
+                        {% endif %}
+                    {% elif user == a.printer_receiever %}                                      
+                        <td>Printer Receiver</td>
+                        {% if not a.resignation_printer %}
+                            <td style="color: rgb(174, 0, 255);"><b>Working</b></td>   
+                        {% else %}
+                            <td style="color: rgb(0, 119, 128);"><b>Done</b></td>                         
+                        {% endif %}
+                    {% elif user == a.scanner_receiever %}                                      
+                        <td>Scanner Receiver</td>
+                        {% if not a.resignation_scanner %}
+                            <td style="color: rgb(174, 0, 255);"><b>Working</b></td>   
+                        {% else %}
+                            <td style="color: rgb(0, 119, 128);"><b>Done</b></td>                         
+                        {% endif %}
+                    {% elif user == a.recommended_hod %}                                      
+                        <td>Recommended HOD</td>
+                        {% if not a.resignation_hod %}
+                            <td style="color: rgb(174, 0, 255);"><b>Working</b></td>   
+                        {% else %}
+                            <td style="color: rgb(0, 119, 128);"><b>Done</b></td>                         
+                        {% endif %}
+                    {% endif %}
+                    <td><a class="fas fa-file-pdf" href="{% url 'resignation-pdf' a.id %}" target="_blank"> View</a></td>
+                </tr>
+            {% endfor %}
+            
+
+            </tbody>
+        </table>
+    </article>
+
+{% endblock %}
+
+
+

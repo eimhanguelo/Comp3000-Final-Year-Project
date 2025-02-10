@@ -1,0 +1,133 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block network %}
+
+<div class="pagetitle">
+    <h1>Phone Management</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Users</a></li>
+            <li class="breadcrumb-item">Phone</li>
+            <li class="breadcrumb-item active">Create</li>
+        </ol>
+    </nav>
+</div>
+
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            <div class="card shadow">
+                <div class="card-body">
+                    <!-- Title Section -->
+                    <div class="d-flex align-items-center mb-3">
+                        <h5 class="card-title d-flex align-items-center mb-0">
+                            <i class="fa fa-cogs me-2 text-primary"></i>
+                            CISCO Phone Inventory Detail - {{ object.id }}
+                        </h5>
+                        <a href="{% url 'phone-update' object.id %}" class="ms-auto btn btn-outline-primary btn-sm">
+                            <i class="fas fa-pencil-alt"></i> Update
+                        </a>
+                    </div>
+
+                    <!-- Phone Details Section -->
+                    <h5 class="card-title">
+                        <i class="fas fa-network-wired"></i> Phone Details
+                    </h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th>MAC:</th>
+                                    <td>{{ object.mac_address }}</td>
+                                    <th>Model:</th>
+                                    <td>{{ object.model }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Power Adapter:</th>
+                                    <td>{{ object.power_adapter }}</td>
+                                    <th>IP:</th>
+                                    <td>{{ object.provided_ip }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Switch Port:</th>
+                                    <td>{{ object.switch_port }}</td>
+                                    <th>EXT:</th>
+                                    <td>{{ object.ext }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Display:</th>
+                                    <td>{{ object.display_name }}</td>
+                                    <th>Condition:</th>
+                                    <td>{{ object.phone_condition }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Sharing Mode:</th>
+                                    <td>{{ object.share_mode }}</td>
+                                    <th>Phone Status:</th>
+                                    <td>{{ object.ip_status }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Employee ID:</th>
+                                    <td>{{ object.emp_id }}</td>
+                                    <th>Name:</th>
+                                    <td>{{ object.name }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Position:</th>
+                                    <td>{{ object.position }}</td>
+                                    <th>Location:</th>
+                                    <td>{{ object.location }}, {{ object.floor }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Remarks:</th>
+                                    <td colspan="3">{{ object.remarks }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Created by:</th>
+                                    <td colspan="3">{{ object.creator.first_name }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Last Used in Forms Section -->
+                    <h5 class="card-title">
+                        <i class="fas fa-clipboard"></i> Last Used in Forms
+                    </h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr class="text-primary">
+                                    <th>EXT</th>
+                                    <th>IP</th>
+                                    <th>Display</th>
+                                    <th>Condition</th>
+                                    <th>Modified By</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for o in object.history.all %}
+                                    <tr>
+                                        <td>{{ o.ext }}</td>
+                                        <td>{{ o.provided_ip }}</td>
+                                        <td>{{ o.display_name }}</td>
+                                        <td>{{ o.phone_condition }}</td>
+                                        <td>{{ o.history_user }}</td>
+                                        <td>{{ o.date_updated|date:"d M 'Y | P" }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

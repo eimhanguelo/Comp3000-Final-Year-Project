@@ -1,0 +1,447 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.5/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.dataTables.min.css">
+
+    <style>
+        /* Table styling */
+        .datatable {
+            font-size: 0.9rem; /* Smaller font size for table */
+        }
+
+        .datatable th, .datatable td {
+            padding: 0.5rem; /* Reduced padding for table cells */
+        }
+
+        .datatable tr {
+            height: 40px; /* Adjust row height */
+        }
+    </style>
+
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>IT Digitalization System</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+  
+
+  <link rel="icon"  href="{% static 'img/Microsoft.gif' %}">
+  <link rel="apple-touch-icon"  href="{% static 'assets/img/apple-touch-icon.png' %}">
+
+
+  <!-- Google Fonts -->
+  {% comment %} <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet"> {% endcomment %}
+
+  <!-- Vendor CSS Files -->
+   <link rel="stylesheet" type="text/css" href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}">
+   <link rel="stylesheet" type="text/css" href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}">
+   <link rel="stylesheet" type="text/css" href="{% static 'assets/vendor/boxicons/css/boxicons.min.css' %}">
+   <link rel="stylesheet" type="text/css" href="{% static 'assets/vendor/quill/quill.snow.css' %}">
+   <link rel="stylesheet" type="text/css" href="{% static 'assets/vendor/quill/quill.bubble.css' %}">
+   <link rel="stylesheet" type="text/css" href="{% static 'assets/vendor/remixicon/remixicon.css' %}">
+   <link rel="stylesheet" type="text/css" href="{% static 'assets/vendor/simple-datatables/style.css' %}">
+
+  <!-- Template Main CSS File -->
+   <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}">
+
+
+
+   <link rel="stylesheet" type="text/css" href="{% static 'blog/main.css' %}">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="{% url 'front' %}" class="logo d-flex align-items-center">
+        <img href="{% url 'front' %}" style="width: 30px; height: 40px; align-content: flex-start" src="{% static 'img/Microsoft.gif' %}" alt="">
+        <span class="d-none d-lg-block">DigitizeIT</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+   
+{% comment %}     
+    <div class="search-bar">
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+      </form>
+    </div><!-- End Search Bar --> {% endcomment %}
+
+    <div class="search-bar">
+      <div id="digital-clock" class="ms-5" aria-label="Current Time"></div>
+    </div><!-- End Search Bar -->
+    
+    <style>
+      #digital-clock {
+        font-size: 1rem; /* Adjust font size */
+        color: #333; /* Text color */
+        font-weight: bold; /* Make the clock bold */
+      }
+    </style>
+    
+    <script>
+      function updateClock() {
+        const now = new Date();
+        
+        // Get current date
+        const options = { 
+          weekday: 'long', 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        };
+        const date = now.toLocaleDateString(undefined, options); // Format date
+    
+        // Get current time
+        const hours = now.getHours();
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        
+        // Convert to 12-hour format and determine AM/PM
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        const formattedHours = String(hours % 12 || 12).padStart(2, '0'); // 12-hour format
+        
+        // Combine date and time for display
+        const clock = `${date} | ${formattedHours}:${minutes}:${seconds} ${ampm}`;
+        document.getElementById('digital-clock').innerText = clock;
+      }
+    
+      // Update the clock immediately, then every second
+      updateClock();
+      setInterval(updateClock, 1000);
+    </script>
+    
+
+    <nav class="header-nav ms-auto">
+      <ul class="d-flex align-items-center">
+
+        <li class="nav-item d-block d-lg-none">
+          <a class="nav-link nav-icon search-bar-toggle " href="#">
+            <i class="bi bi-search"></i>
+          </a>
+        </li><!-- End Search Icon--> 
+
+       
+
+        <li class="nav-item dropdown pe-3">
+
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+            <img src="{{ user.profile.image.url }}" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2">{{ user.first_name }}</span>
+          </a><!-- End Profile Iamge Icon -->
+
+         
+
+          
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+            <li class="dropdown-header">
+              <h6>{{ user.first_name }}</h6>
+              <span>{{ user.profile.position.name }}</span>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="{% url 'profile' %}">
+                <i class="bi bi-person"></i>
+                <span>My Profile</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="{% url 'logout' %}">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Sign Out</span>
+              </a>
+            </li>
+
+          </ul><!-- End Profile Dropdown Items -->
+        </li><!-- End Profile Nav -->
+
+      </ul>
+    </nav><!-- End Icons Navigation -->
+
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+        
+        
+
+     <li class="nav-item">
+        <a class="nav-link collapsed">
+            <div class="sidebar-header" style="align-content: center">
+                <img class="account-img" src="{{ user.profile.image.url }}">
+            </div>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'admin-dashboard' %}">
+          <i class="bi bi-grid-fill"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-heading">Admin</li>
+      
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'admin-it-forms'%}">
+          <i class="bi bi-shield-lock-fill"></i><span>Admin Home</span>
+        </a>
+      </li><!-- End Components Nav -->
+      
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'tracker_list'%}">
+          <i class="bi bi-file-earmark-check-fill"></i><span>Admin Tracker</span>
+        </a>
+      </li><!-- End Components Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'ticket-engineers' user.username %}">
+          <i class="bi bi-ticket-fill"></i><span>Admin Eticket</span>
+        </a>
+      </li><!-- End Components Nav -->
+    
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'lan-home' %}" >
+          <i class="bi bi-broadcast"></i> <span>Admin Network</span>
+        </a>
+      </li><!-- End Components Nav -->
+    
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'inventory-home' %}">
+            <i class="bi bi-pc-display"></i> <span>Admin Hardware</span>
+        </a>
+    </li>
+      
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'phone-home' %}" >
+          <i class="bi bi-telephone-fill"></i> <span>Admin IP-Phone</span>
+        </a>
+      </li><!-- End Components Nav -->
+
+      <li class="nav-heading">Users</li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'ticket-users' user.username %}" >
+          <i class="bi bi-menu-button-wide"></i><span>My Eticket</span>
+        </a>
+      </li><!-- End Components Nav -->
+
+
+
+      <li class="nav-item">
+        <a class="nav-link collapsed"  href="{% url 'user-it-forms' user %}" >
+          <i class="bi bi-journal-text"></i><span>IT Forms</span>
+        </a>
+      </li><!-- End Forms Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'user-review' user.username %}">
+          <i class="bi bi-layout-text-window-reverse"></i><span>Form Review</span>
+        </a>
+      </li><!-- End Tables Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'user-list' %}">
+          <i class="bi bi-people"></i><span>Contact Directory</span>
+        </a>
+      </li><!-- End Forms Nav -->
+      
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'roster-home' %}">
+          <i class="bi bi-calendar-check"></i><span>IT Duty Schedule</span>
+        </a>
+      </li><!-- End Tables Nav -->
+      
+
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'profile' %}">
+          <i class="bi bi-person"></i>
+          <span>My Profile</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
+
+
+      <li class="nav-heading">Others</li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'logout' %}">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>Logout</span>
+        </a>
+      </li><!-- End Login Page Nav -->
+
+    </ul>
+
+  </aside><!-- End Sidebar-->
+
+  <main id="main" class="main">
+
+    {% block content %} {% endblock %}
+
+    {% block network %} {% endblock %}
+
+    
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>IT Digitalization System</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+      Designed by <a href="">IT Digitalization System</a>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script type="text/javascript" src="{% static 'assets/vendor/apexcharts/apexcharts.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+ <script type="text/javascript" src="{% static 'assets/vendor/chart.js/chart.umd.js' %}"></script>
+ <script type="text/javascript" src="{% static 'assets/vendor/echarts/echarts.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'assets/vendor/quill/quill.js' %}"></script>
+  <script type="text/javascript" src="{% static 'assets/vendor/simple-datatables/simple-datatables.js' %}"></script>
+  <script type="text/javascript" src="{% static 'assets/vendor/tinymce/tinymce.min.js' %}"></script>
+   <script type="text/javascript" src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+
+  <!-- Template Main JS File -->
+   <script type="text/javascript" src="{% static 'assets/js/main.js' %}"></script>
+
+
+
+   
+<!-- jQuery and DataTables JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.5/js/buttons.flash.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.5/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.5/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.5/js/buttons.colVis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+
+<!-- DataTables Initialization with Buttons -->
+<script>
+  $(document).ready(function() {
+    $('.datatable').DataTable({
+      responsive: true,
+      paging: false, // Disable pagination
+      ordering: true,
+      info: false,
+      searching: false,
+      lengthChange: false,
+      lengthMenu: [10, 25, 50, 75, 100],
+      order: [[1, 'asc'], [0, 'desc']],
+      autoWidth: true,
+      dom: 'Bfrtip',
+      buttons: [
+          {
+              extend: 'pdf',
+              orientation: 'landscape', // Horizontal orientation for more space
+              pageSize: 'A4', // Page size (can also try 'A3' if needed)
+              customize: function(doc) {
+                  // Optional: Adjust margins to fit content
+                  doc.content[1].margin = [10, 10, 10, 10];
+              }
+          },
+          'copy', 'csv', 'excel', 'print', 'colvis'
+      ],
+      columnDefs: [
+          { 
+              targets: [0, 5], 
+              visible: true 
+          }
+      ]
+  });
+  
+  });
+</script>
+
+   <script type="text/javascript" src="{% static 'blog/htmx.min.js' %}"></script>
+<!-- Include Select2 CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+<!-- Include Select2 JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+
+<script>
+  $(document).ready(function() {
+      // Helper function to initialize Select2 with AJAX
+      function initializeSelect2(selector, url, placeholder) {
+          $(selector).select2({
+              placeholder: placeholder,
+              allowClear: true,
+              ajax: {
+                  url: url,  // Ensure this URL is correct
+                  dataType: 'json',
+                  delay: 250,
+                  processResults: function (data) {
+                      return {
+                          results: $.map(data, function (item) {
+                              return { id: item.id, text: item.first_name + ' ' + item.last_name };  // Combine first and last name
+                          })
+                      };
+                  },
+                  error: function (xhr, status, error) {
+                      console.log('AJAX Error: ', error);
+                  }
+              }
+          });
+      }
+
+      // Initialize Select2 for Employee's Recommended By field
+      $('#id_recommended_by_all').select2({
+          placeholder: 'Search for Recommended By (Employee)',
+          allowClear: true
+      });
+
+      // Initialize Select2 for Employee's Approved HOD field
+      $('#id_approved_hod_all').select2({
+          placeholder: 'Search for Approved HOD (Employee)',
+          allowClear: true
+      });
+
+      $('#id_all_users').select2({
+        placeholder: 'Search Users',
+        allowClear: true
+    });
+
+      // Initialize Select2 for Requisition's Recommended By field with AJAX
+      initializeSelect2('#id_recommended_by_requisitions', '{% url "display_name_recommender" %}', 'Search for Recommender (Requisition)');
+
+      // Initialize Select2 for Requisition's Recommended HOD field with AJAX
+      initializeSelect2('#id_recommended_hod_requisitions', '{% url "display_name_hod" %}', 'Search for HOD');
+  });
+</script>
+
+</body>
+
+</html>

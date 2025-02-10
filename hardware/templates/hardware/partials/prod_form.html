@@ -1,0 +1,82 @@
+{% load crispy_forms_tags %}
+<div hx-target="this" hx-swap="outerHTML">
+
+    <form method="POST" id="reqForm" data-models-url="{% url 'load-models' %}" style="background-color:#F2F4F4; border: 2px solid black; padding: 20px; margin: 0;" novalidate>
+
+        {% csrf_token %}
+
+        <div class="row mb-3">
+            <div class="col-sm-6">
+                {{ form.product|as_crispy_field }}  
+            </div>
+
+            <div class="col-sm-6">
+                {{ form.quantity|as_crispy_field }}
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-sm-12">
+                {{ form.details|as_crispy_field }}
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-sm-6">
+                {{ form.date_of_last_issue|as_crispy_field }}
+            </div>
+
+            <div class="col-sm-6">
+                {{ form.remarks|as_crispy_field }}
+            </div>
+        </div>
+
+        {% if prod %}
+            <button class="btn btn-primary" style="background-color: darkcyan;" type="submit" hx-post="{% url 'update-prod' prod.id %}" onclick="enableSubmitButton()">
+                Update Item
+            </button>
+            {% comment %} <button class="btn btn-danger" hx-get="{% url 'detail-prod' prod.id %}">
+                Cancel
+            </button> {% endcomment %}
+        {% else %}
+            <button class="btn btn-primary" style="background-color: darkcyan;" type="submit" hx-post="" onclick="enableSubmitButton()">
+                Add Item
+            </button>
+            {% comment %} <button id="cancel-btn" class="btn btn-danger" onclick="cancelSubmitButton()">
+                Cancel
+            </button> {% endcomment %}
+        {% endif %}
+            
+    </form>
+
+    <script>
+        // Handle product selection change
+        $("#id_product").change(function () {
+            var url = $("#reqForm").attr("data-models-url");  
+            var productId = $(this).val();  
+    
+            $.ajax({                      
+                url: url,                    
+                data: {
+                    'product': productId       
+                },
+                success: function (data) {  
+                    $("#id_model").html(data);  
+                }
+            });
+        });
+
+        // Show the submit button when needed
+        function enableSubmitButton() {
+            var submitButton = document.getElementById('send-mail-btn');
+            if (submitButton) {
+                submitButton.style.display = 'block'; // Make the Submit Now button visible
+            }
+        }
+
+        // Cancel and redirect to the create requisition page
+        function cancelSubmitButton() {
+            window.location.href = "{% url 'requisition-create' %}";
+        }
+    </script>
+</div>

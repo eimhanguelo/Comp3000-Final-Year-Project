@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>SPLU2 IT Website</title>
+    
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Font Awesome and other custom styles -->
+    <link href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'vendor/simple-line-icons/css/simple-line-icons.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/landing-page.min.css' %}" rel="stylesheet">
+    <link href="{% static 'blog/login2.css' %}" rel="stylesheet">
+
+    <!-- jQuery UI CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+
+</head>
+<body role="main" class="container" style="min-height: 100%; min-width: 100%; background-image: url('{% static "img/front.jpg" 
+%}')";>
+
+
+<!-- Navigation -->
+<nav class="navbar navbar-light bg-light static-top">
+    <div class="container">
+        <img style="width: 80px; height: 80px; align-content: flex-start" src="{% static 'img/Microsoft.gif' %}" alt="">
+        <img style="width: 670px; height: 80px" src="{% static 'img/sil.png' %}" alt="">
+        <a href="{% url 'front' %}">Home</a>
+    </div>
+</nav>
+
+<main>
+    {% if messages %}
+        {% for message in messages %}
+            <div style="text-align: center" class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% block content %}{% endblock %}
+</main>
+
+<!-- Bootstrap core JavaScript -->
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- jQuery UI JavaScript -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+<!-- Custom JavaScript -->
+<script>
+    $(document).ready(function () {
+        $("#id_username").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '{% url "autocomplete" %}',
+                    dataType: 'json',
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response(data);
+                    }
+                });
+            },
+            minLength: 2, // Minimum characters before triggering autocomplete
+            select: function (event, ui) {
+                // Optional: handle selection of an item
+            }
+        });
+
+       
+    });
+
+</script>
+
+
+</body>
+</html>

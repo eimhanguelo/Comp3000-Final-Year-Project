@@ -1,0 +1,186 @@
+
+
+{% extends "blog/basep.html" %}
+{% load static %}
+
+{% block network %}
+
+<style>
+    /* Container for the section */
+    .content-section {
+        padding: 20px;
+        background-color: #f8f9fa;
+    }
+
+    /* Heading Style */
+    h1 {
+        text-align: center;
+        color: #343a40;
+        font-family: 'Roboto', sans-serif;
+        margin-bottom: 30px;
+        font-size: 2.5rem;
+        font-weight: 700;
+        animation: fadeInLeft 1s ease-out;
+    }
+
+    @keyframes fadeInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    /* Card Counter Style */
+    .card-counter {
+        position: relative;
+        background: #ffffff;
+        border-radius: 15px;
+        padding: 20px;
+        color: #343a40;
+        text-align: center;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        transition: all 0.5s ease;
+        overflow: hidden;
+        background-size: cover;
+        background-position: center;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .card-counter:hover {
+        background: rgba(255, 255, 255, 0.9);
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .icon-container {
+        font-size: 4rem;
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0.4);
+        border-radius: 50%;
+        padding: 20px;
+        margin-bottom: 20px;
+        display: inline-block;
+        transition: background-color 0.3s ease;
+    }
+
+    .icon-container:hover {
+        background-color: rgba(0, 0, 0, 0.6);
+    }
+
+    .count-numbers {
+        font-size: 3rem;
+        font-weight: bold;
+        display: block;
+        color: #343a40;
+        margin-bottom: 10px;
+    }
+
+    .count-name {
+        font-size: 1.5rem;
+        color: #343a40;
+        font-weight: 500;
+    }
+
+    .btn-link {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #fff;
+        text-decoration: none;
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #6c757d; /* Dark gray background */
+        border-radius: 5px;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .btn-link:hover {
+        background-color: #5a6268; /* Slightly darker gray for hover effect */
+        transform: scale(1.05);
+    }
+
+    /* Background Image */
+    .it-forms-panel {
+        background-image: url("{% static 'img/it_forms.jpg' %}");
+        background-size: cover;
+        background-position: center;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .card-counter {
+            padding: 15px;
+        }
+
+        .icon-container {
+            font-size: 3rem;
+            padding: 15px;
+        }
+
+        .count-numbers {
+            font-size: 2rem;
+        }
+
+        .count-name {
+            font-size: 1.2rem;
+        }
+    }
+    /* Enhanced Heading Style */
+
+h1 {
+    text-align: center;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+    position: relative;
+    padding: 10px;
+
+    background: linear-gradient(90deg, rgba(0,204,204,1) 0%, rgba(0,153,255,1) 100%);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+</style>
+
+<div class="content-section">
+    
+    <h1 class="animate__animated animate__fadeInLeft">
+        <span class="glyphicon glyphicon-user"></span> Welcome {{ user.first_name }} 
+    </h1>
+    
+
+    <div class="media">
+        <!-- -------------------------row 1------------------------------- -->
+        <div class="row">
+            <div class="col-sm-auto">
+                <div class="card-counter it-forms-panel">
+                    <div class="btn btn-lg">
+                        <i class="glyphicon glyphicon-th-large"></i>
+                    </div>
+                    <div class="count-container">
+                        <span class="count-numbers">8</span>
+                        <span class="count-name">
+                            <a class="btn btn-lg btn-link" 
+                               href="{% url 'user-it-forms' user %}" 
+                               style="font-size: 18px; color: black; font-weight: bold;">
+                                IT Forms
+                            </a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

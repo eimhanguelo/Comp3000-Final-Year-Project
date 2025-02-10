@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout Warning</title>
+    <style>
+        /* Styles for the logout warning notification */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4; /* Light background for contrast */
+        }
+        #logout-warning {
+            display: none; 
+            position: fixed; 
+            bottom: 20px; 
+            right: 20px; 
+            background: linear-gradient(135deg, #ffcc00, #ff9900); /* Gradient background */
+            padding: 20px; 
+            border: 2px solid #000; 
+            color: black; 
+            font-weight: bold; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); 
+            z-index: 1000; 
+            text-align: center;
+            animation: slideIn 0.5s; /* Animation for entering */
+            transition: transform 0.3s ease; /* Scale effect on hover */
+        }
+        #logout-warning:hover {
+            transform: scale(1.05); /* Slightly enlarge on hover */
+        }
+        #logout-warning span {
+            color: red; /* Style for the countdown text */
+            font-size: 1.5em; /* Larger font size for emphasis */
+        }
+        button {
+            background-color: #007bff; 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            transition: background-color 0.3s, transform 0.2s; /* Button hover effect */
+            font-size: 1em; /* Adjust button font size */
+            margin-top: 10px; /* Space above button */
+        }
+        button:hover {
+            background-color: #0056b3; /* Darker shade on hover */
+            transform: translateY(-2px); /* Lift effect on hover */
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Logout warning notification -->
+<div id="logout-warning">
+    🚨 <strong>Attention!</strong> Auto logout in <span id="countdown">60 seconds</span> due to inactivity. 
+</div>
+
+<script>
+    let inactivityTime = function () {
+        let timeout; // Timer variable for auto logout
+        let warningTimeout; // Warning timer variable
+        let countdownValue = 60; // Countdown value in seconds
+        const countdownDisplay = document.getElementById('countdown');
+
+        // Function to display the warning and start the countdown
+        const showWarning = () => {
+            document.getElementById('logout-warning').style.display = 'block'; // Show warning message
+            countdownDisplay.innerText = `${countdownValue} seconds`; // Initialize countdown display
+
+            const countdownInterval = setInterval(() => {
+                countdownValue--;
+                countdownDisplay.innerText = `${countdownValue} seconds`;
+                if (countdownValue <= 0) {
+                    clearInterval(countdownInterval);
+                    // Redirect to logout URL when countdown reaches zero
+                    window.location.href = "{% url 'logout' %}"; // Update with actual logout URL
+                }
+            }, 1000); // Update countdown every second
+        };
+
+        // Reset timer on user activity
+        const resetTimer = () => {
+            clearTimeout(timeout);
+            clearTimeout(warningTimeout);
+            countdownValue = 60; // Reset countdown value
+            document.getElementById('logout-warning').style.display = 'none'; // Hide warning message
+
+            // Set a timer for 9 minutes (540 seconds) before showing the logout warning
+            warningTimeout = setTimeout(showWarning, 540000); // Show warning after 9 minutes
+
+            // Set a timer for auto logout after 10 minutes (600 seconds)
+            timeout = setTimeout(() => {
+                // Will trigger the logout if user is inactive
+                window.location.href = "{% url 'logout' %}"; // Update with actual logout URL
+            }, 600000); // 10 minutes till logout from inactivity
+        };
+
+        // Reset timer on mouse movements, keypress, or other events
+        window.onload = resetTimer;
+        document.onmousemove = resetTimer;
+        document.onkeypress = resetTimer;
+    };
+
+    // Function to handle staying logged in
+    const stayLoggedIn = () => {
+        clearTimeout(timeout);
+        clearTimeout(warningTimeout);
+        document.getElementById('logout-warning').style.display = 'none'; // Hide warning
+        resetTimer(); // Reset the inactivity timer
+    };
+
+    inactivityTime(); // Start the inactivity timer
+</script>
+</body>
+</html>
+

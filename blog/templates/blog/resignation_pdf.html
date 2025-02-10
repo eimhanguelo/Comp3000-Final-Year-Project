@@ -1,0 +1,375 @@
+<html lang="en">
+
+<head>
+
+	<title> {{ runset }}</title>
+
+	<style>
+
+		  @page {
+			size: a4 portrait;
+			@frame header_frame {           /* Static Frame */
+				-pdf-frame-content: header_content;
+				left: 50pt; width: 512pt; top: 30pt; height: 30pt;
+			}
+			@frame content_frame {          /* Content Frame */
+				left: 50pt; width: 512pt; top: 30pt; height: 700pt;
+			}
+			@frame footer_frame {           /* Another static Frame */
+				-pdf-frame-content: footer_content;
+				left: 50pt; width: 512pt; top: 750pt; height: 85pt;
+			}
+		}
+
+		  .center {
+			  font-size: 15px;
+			  margin: auto;
+			  width: 100%;
+			  font-weight: bold;
+			  border: 2px solid black;
+			  background-color: lightgrey;
+			  padding: 5px;
+			  text-align: center;
+			}
+		#employee {
+				  font-family: Arial, Helvetica, sans-serif;
+				  border-collapse: collapse;
+				  width: 100%;
+				  font-size: 10px;
+
+				}
+
+		#employee td {
+				  border: 1px solid black;
+				  padding: 2px;
+				}
+
+	</style>
+
+</head>
+	<body>
+
+		<div style="text-align: center">
+			<table>
+				<tr>
+					<td><h5 style="color:green; font-size:200%"> IT Digitalization System</h5></td>
+		  		</tr>
+				<tr>
+					<td><h1>DigitizeIT</h1></td>
+		  		</tr>
+				<tr>
+					<td>A Smart IT Solutions</td>
+		  		</tr>
+				<tr>
+					<td style="text-align: center; font: italic small-caps bold 12px/30px Georgia, serif; color: darkslateblue">
+						<h2>Form No: {{ runset }}</h2></td>
+				</tr>
+
+			</table>
+		</div>
+
+
+		<div class="center">
+			MAIL/USER ACCOUNT MODIFICATION FORM
+		</div>
+		<br>
+
+		
+		<div class="center">EMPLOYEE INFORMATION</div>
+
+		<table id="employee">
+			<tr>
+				<td width="35%">Full Name</td>
+				<td width="65%" colspan="2">{{ user_history.first_name }}</td>
+			</tr>
+			
+			<tr>
+				<td width="35%">Email</td>
+				<td width="65%" colspan="2">{{ user_history.email }}</td>
+			</tr>
+
+			<tr>
+				<td width="35%">DESIGNATION</td>
+				<td width="65%" colspan="2">{{ profile_history.0.position }}</td>
+			</tr>
+			<tr>
+				<td width="35%">DEPARTMENT</td>
+				<td width="65%" colspan="2">{{ profile_history.0.department }}</td>
+			</tr>
+			<tr>
+				<td width="35%">EMPLOYEE ID</td>
+				<td width="65%" colspan="2">{{ profile_history.0.emp_id }}</td>
+			</tr>
+
+			<tr>
+				<td width="35%">Contact</td>
+				<td width="40%">Phone : {{ profile_history.0.phone }}</td>
+				<td width="25%">EXT : {{ profile_history.0.ext}}</td>
+			</tr>
+
+		</table>
+
+		<br style = "line-height:7;">
+
+		<div class="center">
+			Form Details
+		</div>
+
+        <table id="employee">
+            <tr>
+				<td width="15%"><b>Accesories</b></td>
+				<td width="12%"><b>Answer</b></td>
+                <td width="23%"><b>Signed By</b></td>
+				<td width="15%"><b>Signed Type</b></td>
+                <td width="23%"><b>Comment</b></td>
+				<td width="12%"><b>Date</b></td>
+			</tr>
+			<tr>
+				<td width="15%"><b>Computer Data:</b></td>
+				<td width="12%">{{ runset.computer_data }}</td>
+                <td width="23%">{{ data_signer.first_name }}</td>
+				<td width="15%">{{ runset.resignation_data.sign_type }}</td>
+                <td width="23%">{{ runset.resignation_data.comment }} </td>
+				<td width="12%">{{ runset.resignation_data.date_updated|date:"d M' y" }}</td>
+			</tr>
+			<tr>
+				<td width="15%"><b>Email Archive:</b></td>
+				<td width="12%">{{ runset.email_archive }}</td>
+                <td width="23%">{{ archive_signer.first_name }}</td>
+				<td width="15%">{{ runset.resignation_archive.sign_type }}</td>
+                <td width="23%">{{ runset.resignation_archive.comment }} </td>
+				<td width="12%">{{ runset.resignation_archive.date_updated|date:"d M' y" }}</td>
+			</tr>
+			<tr>
+				<td width="15%"><b>IP: {{ runset.computer_ip_address }}</b></td>
+				{% if runset.common_computer_ip == True %}
+					<td width="12%">Common : Yes</td>
+				{% else %}
+					<td width="12%">Common : No</td>
+				{% endif %}
+                <td width="23%">{{ ip_signer.first_name }}</td>
+				<td width="15%">{{ runset.resignation_ip.sign_type }}</td>
+                <td width="23%">{{ runset.resignation_ip.comment }} </td>
+				<td width="12%">{{ runset.resignation_ip.date_updated|date:"d M' y" }}</td>
+			</tr>
+
+			<tr>
+				<td width="15%"><b>Phone: {{ runset.ip_phone }}</b></td>
+				{% if runset.ip_phone %}
+					{% if object.common_ip_phone == True %}
+						<td width="12%">Common : Yes</td>
+					{% else %}
+						<td width="12%">Common : No</td>
+					{% endif %}
+					<td width="23%">{{ phone_signer.first_name }}</td>
+					<td width="15%">{{ runset.resignation_phone.sign_type }}</td>
+					<td width="23%">{{ runset.resignation_phone.comment }} </td>
+					<td width="12%">{{ runset.resignation_phone.date_updated|date:"d M' y" }}</td>
+				{% else %}
+					<td width="12%">N/A</td>
+					<td width="23%">N/A</td>
+					<td width="15%">N/A</td>
+					<td width="23%">N/A</td>
+					<td width="12%">N/A</td>
+				{% endif %}
+			</tr>
+			<tr>
+				<td width="15%"><b>Printer Owner: </b></td>
+				{% if runset.printer_owner == True %}
+					<td width="12%">Yes</td>	
+					<td width="23%">{{ printer_signer.first_name }}</td>
+					<td width="15%">{{ runset.resignation_printer.sign_type }}</td>
+					<td width="23%">{{ runset.resignation_printer.comment }} </td>
+					<td width="12%">{{ runset.resignation_printer.date_updated|date:"d M' y" }}</td>
+				{% else %}
+					<td width="12%">No</td>
+					<td width="23%">N/A</td>
+					<td width="15%">N/A</td>
+					<td width="23%">N/A</td>
+					<td width="12%">N/A</td>
+				{% endif %}
+			</tr>
+			<tr>
+				<td width="15%"><b>Scanner Owner: </b></td>
+				{% if runset.scanner_owner == True %}
+					<td width="12%">Yes</td>	
+					<td width="23%">{{ scanner_signer.first_name }}</td>
+					<td width="15%">{{ runset.resignation_scanner.sign_type }}</td>
+					<td width="23%">{{ runset.resignation_scanner.comment }} </td>
+					<td width="12%">{{ runset.resignation_scanner.date_updated|date:"d M' y" }}</td>
+				{% else %}
+					<td width="12%">No</td>
+					<td width="23%">N/A</td>
+					<td width="15%">N/A</td>
+					<td width="23%">N/A</td>
+					<td width="12%">N/A</td>
+				{% endif %}
+			</tr>
+			<tr>
+				<td width="15%"><b>HOD:</b></td>
+				<td width="12%">N/A</td>
+                <td width="23%">{{ hod_signer.first_name }}</td>
+				<td width="15%">{{ runset.resignation_hod.sign_type }}</td>
+                <td width="23%">{{ runset.resignation_hod.comment }} </td>
+				<td width="12%">{{ runset.resignation_hod.date_updated|date:"d M' y" }}</td>
+			</tr>
+
+		</table>
+
+		<br>
+
+		<div class="center">
+			IT Processing Section
+		</div>
+
+		<table id="employee">
+			<tr>
+				<td width="15%"><b>Internet Access: </b></td>
+				{% if runset.internet_access == True %}
+					<td width="12%">Yes</td>	
+					<td width="23%">{{ internet_signer.first_name }}</td>
+					<td width="15%">{{ runset.resignation_internet.sign_type }}</td>
+					<td width="23%">{{ runset.resignation_internet.comment }} </td>
+					<td width="12%">{{ runset.resignation_internet.date_updated|date:"d M' y" }}</td>
+				{% else %}
+					<td width="12%">No</td>
+					<td width="23%">N/A</td>
+					<td width="15%">N/A</td>
+					<td width="23%">N/A</td>
+					<td width="12%">N/A</td>
+				{% endif %}
+			</tr>
+
+			<tr>
+				<td width="15%"><b>Empower ID: </b></td>
+				{% if runset.empower_id %}
+					<td width="12%">{{ runset.empower_id }}</td>	
+					<td width="23%">{{ empower_signer.first_name }}</td>
+					<td width="15%">{{ runset.resignation_empower.sign_type }}</td>
+					<td width="23%">{{ runset.resignation_empower.comment }} </td>
+					<td width="12%">{{ runset.resignation_empower.date_updated|date:"d M' y" }}</td>
+				{% else %}
+					<td width="12%">No</td>
+					<td width="23%">N/A</td>
+					<td width="15%">N/A</td>
+					<td width="23%">N/A</td>
+					<td width="12%">N/A</td>
+				{% endif %}
+			</tr>
+
+			<tr>
+				<td width="15%"><b>Chromeleon ID: </b></td>
+				{% if runset.chromeleon_id %}
+					<td width="12%">{{ runset.chromeleon_id }}</td>	
+					<td width="23%">{{ chromeleon_signer.first_name }}</td>
+					<td width="15%">{{ runset.resignation_chromeleon.sign_type }}</td>
+					<td width="23%">{{ runset.resignation_chromeleon.comment }} </td>
+					<td width="12%">{{ runset.resignation_chromeleon.date_updated|date:"d M' y" }}</td>
+				{% else %}
+					<td width="12%">No</td>
+					<td width="23%">N/A</td>
+					<td width="15%">N/A</td>
+					<td width="23%">N/A</td>
+					<td width="12%">N/A</td>
+				{% endif %}
+			</tr>
+
+			<tr>
+				<td width="15%"><b>Chromeleon ID: </b></td>
+				{% if runset.eqms_id %}
+					<td width="12%">{{ runset.eqms_id }}</td>	
+					<td width="23%">{{ eqms_signer.first_name }}</td>
+					<td width="15%">{{ runset.resignation_eqms.sign_type }}</td>
+					<td width="23%">{{ runset.resignation_eqms.comment }} </td>
+					<td width="12%">{{ runset.resignation_eqms.date_updated|date:"d M' y" }}</td>
+				{% else %}
+					<td width="12%">No</td>
+					<td width="23%">N/A</td>
+					<td width="15%">N/A</td>
+					<td width="23%">N/A</td>
+					<td width="12%">N/A</td>
+				{% endif %}
+			</tr>
+
+			<tr>
+				<td width="15%"><b>Standalone ID: </b></td>
+				{% if runset.standalone_id %}
+					<td width="12%">{{ runset.standalone_id }}</td>	
+					<td width="23%">{{ standalone_signer.first_name }}</td>
+					<td width="15%">{{ runset.resignation_standalone.sign_type }}</td>
+					<td width="23%">{{ runset.resignation_standalone.comment }} </td>
+					<td width="12%">{{ runset.resignation_standalone.date_updated|date:"d M' y" }}</td>
+				{% else %}
+					<td width="12%">No</td>
+					<td width="23%">N/A</td>
+					<td width="15%">N/A</td>
+					<td width="23%">N/A</td>
+					<td width="12%">N/A</td>
+				{% endif %}
+			</tr>
+			
+
+		</table >
+		<br>
+			
+		<div class="center">
+			IT Admin Section
+		</div>
+		
+		<table id="employee">
+
+			<tr>
+				<td width="15%"><b>Email:</b></td>
+				<td width="12%">Disable</td>
+                <td width="23%">{{ disable_signer.first_name }}</td>
+				<td width="15%">{{ runset.resignation_disable.sign_type }}</td>
+                <td width="23%">{{ runset.resignation_disable.comment }} </td>
+				<td width="12%">{{ runset.resignation_disable.date_updated|date:"d M' y" }}</td>
+			</tr>
+
+			<tr>
+				<td width="15%"><b>First Review:</b></td>
+				<td width="12%">Release Sign</td>
+                <td width="23%">{{ primary_signer.first_name }}</td>
+				<td width="15%">{{ runset.resignation_primary.sign_type }}</td>
+                <td width="23%">{{ runset.resignation_primary.comment }} </td>
+				<td width="12%">{{ runset.resignation_primary.date_updated|date:"d M' y" }}</td>
+			</tr>
+
+			<tr>
+				<td width="15%"><b>Email:</b></td>
+				<td width="12%">Deletion Sign</td>
+                <td width="23%">{{ deletion_signer.first_name }}</td>
+				<td width="15%">{{ runset.resignation_deletion.sign_type }}</td>
+                <td width="23%">{{ runset.resignation_deletion.comment }} </td>
+				<td width="12%">{{ runset.resignation_deletion.date_updated|date:"d M' y" }}</td>
+			</tr>
+
+			<tr>
+				<td width="15%"><b>Final Review:</b></td>
+				<td width="12%">Closed Sign</td>
+                <td width="23%">{{ final_signer.first_name }}</td>
+				<td width="15%">{{ runset.resignation_final.sign_type }}</td>
+                <td width="23%">{{ runset.resignation_final.comment }} </td>
+				<td width="12%">{{ runset.resignation_final.date_updated|date:"d M' y" }}</td>
+			</tr>
+		  
+		</table>
+
+	<!-- Content for Static Frame 'footer_frame' -->
+		<div id="footer_content">
+			<hr>
+			page <pdf:pagenumber></pdf:pagenumber>
+			of <pdf:pagecount></pdf:pagecount>
+			<p> {{ user.get_username }}</p>
+			<p style="text-align: center">This is system generated copy does not required any additional ball point writing</p>
+			<p style="text-align: center; font: italic small-caps bold 12px/30px Georgia, serif; color: darkslateblue">
+				&copy; Copyright Square InformatiX Limited. Contact: Ext: 3092/3099
+			</p>
+
+		</div>
+
+	</body>
+
+
+</html>

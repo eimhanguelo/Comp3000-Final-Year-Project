@@ -1,0 +1,287 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block network %}
+
+<div class="pagetitle">
+    <h1>Phone Management</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Users</a></li>
+            <li class="breadcrumb-item">Phone</li>
+            <li class="breadcrumb-item active">Create</li>
+        </ol>
+    </nav>
+</div>
+
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title d-flex align-items-center">
+                        <i class="fa fa-cogs me-2 text-primary"></i> Phone Inventory Form
+                    </h5>
+                    <form method="POST" class="p-4">
+                        {% csrf_token %}
+
+                        <!-- Section: Basic Information -->
+                        <h6 class="text-primary">Basic Information</h6>
+                        <hr class="my-3">
+
+                        <div class="row mb-3">
+                            <!-- MAC Address and Phone Condition fields on the same row -->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_mac_address" class="form-label">
+                                            <i class="bi bi-wifi me-1 text-info"></i> MAC Address*
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.mac_address|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_phone_condition" class="form-label">
+                                            <i class="bi bi-card-checklist me-1 text-info"></i> Phone Condition*
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.phone_condition|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <!-- Phone IP and EXT fields on the same row -->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_provided_ip" class="form-label">
+                                            <i class="bi bi-globe me-1 text-info"></i> Phone IP
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.provided_ip|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_ext" class="form-label">
+                                            <i class="bi bi-phone me-1 text-info"></i> EXT
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.ext|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <!-- Sharing Mode and Model fields on the same row -->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_share_mode" class="form-label">
+                                            <i class="bi bi-share me-1 text-info"></i> Select Sharing Mode
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.share_mode|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_model" class="form-label">
+                                            <i class="bi bi-phone me-1 text-info"></i> Select Model
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.model|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <!-- Power Adapter and Display Name fields on the same row -->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_power_adapter" class="form-label">
+                                            <i class="bi bi-plug me-1 text-info"></i> Select Power Adapter
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.power_adapter|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_display_name" class="form-label">
+                                            <i class="bi bi-tags me-1 text-info"></i> Display Name
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.display_name|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <!-- Name and Department fields on the same row -->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_name" class="form-label">
+                                            <i class="bi bi-person me-1 text-info"></i> Name
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.name|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_department" class="form-label">
+                                            <i class="bi bi-building me-1 text-info"></i> Select Department
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.department|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <!-- Position and Employee ID fields on the same row -->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_position" class="form-label">
+                                            <i class="bi bi-briefcase me-1 text-info"></i> Select Position
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.position|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_emp_id" class="form-label">
+                                            <i class="bi bi-person-badge me-1 text-info"></i> Employee ID
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.emp_id|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <!-- Switch Port and Location fields on the same row -->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_switch_port" class="form-label">
+                                            <i class="bi bi-router me-1 text-info"></i> Switch Port
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.switch_port|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_location" class="form-label">
+                                            <i class="bi bi-geo-alt me-1 text-info"></i> Select Location
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.location|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <!-- Floor and Remarks fields on the same row -->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="id_floor" class="form-label">
+                                            <i class="bi bi-building me-1 text-info"></i> Select Floor
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.floor|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="row mb-3">
+                            <!-- Floor and Remarks fields on the same row -->
+
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label for="id_remarks" class="form-label">
+                                            <i class="bi bi-pencil-square me-1 text-info"></i> Remarks
+                                        </label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        {{ form.remarks|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button Section -->
+                        <div class="text-center py-4">
+                            <button type="submit" class="btn btn-success rounded-pill" aria-label="Submit Form">
+                                <i class="bi bi-check-circle me-2"></i>
+                                Submit
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock network %}

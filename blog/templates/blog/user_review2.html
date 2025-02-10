@@ -1,0 +1,327 @@
+{% extends "blog/base.html"%}
+
+{% load crispy_forms_tags %}
+{% block network %}
+
+<div class="pagetitle">
+    <h1>Eticket</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Users</a></li>
+            <li class="breadcrumb-item active">Review</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+
+<section class="section">
+    <div class="row justify-content-center"> <!-- Added justify-content-center to center the column -->
+        <div class="col-lg-11">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Review Panel: My Pending Task</h5>
+            <table  class="table table-hover" align="center" style="width:100%; text-align:center; font-size: 15px;">
+            <thead>
+          
+            <tr class="bg-light text-center border py-2">
+                <th style="text-align: center;">Form No</th>
+                <th style="text-align: center;">Created By</th>
+                <th style="text-align: center;">Created On</th>
+                <th style="text-align: center;">Signature Type</th>
+                <th style="text-align: center;">Current Status</th>
+                <th style="text-align: center;">PDF</th>
+            </tr> 
+            </thead>
+            <tbody>
+            {% for a in employees %}
+                <tr>                                                               
+                       {% if user == a.recommended_by and not a.employee_sign %}                            
+                                <td><a  href="{% url 'emp-detail' a.id %}"><b>{{ a }} </b></a></td>
+                                <td>{{ a.author.first_name }}</a></td>
+                                <td>{{ a.date_posted }}</a></td> 
+                                <td>Recommended Sign</td>
+                                <td>Ready To Sign</td>                                
+                                <td><a class="fas fa-file-pdf" href="{% url 'emp-pdf' a.id %}" target="_blank"> View</a></td>                        
+                        {% endif %} 
+
+                        {% if user == a.approved_hod and a.employee_sign.sign_type == "Agreed" and a.employee_sign  and not a.employee_hod %}
+                                    <td><a  href="{% url 'emp-detail' a.id %}"><b>{{ a }} </b></a></td>
+                                    <td>{{ a.author.first_name }}</a></td>
+                                    <td>{{ a.date_posted }}</a></td> 
+                                    <td>Recommended HOD</td>
+                                    <td>Ready To Sign</td>
+                                    <td><a class="fas fa-file-pdf" href="{% url 'emp-pdf' a.id %}" target="_blank"> View</a></td>                           
+                        {% endif %} 
+
+                       {% if user in a.approved_hr.all and a.employee_hod.sign_type == "Agreed" and a.employee_hod and not a.employee_hr %}                        
+                                    <td><a  href="{% url 'emp-detail' a.id %}"><b>{{ a }} </b></a></td>
+                                    <td>{{ a.author.first_name }}</a></td>
+                                    <td>{{ a.date_posted }}</a></td> 
+                                    <td>Recommended HR</td>
+                                    <td>Ready To Sign</td>
+                                    <td><a class="fas fa-file-pdf" href="{% url 'emp-pdf' a.id %}" target="_blank"> View</a></td>                           
+                        {% endif %}                     
+                         
+                </tr>
+            {% endfor %}
+
+            {% for a in accounts %}
+                <tr>                                     
+                       {% if user == a.recommended_by and not a.account_sign %}                            
+                                <td><a  href="{% url 'mail-detail' a.id %}"><b>{{ a }} </b></a></td>
+                                <td>{{ a.author.first_name }}</a></td>
+                                <td>{{ a.date_posted }}</a></td> 
+                                <td>Recommended Sign</td>
+                                <td>Ready To Sign</td>
+                                <td><a class="fas fa-file-pdf" href="{% url 'mail-pdf' a.id %}" target="_blank"> View</a></td>                         
+                        {% endif %}
+
+                       {% if user == a.approved_hod and a.account_sign.sign_type == "Agreed" and a.account_sign and not a.account_hod %}
+                                    <td><a  href="{% url 'mail-detail' a.id %}"><b>{{ a }} </b></a></td>
+                                    <td>{{ a.author.first_name }}</a></td>
+                                    <td>{{ a.date_posted }}</a></td> 
+                                    <td>Recommended HOD</td> 
+                                    <td>Ready To Sign</td>
+                                    <td><a class="fas fa-file-pdf" href="{% url 'mail-pdf' a.id %}" target="_blank"> View</a></td>                           
+                        {% endif %}
+
+                       {% if user in a.approved_hr.all and a.account_hod.sign_type == "Agreed" and a.account_hod  and not a.account_hr %}   
+                                    <td><a  href="{% url 'mail-detail' a.id %}"><b>{{ a }} </b></a></td>
+                                    <td>{{ a.author.first_name }}</a></td> 
+                                    <td>{{ a.date_posted }}</a></td> 
+                                    <td>Recommended HR</td> 
+                                    <td>Ready To Sign</td>
+                                    <td><a class="fas fa-file-pdf" href="{% url 'mail-pdf' a.id %}" target="_blank"> View</a></td>                         
+                                                   
+                            {% endif %}                     
+                       
+                </tr>
+            {% endfor %}  
+
+            {% for a in lanrequest %}
+                {% if user == a.recommended_hod and not a.lanrequest_sign %}
+                    <tr>
+                        <td><a  href="{% url 'lan1-detail' a.id %}"><b>{{ a }}</b></a></td>
+                        <td>{{ a.author.first_name }}</td>
+                        <td>{{ a.date_posted }}</td>
+                        <td>Approved by HOD</td>
+                        <td>Ready To Sign</td>
+                        <td><a class="fas fa-file-pdf" href="{% url 'lan1-pdf' a.id %}" target="_blank"> View</a></td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+
+            {% for a in lantransfer %}
+            <tr>
+                {% if user == a.recommended_hod and not a.lantransfer_hod %}
+                    <td><a  href="{% url 'lan2-detail' a.id %}"><b>{{ a }}</b></a></td>
+                    <td>{{ a.author.first_name }}</a></td>
+                    <td>{{ a.date_posted }}</a></td>
+                    <td>Recommended HOD</td>
+                    <td>Ready To Sign</td>
+                    <td><a class="fas fa-file-pdf" href="{% url 'lan2-pdf' a.id %}" target="_blank"> View</a></td>
+                {% endif %} 
+
+                {% if user in a.recommended_hr.all and a.lantransfer_hod.sign_type == "Agreed" and not a.lantransfer_hr %}
+                    <td><a  href="{% url 'lan2-detail' a.id %}"><b>{{ a }}</b></a></td>
+                    <td>{{ a.author.first_name }}</a></td>
+                    <td>{{ a.date_posted }}</a></td>
+                    <td>Recommended HR</td>
+                    <td>Ready To Sign</td>
+                    <td><a class="fas fa-file-pdf" href="{% url 'lan2-pdf' a.id %}" target="_blank"> View</a></td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+
+        {% for a in laninstrument %}
+        <tr>
+            {% if user == a.recommended_hod and not a.laninstrument_sign %}
+                <td><a  href="{% url 'lan3-detail' a.id %}"><b>{{ a }} </b></a></td>
+                <td>{{ a.author.first_name }}</a></td>
+                <td>{{ a.date_posted }}</a></td> 
+                <td>HOD Approval</td>
+                <td "><b>User Signed</b></td>
+                <td><a class="fas fa-file-pdf" href="{% url 'lan3-pdf' a.id %}" target="_blank"> View</a></td>                         
+        {% endif %}
+            
+        </tr>
+    {% endfor %}
+
+
+
+
+    {% for a in laninstrumenttransfer %}
+    <tr>
+        {% if user == a.recommended_hod and not a.lantransfer_hod %}
+            <td><a  href="{% url 'lantransferinstrument-detail' a.id %}"><b>{{ a }}</b></a></td>
+            <td>{{ a.author.first_name }}</a></td>
+            <td>{{ a.date_posted }}</a></td>
+            <td>Recommended By (HOD)</td>
+            <td "><b>User Initiation: Signed</b></td>
+            <td><a class="fas fa-file-pdf" href="{% url 'lantransferinstrument-pdf' a.id %}" target="_blank"> View</a></td>
+
+        {% endif %} 
+
+        {% if user in a.recommended_hr.all and a.lantransfer_hod.sign_type == "Agreed" and not a.lantransfer_hr %}
+            <td><a  href="{% url 'lantransferinstrument-detail' a.id %}"><b>{{ a }}</b></a></td>
+            <td>{{ a.author.first_name }}</a></td>
+            <td>{{ a.date_posted }}</a></td>
+            <td>Approved By (HR)</td>
+            <td>HOD Recommendation: Signed</td>
+            <td><a class="fas fa-file-pdf" href="{% url 'lantransferinstrument-pdf' a.id %}" target="_blank"> View</a></td>
+        {% endif %}
+    </tr>
+{% endfor %}
+
+
+            {% for a in file %}
+            <tr>
+                {% if a.other_dept_head != None %}
+                    {% if user == a.other_dept_head %}                        
+                        {% if not a.fileaccess_other_hod %}
+                            <td><a  href="{% url 'file-detail' a.id %}"><b>{{ a }} </b></a></td>
+                            <td>{{ a.author.first_name }}</a></td>
+                            <td>{{ a.date_posted }}</a></td> 
+                            <td>Other Dept HOD</td>
+                            <td>Ready To Sign</td>
+                            <td><a class="fas fa-file-pdf" href="{% url 'file-pdf' a.id %}" target="_blank"> View</a></td>
+                        {% endif %}                            
+                    {% endif %}
+
+                    {% if user == a.recommended_by %}
+                        {% if a.fileaccess_other_hod %} 
+                            {% if not a.fileaccess_sign %}
+                                <td><a  href="{% url 'file-detail' a.id %}"><b>{{ a }} </b></a></td>
+                                <td>{{ a.author.first_name }}</a></td>
+                                <td>{{ a.date_posted }}</a></td> 
+                                <td>Recommended Sign</td>
+                                <td>Ready To Sign</td>
+                                <td><a class="fas fa-file-pdf" href="{% url 'file-pdf' a.id %}" target="_blank"> View</a></td>
+                            {% endif %}
+                        {% endif %}  
+                    {% endif %}                    
+                    {% if user == a.recommended_hod %}                        
+                        {% if a.fileaccess_sign %}
+                            {% if not a.fileaccess_hod %}
+                                <td><a  href="{% url 'file-detail' a.id %}"><b>{{ a }} </b></a></td>
+                                <td>{{ a.author.first_name }}</a></td>
+                                <td>{{ a.date_posted }}</a></td> 
+                                <td>Recommended HOD</td>
+                                <td>Ready To Sign</td>
+                                <td><a class="fas fa-file-pdf" href="{% url 'file-pdf' a.id %}" target="_blank"> View</a></td>                              
+                            {% endif %}                      
+                        {% endif %}                         
+                    {% endif %}
+                {% else %}
+                    {% if user == a.recommended_by %}
+                        {% if not a.fileaccess_sign %}
+                            <td><a  href="{% url 'file-detail' a.id %}"><b>{{ a }} </b></a></td>
+                            <td>{{ a.author.first_name }}</a></td>
+                            <td>{{ a.date_posted }}</a></td> 
+                            <td>Recommend Sign </td>
+                            <td>Ready To Sign</td>
+                            <td><a class="fas fa-file-pdf" href="{% url 'file-pdf' a.id %}" target="_blank"> View</a></td>                           
+                        {% endif %}
+                    {% endif %}
+                    {% if user == a.recommended_hod %}
+                        {% if a.fileaccess_sign %}
+                            {% if not a.fileaccess_hod %}
+                                <td><a  href="{% url 'file-detail' a.id %}"><b>{{ a }} </b></a></td>
+                                <td>{{ a.author.first_name }}</a></td>
+                                <td>{{ a.date_posted }}</a></td> 
+                                <td>Recommended HOD</td>
+                                <td>Ready To Sign</td>
+                                <td><a class="fas fa-file-pdf" href="{% url 'file-pdf' a.id %}" target="_blank"> View</a></td>                         
+                            {% endif %}                        
+                        {% endif %} 
+                    {% endif %}
+                    
+                {% endif %}
+                
+            </tr>
+            {% endfor %} 
+
+
+           {% for a in requisition %}
+           <tr>
+               {% if user == a.recommended_by and not a.requisition_sign and a.requisition_inventory.all|length != 0 %}
+                   <td><a  href="{% url 'requisition-detail' a.id %}"><b>{{ a }}</b></a></td>
+                   <td>{{ a.author.first_name }}</a></td>
+                   <td>{{ a.date_posted }}</a></td> 
+                   <td>Recommended Sign</td>
+                   <td>Ready To Sign</td>
+                   <td>
+                    <a href="{% url 'requisition-pdf' a.id %}" target="_blank">
+                        <i class="fas fa-file-pdf"></i> View
+                    </a>
+                </td>   
+                   
+                   
+               {% elif user == a.recommended_hod and a.requisition_sign.sign_type == "Agreed" and not a.requisition_hod %}
+                   <td><a  href="{% url 'requisition-detail' a.id %}"><b>{{ a }}</b></a></td>
+                   <td>{{ a.author.first_name }}</a></td>
+                   <td>{{ a.date_posted }}</a></td> 
+                   <td>Recommended HOD</td>
+                   <td>Ready To Sign</td>
+                   <td><a class="fas fa-file-pdf" href="{% url 'requisition-pdf' a.id %}" target="_blank">View</a></td>                  
+                   
+                   
+               {% elif user in a.recommended_hr.all and a.requisition_hod.sign_type == "Agreed" and not a.requisition_hr and a.has_product_with_asset_no %}
+                   <td><a  href="{% url 'requisition-detail' a.id %}"><b>{{ a }}</b></a></td>
+                   <td>{{ a.author.first_name }}</a></td>
+                   <td>{{ a.date_posted }}</a></td> 
+                   <td>Approved HRD</td>
+                   <td>Ready To Sign</td>
+                   <td><a class="fas fa-file-pdf" href="{% url 'requisition-pdf' a.id %}" target="_blank">View</a></td>     
+
+                   
+                   
+                {% elif user in a.recommended_accountant.all and a.requisition_hr.sign_type == "Agreed" and not a.requisition_accountant and a.has_product_with_asset_no %}
+                   <td><a  href="{% url 'requisition-detail' a.id %}"><b>{{ a }}</b></a></td>
+                   <td>{{ a.author.first_name }}</a></td>
+                   <td>{{ a.date_posted }}</a></td> 
+                   <td>Asset No Provider</td>
+                   <td>Ready To Sign</td>
+                   <td><a class="fas fa-file-pdf" href="{% url 'requisition-pdf' a.id %}" target="_blank">View</a></td>    
+
+                {% elif user in a.recommended_verifier_it.all and a.requisition_accountant.sign_type == "Agreed" and not a.requisition_verify and a.has_product_with_asset_no %}
+                   <td><a  href="{% url 'requisition-detail' a.id %}"><b>{{ a }}</b></a></td>
+                   <td>{{ a.author.first_name }}</a></td>
+                   <td>{{ a.date_posted }}</a></td> 
+                   <td>IT Verification</td>
+                   <td>Ready To Sign</td>
+                   <td><a class="fas fa-file-pdf" href="{% url 'requisition-pdf' a.id %}" target="_blank">View</a></td>  
+                   
+                {% elif user in a.recommended_verifier_it.all and a.requisition_hod.sign_type == "Agreed" and not a.requisition_verify and not a.has_product_with_asset_no%}
+                   <td><a  href="{% url 'requisition-detail' a.id %}"><b>{{ a }}</b></a></td>
+                   <td>{{ a.author.first_name }}</a></td>
+                   <td>{{ a.date_posted }}</a></td> 
+                   <td>IT Verification</td>
+                   <td>Ready To Sign</td>
+                   <td><a class="fas fa-file-pdf" href="{% url 'requisition-pdf' a.id %}" target="_blank">View</a></td>  
+
+                   
+
+
+               {% elif user in a.recommended_hod_it.all and a.requisition_verify.sign_type == "Agreed" and not a.requisition_hod_it %}
+                   <td><a  href="{% url 'requisition-detail' a.id %}"><b>{{ a }}</b></a></td>
+                   <td>{{ a.author.first_name }}</a></td>
+                   <td>{{ a.date_posted }}</a></td> 
+                   <td>Approved IT</td>
+                   <td>Ready To Sign</td>
+                   <td><a class="fas fa-file-pdf" href="{% url 'requisition-pdf' a.id %}" target="_blank">View</a></td>  
+                         
+               {% endif %}
+           </tr>
+       {% endfor %}
+       
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+</div>
+</section>
+
+{% endblock %}

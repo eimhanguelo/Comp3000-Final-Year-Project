@@ -1,0 +1,82 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+
+<div class="pagetitle">
+    <h1>Lan Instrument</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Users</a></li>
+            <li class="breadcrumb-item">IT Forms</li>
+            <li class="breadcrumb-item">Lan Instrument </li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title d-flex align-items-center gap-2">
+                        <i class="bi bi-pencil-square" aria-hidden="true" title="Edit and Engage in Discussion"></i>
+                        Approved by HOD
+                    </h5>
+                    
+                    <div class="card-title pt-3 d-flex align-items-center justify-content-center gap-2 text-center">
+                        <i class="bi bi-chat-dots" aria-hidden="true" title="Real-time chat with engineers and users"></i>
+                        <span>HOD Approval for the Instrument Lan Connectivity</span>
+                    </div>
+
+                    <!-- Form for Assignment -->
+                    <form method="post">
+                        {% csrf_token %}
+                    
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="{{ form.required_ip_address.id_for_label }}">IP Address:</label>
+                            <div class="col-sm-10">
+                                {{ form.required_ip_address|as_crispy_field }}
+                            </div>
+                        </div>
+                    
+                        <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="reset" class="btn btn-secondary">Reset</button>
+                        </div>
+                    </form>
+                    
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--------------------------------------select2---------------------------->
+<script type="text/javascript" src="{% static 'blog/jquery-3.5.1.min.js' %}"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#id_required_ip_address').select2({
+            ajax: {
+                url: '{% url 'display_ip_free' %}',
+                dataType: 'json',
+                processResults: function (data) {
+                    return {
+                        results: $.map(data, function (item) {
+                            return {id: item.id, text: item.ip_address};
+                        })
+                    };
+                }
+            },
+            minimumInputLength: 1,
+            placeholder: 'Search for an ip address',
+            allowClear: true,
+
+        });
+    });
+
+</script>
+{% endblock content %}

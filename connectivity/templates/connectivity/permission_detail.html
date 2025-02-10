@@ -1,0 +1,249 @@
+{% extends "blog/basef.html"%}
+{% block content %}
+
+<style>
+    #user_view {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        }
+    #user_view th {
+        width: 28%;
+        font-size: 16px;
+        padding: 2px;
+    }
+    #user_view td {
+        width: 72%;
+        font-size: 14px;
+        padding: 2px;
+    }
+</style>
+
+<div class="div-shadow">
+           <h3 class="border-bottom mb-4" style="text-align: center; color: darkmagenta; font-size: x-large; font-weight: bold">USB Access & Administrative Permission Request Form</h3>
+            <h4 style="color: coral"> Form No :  {{ object }} </h4>
+</div>
+<article class="media content-section">
+   <legend class="border-bottom mb-4" style="text-align: center; color: darkgreen; font-size: large;font-weight: bold">User Details </legend>
+
+   <div class="media-body">
+
+   
+       <div class="row">
+
+           <div class="col-sm-8">
+                
+                <table id="user_view">     
+                    
+                    <tr>
+                        <th>Name :</th>
+                        <td>{{ user_history.first_name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Email :</th>
+                        <td>{{ user_history.email }}</td>
+                    </tr>
+                
+
+                    <tr>
+                        <th>Department :</th>
+                        <td>{{ profile_history.0.department }} </td>
+                    </tr>
+                    <tr>
+                        <th>Designation :</th>
+                        <td>{{ profile_history.0.position }}</td>
+                    </tr>
+                    <tr>
+                        <th>Employee ID :</th>
+                        <td>{{ profile_history.0.emp_id }} </td>
+                    </tr>
+                    <tr>
+                        <th>Contact :</th>
+                        <td>{{ profile_history.0.phone }} || {{ profile_history.0.ext }} </td>
+                    </tr>
+                    <tr>
+                        <th>Address :</th>
+                        <td>{{ profile_history.0.location }} ,  {{ profile_history.0.floor }} </td>
+                    </tr> 
+                        
+                </table>
+           </div>
+
+           <div class="col-sm-4">
+            <p>
+                <button class="btn btn-outline-info" data-toggle="collapse" data-target="#side_button" aria-expanded="false" aria-controls="collapseExample">
+                    <i class="glyphicon glyphicon-option-vertical"></i>
+                </button>
+            </p>
+             <div class="collapse" id="side_button">
+                <div class="card card-body">
+                {% if hr_history == 'not_signed' %}
+                    <a class="btn btn-outline-info btn-sm mt-1 mb-1" href="{% url 'permission-update' object.id %}">Update</a><br>
+                {% else %}
+                    <a class="btn btn-outline-info btn-sm mt-1 mb-1" disabled>Update</a><br>
+                {% endif %}
+                    <a class="btn btn-sm mt-1 mb-1" href="{% url 'permission-pdf' object.id %}" target="_blank">View as PDF</a>
+                </div>
+             </div>
+
+         </div>
+     </div>
+
+  <div>
+
+    <div>
+
+        <legend class="border-bottom mb-4" style="text-align: center; color: darkgreen; font-size: large; font-weight: bold">Form Details </legend>
+        
+           <table id="user_view">
+              
+               <tr>
+                    <th>Computer Name : </th>
+                    <td>{{ object.computer_name }}</td>
+                </tr>
+                <tr>
+                    <th>IP Address : </th>
+                    <td>{{ object.ip_address }}</td>
+                </tr>
+                <tr>
+                    <th>Permission Type : </th>
+                    <td>{{ object.permission_type }}</td>
+                </tr>
+                <tr>                    
+                    <th>Justification : </th>
+                    <td>{{ object.justification }}</td>                    
+               </tr>
+       
+               <tr>
+                    <th>Recommended HOD : </th>             
+                    <td>{{ approved_hod_history.first_name }}</td>
+                </tr>
+                <tr>
+                    <th>Recommended HR : </th>             
+                    <td>{{ approved_hr_history.first_name }}</td>                        
+                </tr>
+               <tr>
+                   <th>Created Date : </th>
+                   <td><small class="text-muted">{{ object.date_posted|date:"d M' Y P" }}</small></td>
+               </tr>
+               <tr>
+                    <th>Updated Date : </th>
+                    <td><small class="text-muted">{{ object.date_updated|date:"d M' Y P" }}</small></td>
+                </tr>
+
+           </table>
+
+       </div>
+    </div>
+</article>
+
+<article class="media content-section">
+    <legend class="border-bottom mb-4" style="text-align: center; color: darkgreen; font-size: large; font-weight: bold">Review and Signing Section</legend>
+
+    
+    
+    <table style="width: 100%">
+
+        <tr style="color: dodgerblue; border-bottom: 1px solid gray">
+            <th>Signer Name</th>
+            <th>Sign Type</th>
+            <th>Comment</th>
+            <th>Sign Date</th>
+        </tr>
+        
+        <tr>
+            <th>{{ hod_history.first_name }}</th>
+            <td>{{ object.permission_hod.sign_type }}</td>
+            <td>{{ object.permission_hod.comment }}</td>
+            <td>{{ object.permission_hod.date_updated }}</td>   
+        </tr>
+        <tr>
+            <th>{{ hr_history.first_name }}</th>
+            <td>{{ object.permission_hr.sign_type }}</td>
+            <td>{{ object.permission_hr.comment }}</td>
+            <td>{{ object.permission_hr.date_updated }}</td>   
+        </tr>
+    </table>
+
+    <div>
+        {% if user == object.recommended_hod %}
+                {% if hod_history == 'not_signed' %}
+                    <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'permissionhod-create' object.id %}">Recommend HOD Sign</a>
+                {% else %}
+                    {% if hr_history == 'not_signed' %}
+                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'permissionhod-update' object.permission_hod.id %}">HOD Update Sign</a>
+                    {% else %}
+                        <p>You are not allowed to update your review</p>
+                    {% endif %}
+                {% endif %}
+        {% endif %}
+
+        {% if user == object.recommended_hr %}
+            {% if hod_sign == 'yes' %}
+                {% if hr_history == 'not_signed' %}
+                    <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'permissionhr-create' object.id %}">Recommend HR Sign</a>
+                {% else %}
+                    {% if admin_history == 'not_signed' %}
+                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'permissionhr-update' object.permission_hr.id %}">HR Update Sign</a>
+                    {% else %}
+                        <p>You are not allowed to update your review</p>
+                    {% endif %}
+                {% endif %}
+            {% else %}
+                <p>Wait Untill HOD SIgn is completed..!!!</p>
+            {% endif %}
+        {% endif %}
+
+    </div>
+
+    </article>
+
+    <article class="media content-section">
+        <legend class="border-bottom mb-4" style="text-align: center; color: darkgreen; font-size: large; font-weight: bold">IT Admin Section</legend>
+
+        
+
+        <table style="width: 100%">
+
+            <tr>
+                <th>Comment : </th>
+                <td>{{ object.permission_it.comment }}</td>
+            </tr>
+
+            <tr>
+                <th>IT Admin : </th>
+                <td>
+                    {{ admin_history.first_name }}                           
+                </td>  
+            </tr>
+
+            <tr>
+                <th>Completion Date : </th>
+                <td>{{ object.permission_it.date_updated }}</td>
+            </tr>
+            
+        </table>
+        <hr>
+
+        <div>
+            {% if user.is_staff %}
+                {% if admin_history == 'not_signed' %}
+                    <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'permissionit-create' object.id %}">IT Admin Sign this</a>
+                {% else %}
+                    <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'permissionit-update' object.permission_it.id %}">IT Sign Update</a>
+                {% endif %}
+            {% endif %}
+
+        </div>
+    </article>
+
+  
+
+{% endblock %}
+
+
+
+
+
+
+

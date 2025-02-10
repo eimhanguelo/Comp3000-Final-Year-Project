@@ -1,0 +1,379 @@
+
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block network %}
+
+<div class="pagetitle">
+    <h1>Email Management</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Users</a></li>
+            <li class="breadcrumb-item">IT Forms</li>
+            <li class="breadcrumb-item">Email</li>
+            <li class="breadcrumb-item active">Details</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+
+                        <!-- Title Section -->
+                        <h5 class="card-title d-flex align-items-center mb-0">
+                            <i class="bi bi-envelope me-2 text-primary"></i>
+                            Mail/User Account Modification Form
+                        </h5>
+                    
+                        <!-- Form Number Display -->
+                        <h6 class="form-number ms-auto btn btn-info mb-2" style="font-weight: bold;">
+                            <i class="fas fa-file-alt me-1"></i>
+                            <span style="text-decoration: underline;">Form No:</span> 
+                            <strong>{{ object }}</strong>
+                        </h6>
+                    
+                        <!-- E-Ticket Reference (only shown if eticket is available) -->
+                        {% if eticket %}
+                        <h6 class="eticket-reference ms-auto" style="font-weight: bold;">
+                            <i class="fas fa-file-alt me-1"></i>
+                            <span style="text-decoration: underline;">E-Ticket Ref:</span> 
+                            <strong class="btn btn-warning mb-1 border-light border-1 ">
+                                <a href="{{ ticket_link }}" class="text-dark">
+                                    {{ formatted_ticket_id }}
+                                </a>
+                            </strong>
+                        </h6>
+                        {% endif %}
+                    
+                    </div>
+                    
+                </div>
+            
+<div class="card-body">
+        
+    <div>
+        <h5 class="card-title">
+            <i class="fas fa-user"></i> <!-- User icon -->
+            User Details
+        </h5>
+        
+    
+        <div class="row">
+            <div class="col-sm-10">
+                <table class="table table-hover table-bordered ">
+                    <tr>
+                        <th>Name :</th>
+                        <td>{{ user_history.first_name }}</td>
+                        <th>Employee ID :</th>
+                        <td>{{ profile_history.0.emp_id }}</td>
+                    <tr>
+                        <th>Department :</th>
+                        <td>{{ profile_history.0.department }}</td>
+                        <th>Designation :</th>
+                        <td>{{ profile_history.0.position }}</td>
+                    </tr>
+                    <tr>
+                        <th>Address :</th>
+                        <td>{{ profile_history.0.location }}, {{ profile_history.0.floor }}</td>
+                       
+                        <th>Contact :</th>
+                        <td>{{ profile_history.0.phone }} || {{ profile_history.0.ext }}</td>
+                    </tr>
+                </table>
+            
+            </div>
+            <div class="col-sm-2">
+                <div class="card card-body">
+                    {% if object.account_sign.sign_type == "" or object.account_sign.sign_type == "Disagreed" or object.account_hod.sign_type == "Disagreed" or object.account_hr.sign_type == "Disagreed"  %}
+                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'mail-update' object.id %}">
+                            <i class="fas fa-pencil-alt"></i> Update
+                        </a><br>
+                    {% else %}
+                        <button type="button" class="btn btn-outline-primary" disabled>
+                            <i class="fas fa-pencil-alt"></i> Update
+                        </button>
+                    {% endif %}
+            
+                    <a class="btn btn-primary mt-1 mb-1" href="{% url 'mail-pdf' object.id %}" target="_blank">
+                        <i class="fas fa-eye"></i> View PDF
+                    </a>
+                </div>
+            </div>
+            
+
+        </div>
+    </div>
+
+
+
+        <div>
+            <h5 class="card-title">
+                <i class="fas fa-clipboard"></i> <!-- Form-related icon -->
+                Form Details
+            </h5>
+            
+
+            <table class="table table-hover table-bordered ">
+                
+                <tr>
+                    <th>User Account Activation: </th>
+                    <td>
+                        {% if object.user_activation %}
+                            {{ object.user_activation }}
+                        {% else %}
+                            Not Applicable
+                        {% endif %}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Mail Account Activation : </th>
+                    <td>
+                        {% if object.mail_activation %}
+                            {{ object.mail_activation }}
+                        {% else %}
+                            Not Applicable
+                        {% endif %}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Mail Group Access : </th>
+                    <td>
+                        {% if object.group_access %}
+                            {{ object.group_access }}
+                        {% else %}
+                            Not Applicable
+                        {% endif %}
+                    </td>
+                </tr>
+
+                  <tr>
+                      <th>Justification : </th>
+                      <td>{{ object.justification }}</td>
+                  </tr>
+                  <tr>
+                      <th>Recommended to : </th>
+                      <td>{{ recommend_history.first_name }}</td>
+                  </tr>
+                  <tr>
+                      <th>Approved HOD : </th>
+                      <td>{{ approved_hod_history.first_name }}</td>
+                  </tr>
+
+            
+                  <tr>
+                      <th>Approved by (HR) : </th>         
+                      <td>
+                        {% if approved_hr_users %}
+                            {% for user in approved_hr_users %}
+                                {{ user.first_name }}
+                                {% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            No users with HR Approval
+                        {% endif %}
+                    </td>
+{% comment %} 
+                      <td>{{ approved_hr_history.first_name }}</td> {% endcomment %}
+                  </tr>
+                  <tr>
+                    <th>Created Date : </th>
+                    <td><small class="text-muted">{{ object.date_posted|date:"d M Y P" }}</small></td>
+                </tr>
+                <tr>
+                    {% if object.date_posted|date:"d M Y P" == object.date_updated|date:"d M Y P" %}
+                    {% else %}
+                        <th>Updated Date : </th>
+                        <td><small class="text-muted">{{ object.date_updated|date:"d M Y P" }}</small></td>
+                    {% endif %}
+                </tr>
+            </table>
+            
+        </div>
+
+
+        <div>
+            <h5 class="card-title">
+                <i class="fas fa-file-signature"></i> <!-- Icon for review and signing -->
+                Approval & Signature
+            </h5>
+            
+        <table class="table table-striped">
+            <tr style="color: dodgerblue; border-bottom: 1px solid gray">
+                <th>Title</th>
+                <th>Signer Name</th>
+                <th>Sign Type</th>
+                <th>Comment</th>
+                <th>Sign Date</th>
+            </tr>
+            <tr>
+                <th>Created By:</th>
+                <th>{{ user_history.first_name }}</th>
+                <td>
+                    <span class="badge bg-info"><i class="bi bi-check-circle me-1"></i> Created</span>
+                </td>
+                <td>Proceed</td>
+                <td>{{ object.date_posted|date:"d M' Y P" }}</td>
+            </tr>
+            <tr>
+                <th>Recommended By:</th>
+                {% if signer_history != 'not_signed' %}
+                    <th>{{ signer_history.first_name }}</th>
+                    {% if object.account_sign.sign_type == 'Agreed' %}
+                        <td style="color: rgb(0, 128, 0); font-weight: bold;">{{ object.account_sign.sign_type }}</td>
+                    {% else %}
+                        <td style="color: rgb(255, 0, 0); font-weight: bold;">{{ object.account_sign.sign_type }}</td>
+                    {% endif %}
+                    <td>{{ object.account_sign.comment }}</td>
+                    <td>{{ object.account_sign.date_updated|date:"d M' Y P" }}</td>
+                {% else %}
+                    <td colspan="4" style="color: #f44336; font-weight: bold;">Pending Recommendation Sign</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <th>Approved By(HOD):</th>
+
+                {% if hod_history != 'not_signed' %}
+                    <th>{{ hod_history.first_name }}</th>
+                    {% if object.account_hod.sign_type == 'Agreed' %}
+                        <td style="color: rgb(0, 128, 0); font-weight: bold;">{{ object.account_hod.sign_type }}</td>
+                    {% else %}
+                        <td style="color: rgb(255, 0, 0); font-weight: bold;">{{ object.account_hod.sign_type }}</td>
+                    {% endif %}
+                    <td>{{ object.account_hod.comment }}</td>
+                    <td>{{ object.account_hod.date_updated|date:"d M' Y P" }}</td>
+                {% else %}
+                    <td colspan="4" style="color: #f44336; font-weight: bold;">Pending Approved By HOD</td>
+                {% endif %}
+
+
+            </tr>
+            <tr>
+                <th>Approved By (HR):</th>
+
+                {% if hr_history != 'not_signed' %}
+                    <th>{{ hr_history.first_name }}</th>
+                    {% if object.account_hr.sign_type == 'Agreed' %}
+                        <td style="color: rgb(0, 128, 0); font-weight: bold;">{{ object.account_hr.sign_type }}</td>
+                    {% else %}
+                        <td style="color: rgb(255, 0, 0); font-weight: bold;">{{ object.account_hr.sign_type }}</td>
+                    {% endif %}
+                    <td>{{ object.account_hr.comment }}</td>
+                    <td>{{ object.account_hr.date_updated|date:"d M' Y P" }}</td>
+
+                {% else %}
+                    <td colspan="4" style="color: #f44336; font-weight: bold;">Pending Approved By HR</td>
+                {% endif %}
+            </tr>
+
+
+        </table>
+
+    </div>
+
+    
+
+        <div>
+            {% if user == object.recommended_by %}
+                {% if signer_history == 'not_signed' %}
+                    <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'mailsign-create' object.id %}">Recommend Sign</a>
+                {% else %}
+                    {% if hod_history == 'not_signed' %}
+                    <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'mailsign-update' object.account_sign.id %}">Recommended Sign Update</a>
+
+                    {% else %}
+                        <p>Not allowed to update Recommended By Sign</p>
+                    {% endif %}
+                {% endif %}
+                
+            {% endif %}
+
+
+        {% if user == object.approved_hod %}
+            {% if signer_history != 'not_signed' %}
+                {% if hod_history == 'not_signed' %}
+                    <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'mailhod-create' object.id %}">HOD Sign</a>
+                {% else %}
+                    {% if hr_history == 'not_signed' %}
+                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'mailhod-update' object.account_hod.id %}">Approved (HOD) Sign Update</a>
+                    {% else %}
+                        <p>Not allowed to update Approved (HOD) Sign</p>
+                    {% endif %}
+                {% endif %}
+            {% else %}
+                <p>Wait Untill Recommender Sign is completed..!!!</p>
+            {% endif %}
+                
+        {% endif %}
+    </div>     
+ 
+        {% if user in object.approved_hr.all %}
+            {% if hod_sign == 'yes' %}
+                {% if hr_history == 'not_signed' and object.account_hod %}
+                    <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'mailhr-create' object.id %}">HR Sign</a>
+                {% else %}
+                    {% if admin_history == 'not_signed' %}
+                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'mailhr-update' object.account_hr.id %}">Approved (HR) Sign Update</a>
+                    {% else %}
+                        <p>Not allowed to update Approved (HR) Sign</p>
+                    {% endif %}
+                {% endif %}
+
+            {% else %}
+                <p>Wait Untill HOD Sign is completed..!!!</p>
+            {% endif %}
+                
+        {% endif %}
+
+
+ 
+        {% if object.account_hr.sign_type == "Agreed" %}
+        <div>
+            <h5 class="card-title">
+                <i class="fas fa-cogs"></i> <!-- IT Admin-related icon -->
+                IT Admin Section
+            </h5>
+            
+
+            <table class="table table-bordered">
+                <tr>
+                    <th>IT Admin : </th>
+                    <td>
+                        {{ admin_history.first_name }}                           
+                    </td>  
+                </tr>
+    
+                <tr>
+                    <th>Comment : </th>
+                    <td>{{ object.account_it.admin_comment }}</td>
+                </tr>
+                <tr>
+                    <th>Completion Date : </th>
+                    <td>{{ object.account_it.date_updated }}</td>
+                </tr>
+
+            </table>
+
+            <div>
+                {% if user.is_staff %}
+                    {% if admin_history == 'not_signed' %}
+                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'mailit-create' object.id %}">IT Admin Sign</a>
+                    {% else %}
+                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'mailit-update' object.account_it.id %}">IT Admin Update</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+{% endblock network %}
+

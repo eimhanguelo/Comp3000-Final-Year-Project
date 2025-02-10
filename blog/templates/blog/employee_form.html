@@ -1,0 +1,171 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block network %}
+
+<div class="pagetitle">
+    <h1>Email Management</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Users</a></li>
+            <li class="breadcrumb-item">IT Forms</li>
+            <li class="breadcrumb-item">Email</li>
+            <li class="breadcrumb-item active">Create</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title d-flex align-items-center">
+                        <i class="bi bi-envelope me-2 text-primary"></i> Mail/User Account Activation Form
+                    </h5>
+                    <form method="POST" class="p-4">
+                        {% csrf_token %}
+                        <h6 class="text-primary">Basic Information</h6>
+                        <hr class="my-3">
+
+                        <div class="row mb-3">
+                            <label for="fullname" class="col-sm-2 col-form-label">
+                                <i class="bi bi-person-fill me-1 text-info"></i> Full Name*
+                            </label>
+                            <div class="col-sm-4">
+                                {{ form.fullname|as_crispy_field }}
+                            </div>
+                            <label for="designation" class="col-sm-2 col-form-label">
+                                <i class="bi bi-briefcase-fill me-1 text-info"></i> Designation
+                            </label>
+                            <div class="col-sm-4">
+                                {{ form.designation|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="department" class="col-sm-2 col-form-label">
+                                <i class="bi bi-building me-1 text-info"></i> Department
+                            </label>
+                            <div class="col-sm-4">
+                                {{ form.department|as_crispy_field }}
+                            </div>
+                            <label for="emp_id" class="col-sm-2 col-form-label">
+                                <i class="bi bi-card-text me-1 text-info"></i> Employee ID
+                            </label>
+                            <div class="col-sm-4">
+                                {{ form.emp_id|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="location" class="col-sm-2 col-form-label">
+                                <i class="bi bi-geo-alt me-1 text-info"></i> Location
+                            </label>
+                            <div class="col-sm-2">
+                                {{ form.location|as_crispy_field }}
+                            </div>
+                            <div class="col-sm-2">
+                                {{ form.floor|as_crispy_field }}
+                            </div>
+                            <label for="emp_join_date" class="col-sm-2 col-form-label">
+                                <i class="bi bi-calendar-fill me-1 text-info"></i> Join Date
+                            </label>
+                            <div class="col-sm-4">
+                                {{ form.emp_join_date|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="phone" class="col-sm-2 col-form-label">
+                                <i class="bi bi-telephone-fill me-1 text-info"></i> Phone No
+                            </label>
+                            <div class="col-sm-4">
+                                {{ form.phone|as_crispy_field }}
+                            </div>
+                            <label for="ext" class="col-sm-2 col-form-label">
+                                <i class="bi bi-phone-fill me-1 text-info"></i> Extension
+                            </label>
+                            <div class="col-sm-4">
+                                {{ form.ext|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="row mb-3">
+                                    <label for="user_activation" class="col-sm-4 col-form-label">
+                                        <i class="bi bi-toggle-on me-1 text-info"></i> User Activation
+                                    </label>
+                                    <div class="col-sm-8">
+                                        {{ form.user_activation|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="group_access" class="col-sm-4 col-form-label">
+                                        <i class="bi bi-people-fill me-1 text-info"></i> Group Access
+                                    </label>
+                                    <div class="col-sm-8">
+                                        {{ form.group_access|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row mb-3">
+                                    <label for="mail_activation" class="col-sm-4 col-form-label">
+                                        <i class="bi bi-mailbox me-1 text-info"></i> Mail Activation
+                                    </label>
+                                    <div class="col-sm-8">
+                                        {{ form.mail_activation|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="justification" class="col-sm-2 col-form-label">
+                                <i class="bi bi-exclamation-circle me-1 text-info"></i> Justification*
+                            </label>
+                            <div class="col-sm-10">
+                                {{ form.justification|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Approvals -->
+                        <h6 class="text-primary mt-4">Approvals</h6>
+                        <hr class="my-3">
+                        <div class="row mb-2">
+                            <label for="recommended_by" class="col-sm-2 col-form-label">
+                                <i class="bi bi-person-check-fill me-1 text-info"></i> Recommended By*
+                            </label>
+                            <div class="col-sm-4">
+                                {{ form.recommended_by|as_crispy_field }}
+                            </div>
+                            <label for="approved_hod" class="col-sm-2 col-form-label">
+                                <i class="bi bi-person-badge-fill me-1 text-info"></i> Approved HOD*
+                            </label>
+                            <div class="col-sm-4">
+                                {{ form.approved_hod|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+
+                        <!-- Submit Button Section -->
+                        <div class="text-center py-4">
+                            <button type="submit" class="btn btn-success rounded-pill" aria-label="Submit Form">
+                                <i class="bi bi-check-circle me-2"></i>
+                                Submit
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock network %}

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Form Approval Notification</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"> <!-- Added Google Fonts -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', 'Helvetica Neue', Arial, sans-serif;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        .email-container {
+            padding: 40px;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            animation: fadeIn 1s ease-in-out;
+            border: 1px solid #e1e1e1; /* Subtle border for definition */
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 24px; /* Reduced font size for header */
+            color: #3a3a8a; /* Darker blue for header */
+            text-align: center; /* Center the text */
+            margin-bottom: 15px; /* Reduced space below the header */
+            text-decoration: underline; /* Underline the text */
+            font-weight: bold; /* Make it bold for emphasis */
+        }
+        
+        p {
+            font-size: 16px; /* Reduced font size */
+            margin: 8px 0; /* Reduced margins */
+            line-height: 1.4; /* Adjusted line height */
+            color: #4a4a4a; /* Slightly darker text for better contrast */
+        }
+
+        .accepted {
+            color: #28a745; /* Green color for approval message */
+            font-weight: bold;
+        }
+
+        .form {
+            color: #0056b3;
+            font-weight: bold; /* Ensure the link is bold */
+            text-decoration: underline; /* Ensure the link is underlined */
+        }
+
+        .form:hover {
+            color: #004085;
+            text-decoration: underline; /* Keep underline on hover */
+        }
+
+        .button {
+            display: inline-block;
+            background: linear-gradient(90deg, #ff8a00, #da1b60);
+            color: #fff;
+            padding: 10px 20px; /* Slightly reduced padding */
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 15px; /* Reduced margin */
+            transition: background 0.3s ease;
+            text-align: center; /* Centered text within the button */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for button */
+        }
+
+        .button:hover {
+            background: linear-gradient(90deg, #ff6f00, #c2185b);
+        }
+
+        .signature {
+            color: #005cbf;
+            font-weight: bold;
+            margin-top: 20px; /* Reduced margin */
+        }
+
+        .divider {
+            margin: 20px 0;
+            height: 2px;
+            background-color: #e9ecef; /* Light gray for divider */
+            border: none;
+        }
+
+        .footer {
+            font-size: 12px; /* Reduced font size */
+            color: #666;
+            margin-top: 20px; /* Reduced margin */
+            text-align: center; /* Centered footer text */
+        }
+
+        @media (max-width: 600px) {
+            .email-container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 18px; /* Further reduced for mobile */
+            }
+
+            p {
+                font-size: 14px; /* Further reduced for mobile */
+            }
+
+            .button {
+                padding: 8px 16px; /* Further reduced padding for mobile */
+                font-size: 14px; /* Further reduced font size for mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="email-container">
+        <h1>Form Approval Notification</h1>
+        <p>Dear <strong>{{ author }}</strong>,</p>
+        <p>
+            Your submission, Form No: <strong>{{ form_id }}</strong>, has been 
+            <span class="accepted">approved</span> and E-Ticket has been generated. 
+            <a class="form" href="{{ link }}" aria-label="View form details for {{ form_id }}">Click here</a> for details.
+        </p>
+        
+        <p>
+            If you have any questions or require further information, feel free to contact us.
+        </p>
+        <a href="{{ link }}" class="button" aria-label="View form details for {{ form_id }}">View Form</a>
+        <hr class="divider">
+        <p class="footer">
+            Thank you for your submission! We appreciate your cooperation and look forward to supporting you.
+        </p>
+        <p class="signature">
+            Best regards,<br>
+            {{ signer }}<br>
+            {{ company_name }}
+        </p>
+    </div>
+
+</body>
+</html>

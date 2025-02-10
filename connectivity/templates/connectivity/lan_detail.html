@@ -1,0 +1,394 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block network %}
+
+<div class="pagetitle">
+    <h1>LAN Management</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Users</a></li>
+            <li class="breadcrumb-item">LAN</li>
+            <li class="breadcrumb-item active">Create</li>
+        </ol>
+    </nav>
+</div>
+
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            <div class="card shadow">
+                <div class="card-body">
+                    <!-- Title Section -->
+                    <div class="d-flex align-items-center mb-3">
+                        <h5 class="card-title d-flex align-items-center mb-0">
+                            <i class="fa fa-cogs me-2 text-primary"></i>
+                            Master Network Inventory
+                        </h5>
+                        <a href="{% url 'lan-update' object.id %}" class="ms-auto btn btn-outline-primary btn-sm">
+                            <i class="fas fa-pencil-alt"></i> Update
+                        </a>
+                    </div>
+
+                    <!-- LAN Details Section -->
+                    <h5 class="card-title">
+                        <i class="fas fa-network-wired"></i> LAN Details
+                    </h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th>IP Address:</th>
+                                    <td>{{ object.ip_address }}</td>
+                                    <th>IP Used:</th>
+                                    <td style="color: {% if object.ip_used %} green {% else %} rgb(160, 8, 8) {% endif %};">
+                                        <b>{{ object.ip_used }}</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Computer Name:</th>
+                                    <td>{{ object.computer_name }}</td>
+                                    <th>Location:</th>
+                                    <td>{{ object.location }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Operating System:</th>
+                                    <td>{{ object.os }}</td>
+                                    <th>VLAN Name:</th>
+                                    <td>{{ object.vlan }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Switch Port:</th>
+                                    <td>{{ object.switch_port }}</td>
+                                    <th>Cable Tag:</th>
+                                    <td>{{ object.cable_tag }}</td>
+                                </tr>
+                                <tr>
+                                    <th>CPU Model:</th>
+                                    <td>{{ object.cpu_model }}</td>
+                                    <th>Printer Model:</th>
+                                    <td>{{ object.printer_model }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Scanner Model:</th>
+                                    <td>{{ object.scanner_model }}</td>
+                                    <th>LAN Location:</th>
+                                    <td>{{ object.location }}, {{ object.floor }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Remarks:</th>
+                                    <td colspan="3">{{ object.remarks }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Modified By:</th>
+                                    <td>{{ object.admin.first_name }}</td>
+                                    <th>Last Modified Date:</th>
+                                    <td>{{ object.history.all.0.history_date|date:"d M' Y || P" }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Last Used in Forms Section -->
+                    <h5 class="card-title">
+                        <i class="fas fa-clipboard"></i> Last Used in Forms
+                    </h5>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr class="text-primary">
+                                    <th>Form Name</th>
+                                    <th>Person</th>
+                                    <th>Department</th>
+                                    <th>Designation</th>
+                                    <th>Location</th>
+                                    <th>Given Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for r in object.lanrequest_ip.all %}
+                                    <tr>
+                                        <td>
+                                            <a href="{% url 'lan1-detail' r.lanrequest.id %}" target="_blank">{{ r.lanrequest }}</a>
+                                        </td>
+                                        <td>{{ r.lanrequest.author.first_name }}</td>
+                                        <td>{{ r.lanrequest.author.profile.department }}</td>
+                                        <td>{{ r.lanrequest.author.profile.position }}</td>
+                                        <td>{{ r.lanrequest.author.profile.location }}</td>
+                                        <td>{{ r.date_signed|date:"d M' Y | P" }}</td>
+                                    </tr>
+                                {% endfor %}
+                                {% for t in object.lantransfer_ip.all %}
+                                    <tr>
+                                        <td>
+                                            <a href="{% url 'lan2-detail' t.id %}" target="_blank">
+                                                LCTF-{{ t.id }}/{{ t.author.id }}/{{ t.author.profile.emp_id }}
+                                            </a>
+                                        </td>
+                                        <td>{{ t.author.first_name }}</td>
+                                        <td>{{ t.author.profile.department }}</td>
+                                        <td>{{ t.author.profile.position }}</td>
+                                        <td>{{ t.author.profile.location }}</td>
+                                        <td>{{ t.date_posted|date:"d M' Y | P" }}</td>
+                                    </tr>
+                                {% endfor %}
+                                {% for r in object.laninstrument_ip.all %}
+                                    <tr>
+                                        <td>
+                                            <a href="{% url 'lan3-detail' r.laninstrument.id %}" target="_blank">{{ r.laninstrument }}</a>
+                                        </td>
+                                        <td>{{ r.laninstrument.author.first_name }}</td>
+                                        <td>{{ r.laninstrument.author.profile.department }}</td>
+                                        <td>{{ r.laninstrument.author.profile.position }}</td>
+                                        <td>{{ r.laninstrument.author.profile.location }}</td>
+                                        <td>{{ r.date_signed|date:"d M' Y | P" }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- History Section -->
+                    <h5 class="card-title">
+                        <i class="fas fa-clock"></i> History: Last Used
+                    </h5>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr class="text-primary">
+                                    <th>IP</th>
+                                    <th>VLAN</th>
+                                    <th>Switch Name</th>
+                                    <th>Switch Port</th>
+                                    <th>Remarks</th>
+                                    <th>Admin</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for o in object.history.all %}
+                                    <tr>
+                                        <td>{{ o.ip_address }}</td>
+                                        <td>{{ o.vlan }}</td>
+                                        <td>{{ o.switch_name }}</td>
+                                        <td>{{ o.switch_port }}</td>
+                                        <td>{{ o.remarks }}</td>
+                                        <td>{{ o.admin.first_name }}</td>
+                                        <td>{{ o.history_date|date:"d M' Y | P" }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% comment %} {% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block network %}
+
+<div class="pagetitle">
+    <h1>LAN Management</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Users</a></li>
+            <li class="breadcrumb-item">LAN</li>
+            <li class="breadcrumb-item active">Create</li>
+        </ol>
+    </nav>
+</div>
+
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            <div class="card shadow">
+                
+                <div class="card-body">
+
+                    <div class="d-flex align-items-center mb-3">
+
+                        <!-- Title Section -->
+                        <h5 class="card-title d-flex align-items-center mb-0">
+                            <i class="bi bi-envelope me-2 text-primary"></i>
+                            Lan Activation
+                        </h5>
+                    
+                         <!-- Form Number Display -->
+                        <h6 class="form-number ms-auto mb-2 btn btn-outline-primary btn-sm" style="font-weight: bold;">
+                            <a href="{% url 'lan-update' object.id %}" >
+                                <i class="fas fa-pencil-alt"></i> Update
+                            </a>
+                        </h6>
+
+                    
+                    </div>
+
+                    <h5 class="card-title">
+                        <i class="fas fa-user"></i> Lan Details
+                    </h5>
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table table-hover table-bordered ">
+                    <tr>
+                        <th>IP Address:</th>
+                        <td>{{ object.ip_address }}</td>
+                        <th>IP Used :</th>
+                        <td style="color: {% if object.ip_used %} green {% else %} rgb(160, 8, 8) {% endif %};"> 
+                            <b> {{ object.ip_used }} </b>
+                        </td>
+                    <tr>
+                        <th>Computer Name :</th>
+                        <td>{{ object.computer_name }}</td>
+                        <th>Location :</th>
+                        <td>{{ object.location }}</td>
+                    </tr>
+                    <tr>
+                        <th>Operating System :</th>
+                        <td>{{ object.os }}</td>
+                       
+                        <th>VLAN Name :</th>
+                        <td>{{ object.vlan }}</td>
+                    </tr>
+                    <tr>
+                        <th>Switch Port :</th>
+                        <td>{{ object.switch_port }}</td>
+                       
+                        <th>Cable Tag :</th>
+                        <td>{{ object.cable_tag }}</td>
+                    </tr>
+                    <tr>
+                        <th>CPU Model :</th>
+                        <td>{{ object.cpu_model }}</td>
+                       
+                        <th>Printer Model:</th>
+                        <td>{{ object.printer_model }}</td>
+                    </tr>
+                    <tr>
+                        <th>Scanner Model :</th>
+                        <td>{{ object.scanner_model }}</td>
+                       
+                        <th>Lan Location:</th>
+                        <td>{{ object.location }}, {{ object.floor }}</td>
+                    </tr>
+                    <tr>
+                        <th>Remarks</th>
+                        <td>{{ object.remarks }}</td>
+                    </tr>
+                    <tr>
+                        <th>Modified By :</th>
+                        <td>{{ object.admin.first_name }}</td>
+                       
+                        <th>Last Modified Date :</th>
+                        <td>{{ object.history.all.0.history_date|date:"d M' Y || P" }}</td>
+                    </tr>
+                </table>
+            
+            </div>   
+
+        </div>
+
+
+          
+
+
+                <div class="card-body">
+                <!-- IP Address Table Section -->
+                    <article>
+                        <legend class="border-bottom mb-4 text-center text-darkgreen font-weight-bold">Last Used in Forms</legend>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                    <tr class="text-primary">
+                                        <th>Form Name</th>
+                                        <th>Person</th>
+                                        <th>Department</th>
+                                        <th>Designation</th>
+                                        <th>Location</th>
+                                        <th>Given Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for r in object.lanrequest_ip.all %}
+                                        <tr>
+                                            <td><a href="{% url 'lan1-detail' r.lanrequest.id %}" target="_blank">{{ r.lanrequest }}</a></td>
+                                            <td>{{ r.lanrequest.author.first_name }}</td>
+                                            <td>{{ r.lanrequest.author.profile.department }}</td>
+                                            <td>{{ r.lanrequest.author.profile.position }}</td>
+                                            <td>{{ r.lanrequest.author.profile.location }}</td>
+                                            <td>{{ r.date_signed|date:"d M' Y | P" }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    {% for t in object.lantransfer_ip.all %}
+                                        <tr>
+                                            <td><a href="{% url 'lan2-detail' t.id %}" target="_blank">LCTF-{{ t.id }}/{{ t.author.id }}/{{ t.author.profile.emp_id }}</a></td>
+                                            <td>{{ t.author.first_name }}</td>
+                                            <td>{{ t.author.profile.department }}</td>
+                                            <td>{{ t.author.profile.position }}</td>
+                                            <td>{{ t.date_posted|date:"d M' Y | P" }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    {% for r in object.laninstrument_ip.all %}
+                                        <tr>
+                                            <td><a href="{% url 'lan3-detail' r.laninstrument.id %}" target="_blank">{{ r.laninstrument }}</a></td>
+                                            <td>{{ r.laninstrument.author.first_name }}</td>
+                                            <td>{{ r.laninstrument.author.profile.department }}</td>
+                                            <td>{{ r.laninstrument.author.profile.position }}</td>
+                                            <td>{{ r.laninstrument.author.profile.location }}</td>
+                                            <td>{{ r.date_signed|date:"d M' Y | P" }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </article>
+
+                    <!-- History Section -->
+                    <article >
+                        <legend class="border-bottom mb-4 text-center text-darkgreen font-weight-bold">History: Last Used</legend>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                    <tr class="text-primary">
+                                        <th>IP</th>
+                                        <th>VLAN</th>
+                                        <th>Switch Name</th>
+                                        <th>Switch Port</th>
+                                        <th>Remarks</th>
+                                        <th>Admin</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for o in object.history.all %}
+                                        <tr>
+                                            <td>{{ o.ip_address }}</td>
+                                            <td>{{ o.vlan }}</td>
+                                            <td>{{ o.switch_name }}</td>
+                                            <td>{{ o.switch_port }}</td>
+                                            <td>{{ o.remarks }}</td>
+                                            <td>{{ o.admin.first_name }}</td>
+                                            <td>{{ o.history_date|date:"d M' Y | P" }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} {% endcomment %}

@@ -1,0 +1,224 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block network %}
+
+<div class="pagetitle">
+    <h1>Email Management</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Users</a></li>
+            <li class="breadcrumb-item">IT Forms</li>
+            <li class="breadcrumb-item">Email</li>
+            <li class="breadcrumb-item active">Create</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title d-flex align-items-center">
+                        <i class="bi bi-envelope me-2 text-primary"></i> Mail/User Account Modification Form
+                    </h5>
+                    <form method="POST" class="p-4">
+                        {% csrf_token %}
+                        <h6 class="text-primary">Permission Information</h6>
+                        <hr class="my-3">
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="row mb-3">
+                                    <label for="user_activation" class="col-sm-4 col-form-label">
+                                        <i class="bi bi-toggle-on me-1 text-info"></i> User Activation
+                                    </label>
+                                    <div class="col-sm-8">
+                                        {{ form.user_activation|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="group_access" class="col-sm-4 col-form-label">
+                                        <i class="bi bi-people-fill me-1 text-info"></i> Group Access
+                                    </label>
+                                    <div class="col-sm-8">
+                                        {{ form.group_access|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row mb-3">
+                                    <label for="mail_activation" class="col-sm-4 col-form-label">
+                                        <i class="bi bi-mailbox me-1 text-info"></i> Mail Activation
+                                    </label>
+                                    <div class="col-sm-8">
+                                        {{ form.mail_activation|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="justification" class="col-sm-2 col-form-label">
+                                <i class="bi bi-exclamation-circle me-1 text-info"></i> Justification*
+                            </label>
+                            <div class="col-sm-10">
+                                {{ form.justification|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Approvals -->
+                        <h6 class="text-primary mt-4">Approvals</h6>
+                        <hr class="my-3">
+                        <div class="row mb-2">
+                            <label for="recommended_by" class="col-sm-2 col-form-label">
+                                <i class="bi bi-person-check-fill me-1 text-info"></i> Recommended By*
+                            </label>
+                            <div class="col-sm-4">
+                                {{ form.recommended_by|as_crispy_field }}
+                            </div>
+                            <label for="approved_hod" class="col-sm-2 col-form-label">
+                                <i class="bi bi-person-badge-fill me-1 text-info"></i> Approved HOD*
+                            </label>
+                            <div class="col-sm-4">
+                                {{ form.approved_hod|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+
+                        <!-- Submit Button Section -->
+                        <div class="text-center py-4">
+                            <button type="submit" class="btn btn-success rounded-pill" aria-label="Submit Form">
+                                <i class="bi bi-check-circle me-2"></i>
+                                Submit
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock network %}
+
+
+
+{% comment %} {% extends "blog/basef.html"%}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+    <div class="content-section">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4" style="text-align: center; font-weight: bold; color: #3366ff;">MAIL/USER ACCOUNT MODIFICATION FORM</legend>
+
+ 
+
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="form-group row-md-4 mb-0">
+                            {{ form.user_activation|as_crispy_field }}
+                        </div>
+                        <div class="form-group row-md-4 mb-0">
+                            {{ form.group_access|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row-md-4 mb-0">
+                            {{ form.mail_activation|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-12 mb-0">
+                      {{ form.justification|as_crispy_field }}
+                    </div>                 
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6 mb-0">
+                      {{ form.recommended_by|as_crispy_field }}
+                    </div>                
+                    <div class="form-group col-md-6 mb-0">
+                        {{ form.approved_hod|as_crispy_field }}
+                      </div>  
+                </div>
+
+            </fieldset>
+
+            <div style="display: flex; justify-content: center;">   
+                <div class="form-group">
+                    <button id="send-mail-btn" class="btn btn-primary" type="submit">Submit Now</button>
+                </div>
+            </div>
+        </form>
+        {% if form.errors %}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <div class="error-message" style="color: red;"> <b>{{ error }}</b></div>
+                {% endfor %}
+            {% endfor %}
+        {% endif %}
+    </div>
+
+        <!--------------------------------------select2---------------------------->
+        <script type="text/javascript" src="{% static 'blog/jquery-3.5.1.min.js' %}"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $('#id_recommended_by, #id_approved_hod, #id_approved_hr').select2({
+            ajax: {
+                url: '{% url 'display_name' %}',
+                dataType: 'json',
+                processResults: function (data) {
+                    return {
+                        results: $.map(data, function (item) {
+                            return {id: item.id, text: item.first_name};
+                        })
+                    };
+                }
+            },
+            minimumInputLength: 1,
+            placeholder: 'Search user by using display name',
+            allowClear: true,
+        });
+    });
+
+    $(document).ready(function () {
+        $('#id_approved_hr').select2({
+            ajax: {
+                url: '{% url 'display_name_hr' %}',
+                dataType: 'json',
+                processResults: function (data) {
+                    return {
+                        results: $.map(data, function (item) {
+                            return {id: item.id, text: item.first_name};
+                        })
+                    };
+                }
+            },
+            minimumInputLength: 1,
+            placeholder: 'Search HR Person by using display name',
+            allowClear: true,
+        });
+    });
+
+
+    
+</script>
+
+{% endblock content %}
+
+
+
+ {% endcomment %}

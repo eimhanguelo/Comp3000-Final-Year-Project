@@ -1,0 +1,71 @@
+{% extends "blog/basep.html"%}
+{% load crispy_forms_tags %}
+{% block network %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
+
+
+    <article >
+        <div class="row">
+            <div class="col-sm-12 div-shadow text-center" style="font-size: x-large; height: 75px; background-color: rgb(129, 212, 212);">
+                Stock Summary : Product Wise
+            </div>
+        </div>
+
+        <hr style="height:2px;background-color:darkslateblue">
+       
+        <article class="media content-section">
+            <table id="table_id"  class="table table-striped table-bordered display hover" align="center" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>S.N.</th>
+                        <th>Product</th>
+                        <th>Total Quantity</th>
+                                   
+                    </tr>
+                </thead>
+                <tbody>
+                {% for l in stock_summary %}
+                    <tr>
+                        <td><i style="color: darkblue;font-size: medium;" class="fab fa-product-hunt">{{ forloop.counter }}</i></td>
+                        <td><b class="article-title">{{ l.product__name }}</b></td>
+                        <td>{{ l.total_quantity }}</td>
+                        <!-- <td>
+                            {% if l.requisition is None %}
+                                <a class="article-title" style="color: rgb(12, 99, 66)" href="#">
+                                    <b>{{ l.requisition }} </b>
+                                </a>
+                            {% else %}
+                                <a class="article-title" style="color: rgb(12, 99, 66)" href="{% url 'requisition-detail' l.requisition.id %}">
+                                    <b>{{ l.requisition }} </b>
+                                </a>
+                            {% endif %}
+                        </td>
+                     
+                        {% if l.product_condition == 'Requisition Raised' %}
+                            <td style="color: rgb(57, 159, 177);"><b>{{ l.product_condition }}</b></td>
+                        {% elif l.product_condition == 'Sent to CHQ' %}
+                            <td style="color: rgb(180, 63, 63);"><b>{{ l.product_condition }}</b></td>
+                        {% elif l.product_condition == 'In Stock' %}
+                            <td style="color: rgb(37, 172, 71);"><b>{{ l.product_condition }}</b></td>
+                        {% else %}
+                            <td style="color: rgb(84, 30, 210);"><b>{{ l.product_condition }}</b></td>
+                        {% endif %}
+                        <td> {{ l.used_by.first_name }}</td>
+                        <td> {{ l.used_by.profile.floor }} <br> {{ l.used_by.profile.location }}</td>
+                        <td>{{ l.reference }}</td> 
+                        <td>{{ l.requisition.requisition_no }}</td>  -->
+                        <!-- {% if l.chalan_copy %}
+                            <td><a href="{{ l.chalan_copy.url }}" download> {{ l.chalan }}</a></td>
+                        {% else %}
+                            <td>No Chalan Copy</td>
+                        {% endif %} --> 
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+             </table>
+        </article>
+
+   
+
+{% endblock %}

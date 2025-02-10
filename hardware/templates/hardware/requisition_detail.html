@@ -1,0 +1,567 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block network %}
+
+<div class="pagetitle">
+    <h1>Requisition</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Users</a></li>
+            <li class="breadcrumb-item">IT Forms</li>
+            <li class="breadcrumb-item">Requisition</li>
+            <li class="breadcrumb-item active">Details</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <h5 class="card-title d-flex align-items-center mb-0">
+                            <i class="fas fa-shopping-bag me-2 text-primary"></i>
+                            IT Requisition Form Details
+                        </h5>
+      
+
+                        <h6 class="ms-auto btn btn-info mb-2" style="font-weight: bold;">
+                            <i class="fas fa-file-alt me-1"></i>
+                            <span style="text-decoration: underline;">Form No:</span> 
+                            <strong>{{ object }}</strong>
+                        </h6>
+                        
+
+                        {% comment %} <h6 class="" >
+                            <i class="fas fa-file-alt me-1"></i>  <!-- Icon added here -->
+                            Form No: {{ object }}
+                        </h6> {% endcomment %}
+                    </div>
+                </div>
+            
+<div class="card-body">
+        
+    <div>
+        <h5 class="card-title">
+            <i class="fas fa-user"></i> <!-- User icon -->
+            User Details
+        </h5>
+        
+    
+        <div class="row">
+            <div class="col-sm-10">
+                <table class="table table-hover table-bordered ">
+                    <tr>
+                        <th>Name :</th>
+                        <td>{{ user_history.first_name }}</td>
+                        <th>Email :</th>
+                        <td>{{ user_history.email }}</td>
+                    </tr>
+                    <tr>
+                        <th>Department :</th>
+                        <td>{{ profile_history.0.department }}</td>
+                        <th>Designation :</th>
+                        <td>{{ profile_history.0.position }}</td>
+                    </tr>
+                    <tr>
+                        <th>Employee ID :</th>
+                        <td>{{ profile_history.0.emp_id }}</td>
+                        <th>Contact :</th>
+                        <td>{{ profile_history.0.phone }} || {{ profile_history.0.ext }}</td>
+                    </tr>
+                    <tr>
+                        <th>Address :</th>
+                        <td>{{ profile_history.0.location }}, {{ profile_history.0.floor }}</td>
+                        <th>Created Date :</th>
+                        <td><small class="text-muted">{{ object.date_posted|date:"d M' Y P" }}</small></td>
+                    </tr>
+                    {% if object.date_posted|date:"d M Y P" != object.date_updated|date:"d M Y P" %}
+                    <tr>
+                        <th>Updated Date :</th>
+                        <td colspan="3"><small class="text-muted">{{ object.date_updated|date:"d M Y P" }}</small></td>
+                    </tr>
+                    {% endif %}
+                </table>
+            
+            </div>
+            <div class="col-sm-2">
+                <div class="card card-body">
+                    {% if object.requisition_sign.sign_type == "" or object.requisition_sign.sign_type == "Disagreed" or object.requisition_hod.sign_type == "Disagreed" or object.requisition_hr.sign_type == "Disagreed" or object.requisition_hod_it.sign_type == "Disagreed" %}
+                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'requisition-update' object.id %}">
+                            <i class="fas fa-pencil-alt"></i> Update
+                        </a><br>
+                    {% else %}
+                        <button type="button" class="btn btn-outline-primary" disabled>
+                            <i class="fas fa-pencil-alt"></i> Update
+                        </button>
+                    {% endif %}
+            
+                    <a class="btn btn-primary mt-1 mb-1" href="{% url 'requisition-pdf' object.id %}" target="_blank">
+                        <i class="fas fa-eye"></i> View PDF
+                    </a>
+                </div>
+            </div>
+            
+
+        </div>
+    </div>
+
+
+
+        <div>
+            <h5 class="card-title">
+                <i class="fas fa-clipboard"></i> <!-- Form-related icon -->
+                Form Details
+            </h5>
+            
+
+            <table class="table table-hover table-bordered ">
+                <tr>
+                    <th>Requisition Type :</th>
+                    <td>{{ object.requisition_type }}</td>
+                    <th>Requisition No:</th>
+                    <td>{{ object.requisition_no }}</td>
+                   
+                </tr>
+            
+                <tr>
+                    <th>Cost Center :</th>
+                    <td>{{ object.cost_center }}</td>
+
+
+                    <th>New Asset No:</th>
+                    <td>
+                        {% if object.requisition_accountant.new_asset_no %}
+                             <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i> {{ object.requisition_accountant.new_asset_no }}</span> 
+                            </span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark"><i class="bi bi-exclamation-triangle me-1"></i> Asset number to be issued by A&F</span>                                
+                            </span>
+                        {% endif %}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Attachment:</th>
+                    <td colspan="5">
+                        {% if object.requisition_attachment %}
+                            <a href="{{ object.requisition_attachment.url }}" target="_blank" rel="noopener noreferrer" style="font-weight: bold; text-decoration: underline;">
+                                View Attachment
+                            </a>
+                        {% else %}
+                            No attachment available.
+                        {% endif %}
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th>Recommended By :</th>
+                    <td colspan="5">{{ recommended_history.first_name }}</td>
+               
+                </tr>    
+                <tr>                      
+                    <th>Approved By (HOD) :</th>
+                    <td colspan="5">{{ recommend_hod_history.first_name }}</td>
+            
+
+                </tr> 
+
+                <tr>
+                    <th>Approved By (HRD) :</th>
+                    <td colspan="5">
+                        {% if recommended_hr_users %}
+                            {% for user in recommended_hr_users %}
+                                {{ user.first_name }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            No users with HR approval
+                        {% endif %}
+                    </td>
+                </tr>
+            
+                <tr>
+                    <th>Asset No Provided By (A&F):</th>
+                    <td colspan="5">
+                        {% if recommended_accountant_users %}
+                            {% for user in recommended_accountant_users %}
+                                {{ user.first_name }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            No users with A&F approval
+                        {% endif %}
+                    </td>
+                </tr>
+            
+                <tr>
+                    <th>Requisition Verified By (IT):</th>
+                    <td colspan="5">
+                        {% if recommended_verifier_it_users %}
+                            {% for user in recommended_verifier_it_users %}
+                                {{ user.first_name }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            No users with IT Verifier
+                        {% endif %}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Approved By (IT) :</th>
+                    <td colspan="5">
+                        {% if recommended_hod_it_users %}
+                            {% for user in recommended_hod_it_users %}
+                                {{ user.first_name }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            No users with IT approval
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+            
+        </div>
+
+        
+
+        <div>
+            <h5 class="card-title">
+                <i class="fas fa-box"></i> <!-- Product-related icon -->
+                Product Details
+            </h5>
+            
+
+            {% if object.requisition_inventory.all|length == 0 %}
+                <span id="blinker">
+                    <h4 style="text-align: center; color: #bd2130"> 
+                    Required to Add Requisition items!!! </h4>
+                </span>
+                2nd Step: For Add Products 
+                <a class="article-title" style="color: green;" href="{% url 'prod-create' object.id %}">                    
+                   <u><b>Click Here</b></u>
+                </a>
+
+            {% else %}
+
+            <table class="table table-hover table-bordered">
+                    <thead >
+                        <tr >
+                            <th width="6%" style="text-align: center;">Sl. No.</th>
+                            <th scope="col" style="text-align: center;">Name of items (Technical Description, if any)</th>
+                            <th width="6%" style="text-align: center;">Quantity</th>
+                            <th width="13%" style="text-align: center;">Date of Last Issue</th>
+                            <th scope="col" style="text-align: center;">Remarks</th>
+                        </tr>
+                    </thead>
+                        <tbody>
+                        {% for f in object.requisition_inventory.all %}
+                        <tr>
+                             <td width="6%">{{ forloop.counter }}</td> 
+                            <td style="text-align: left;">{{ f.product }}  
+                                {% if f.details %}
+                                    ({{ f.details }})
+                                {% else %}
+                                   
+                                {% endif %}
+                            </td>
+
+                            <td width="6%">{{ f.quantity }}</td>
+                            <td width="13%">
+                                {% if f.date_of_last_issue %}
+                                    {{ f.date_of_last_issue|date:"d M' Y" }}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </td>
+                            <td> 
+                                {% if f.remarks %}
+                                    {{ f.remarks }}
+                                {% else %}
+                                    N/A
+                            {% endif %}
+                        </td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+            </table>
+
+            {% endif %}
+        </div>        
+        
+
+        <div>
+            <h5 class="card-title">
+                <i class="fas fa-file-signature"></i> <!-- Icon for review and signing -->
+                Approval & Signature
+            </h5>
+            
+        <table class="table table-striped">
+            <tr style="color: dodgerblue; border-bottom: 1px solid gray">
+                <th>Title</th>
+                <th>Signer Name</th>
+                <th>Sign Type</th>
+                <th>Comment</th>
+                <th>Sign Date</th>
+            </tr>
+            <tr>
+                <th>Requisition Verified By (IT):</th>
+                {% if verifierit_history != 'not_signed' %}
+                    <th>{{ verifierit_history.first_name }}</th>
+                    {% if object.requisition_verify.sign_type == 'Agreed' %}
+                        <td style="color: rgb(0, 128, 0); font-weight: bold;">{{ object.requisition_verify.sign_type }}</td>
+                    {% else %}
+                        <td style="color: rgb(255, 0, 0); font-weight: bold;">{{ object.requisition_verify.sign_type }}</td>
+                    {% endif %}
+                    <td>{{ object.requisition_verify.comment }}</td>
+                    <td>{{ object.requisition_verify.date_updated|date:"d M' Y P" }}</td>
+                {% else %}
+                    <td colspan="4" style="color: #f44336; font-weight: bold;">Pending Verification by IT</td>
+                {% endif %}
+            </tr>
+
+            {% if not is_recommended_by_hod_same %}
+                <tr>
+                    <th>Recommended By:</th>
+                    {% if signer_history != 'not_signed' %}
+                        <th>{{ signer_history.first_name }}</th>
+                        {% if object.requisition_sign.sign_type == 'Agreed' %}
+                            <td style="color: rgb(0, 128, 0); font-weight: bold;">{{ object.requisition_sign.sign_type }}</td>
+                        {% else %}
+                            <td style="color: rgb(255, 0, 0); font-weight: bold;">{{ object.requisition_sign.sign_type }}</td>
+                        {% endif %}
+                        <td>{{ object.requisition_sign.comment }}</td>
+                        <td>{{ object.requisition_sign.date_updated|date:"d M' Y P" }}</td>
+                    {% else %}
+                        <td colspan="4" style="color: #f44336; font-weight: bold;">Pending Recommendation</td>
+                    {% endif %}
+                </tr>
+            {% endif %}
+
+            <tr>
+                <th>Approved By (HOD):</th>
+                {% if hod_history != 'not_signed' %}
+                    <th>{{ hod_history.first_name }}</th>
+                    {% if object.requisition_hod.sign_type == 'Agreed' %}
+                        <td style="color: rgb(0, 128, 0); font-weight: bold;">{{ object.requisition_hod.sign_type }}</td>
+                    {% else %}
+                        <td style="color: rgb(255, 0, 0); font-weight: bold;">{{ object.requisition_hod.sign_type }}</td>
+                    {% endif %}
+                    <td>{{ object.requisition_hod.comment }}</td>
+                    <td>{{ object.requisition_hod.date_updated|date:"d M' Y P" }}</td>
+                {% else %}
+                    <td colspan="4" style="color: #f44336; font-weight: bold;">Pending Approved By HOD</td>
+                {% endif %}
+            </tr>
+            {% if has_product_with_asset_no %}
+                {% if not is_HR_Super %}
+                    <tr>
+                        <th>Approved By (HR):</th>
+                        {% if hr_history != 'not_signed' %}
+                            <th>{{ hr_history.first_name }}</th>
+                            {% if object.requisition_hr.sign_type == 'Agreed' %}
+                                <td style="color: rgb(0, 128, 0); font-weight: bold;">{{ object.requisition_hr.sign_type }}</td>
+                            {% else %}
+                                <td style="color: rgb(255, 0, 0); font-weight: bold;">{{ object.requisition_hr.sign_type }}</td>
+                            {% endif %}
+                            <td>{{ object.requisition_hr.comment }}</td>
+                            <td>{{ object.requisition_hr.date_updated|date:"d M' Y P" }}</td>
+                        {% else %}
+                            <td colspan="4" style="color: #f44336; font-weight: bold;">Pending Approved By HR</td>
+                        {% endif %}
+                    </tr>
+                {% endif %}
+                <tr>
+                    <th>Asset No Provided By (A&F):</th>
+                    {% if accountant_history != 'not_signed' %}
+                        <th>{{ accountant_history.first_name }}</th>
+                        {% if object.requisition_accountant.sign_type == 'Agreed' %}
+                            <td style="color: rgb(0, 128, 0); font-weight: bold;">{{ object.requisition_accountant.sign_type }}</td>
+                        {% else %}
+                            <td style="color: rgb(255, 0, 0); font-weight: bold;">{{ object.requisition_accountant.sign_type }}</td>
+                        {% endif %}
+                        <td>{{ object.requisition_accountant.comment }}</td>
+                        <td>{{ object.requisition_accountant.date_updated|date:"d M' Y P" }}</td>
+                    {% else %}
+                        <td colspan="4" style="color: #f44336; font-weight: bold;">Pending Provide Asset No by A&F</td>
+                    {% endif %}
+                </tr>
+            {% endif %}
+
+            <tr>
+                <th>Approved By (IT):</th>
+                {% if hodit_history != 'not_signed' %}
+                    <th>{{ hodit_history.first_name }}</th>
+                    {% if  object.requisition_hod_it.sign_type == 'Agreed' %}
+                        <td style="color: rgb(0, 128, 0); font-weight: bold;">{{  object.requisition_hod_it.sign_type }}</td>
+                    {% else %}
+                        <td style="color: rgb(255, 0, 0); font-weight: bold;">{{  object.requisition_hod_it.sign_type }}</td>
+                    {% endif %}
+                    <td>{{ object.requisition_hod_it.comment }}</td>
+                    <td>{{ object.requisition_hod_it.date_updated|date:"d M' Y P" }}</td>
+                {% else %}
+                    <td colspan="4" style="color: #f44336; font-weight: bold;">Pending Approval by IT</td>
+                {% endif %}
+            </tr>
+        </table>
+    </div>
+
+                    <!--------------------------signing Button------------------------------------ -->
+                    <div>
+                        {% if user in object.recommended_verifier_it.all %}
+                            {% if verifierit_history == 'not_signed' %}
+                                <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'req-verify-create' object.id %}">Verify Requisition (IT)</a>
+                            {% else %}
+                                {% if signer_history == 'not_signed' and hod_history == 'not_signed' %}
+                                    <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'req-verify-update' object.requisition_verify.id %}">Update Verify Requisition (IT)</a>
+                                {% else %}
+                                    <p>Not allowed to update Verify Requisition (IT)</p>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+        
+                        {% if user == object.recommended_by and not object.is_recommended_by_hod_same and object.requisition_verify.sign_type == 'Agreed' %}
+                            {% if signer_history == 'not_signed' %}
+                                <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'req-sign-create' object.id %}">Recommended By Sign</a>
+                            {% else %}
+                                {% if hod_history == 'not_signed' %}
+                                    <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'req-sign-update' object.requisition_sign.id %}">Update Recommended By Sign</a>
+                                {% else %}
+                                    <p>Not allowed to update Recommended By Sign</p>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    
+                        {% if user == object.recommended_hod %}
+                            {% if object.requisition_sign.sign_type == 'Agreed' or object.is_recommended_by_hod_same and object.requisition_verify.sign_type == 'Agreed' %}
+                                {% if hod_history == 'not_signed' %}
+                                    <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'req-hod-create' object.id %}">Approved By (HOD) Sign</a>
+                                {% else %}
+                                    {% if has_product_with_asset_no and hr_history == 'not_signed' and not is_HR_Super %}
+                                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'req-hod-update' object.requisition_hod.id %}">Update Approved By (HOD) Sign</a>
+                                    {% elif has_product_with_asset_no and accountant_history == 'not_signed' and is_HR_Super %}
+                                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'req-hod-update' object.requisition_hod.id %}">Update Approved By (HOD) Sign</a>
+                                    {% elif not has_product_with_asset_no and hodit_history == 'not_signed' %}
+                                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'req-hod-update' object.requisition_hod.id %}">Update Approved By (HOD) Sign</a>
+                                    {% else %}
+                                        <p>Not allowed to update Approved By (HOD) Sign</p>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    
+                        {% if user in object.recommended_hr.all and has_product_with_asset_no and object.requisition_hod.sign_type == 'Agreed' and not is_HR_Super %}
+                            {% if hr_history == 'not_signed' %}
+                                <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'req-hr-create' object.id %}">Approved By (HR) Sign</a>
+                            {% else %}
+                                {% if accountant_history == 'not_signed' %}
+                                    <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'req-hr-update' object.requisition_hr.id %}">Update Approved By (HR) Sign</a>
+                                {% else %}
+                                    <p>Not allowed to update Approved By (HR) Sign</p>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    
+                        {% if user in object.recommended_accountant.all and has_product_with_asset_no %}
+                            {% if object.requisition_hr.sign_type == 'Agreed' %}
+                                {% if accountant_history == 'not_signed' %}
+                                    <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'req-acc-create' object.id %}">Provide Asset No (A&F)</a>
+                                {% else %}
+                                    {% if hodit_history == 'not_signed' %}
+                                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'req-acc-update' object.requisition_accountant.id %}">Update Asset No (A&F)</a>
+                                    {% else %}
+                                        <p>Not allowed to update Asset No (A&F)</p>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                    
+                            {% if is_HR_Super and object.requisition_hod.sign_type == 'Agreed' %}
+                                {% if accountant_history == 'not_signed' %}
+                                    <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'req-acc-create' object.id %}">Provide Asset No (A&F)</a>
+                                {% else %}
+                                    {% if hodit_history == 'not_signed' %}
+                                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'req-acc-update' object.requisition_accountant.id %}">Update Asset No (A&F)</a>
+                                    {% else %}
+                                        <p>Not allowed to update Asset No (A&F)</p>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+        
+                        {% if user in object.recommended_hod_it.all and has_product_with_asset_no and object.requisition_accountant.sign_type == 'Agreed' %}
+                            {% if hodit_history == 'not_signed' %}
+                                <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'req-hod-it-create' object.id %}">Approved By (IT)</a>
+                            {% else %}
+                                {% if admin_history == 'not_signed' %}
+                                    <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'req-hod-it-update' object.requisition_hod_it.id %}">Update Approved By (IT)</a>
+                                {% else %}
+                                    <p>Not allowed to update Approved By (IT)</p>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+        
+        
+                        {% if user in object.recommended_hod_it.all and not has_product_with_asset_no and object.requisition_hod.sign_type == 'Agreed' %}
+                            {% if hodit_history == 'not_signed' %}
+                                <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'req-hod-it-create' object.id %}">Approved By (IT)</a>
+                            {% else %}
+                                {% if admin_history == 'not_signed' %}
+                                    <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'req-hod-it-update' object.requisition_hod_it.id %}">Update Approved By (IT)</a>
+                                {% else %}
+                                    <p>Not allowed to update Approved By (IT)</p>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+        
+                    </div>
+ 
+        {% if object.requisition_hod_it.sign_type == "Agreed" %}
+        <div>
+            <h5 class="card-title">
+                <i class="fas fa-cogs"></i> <!-- IT Admin-related icon -->
+                IT Admin Section
+            </h5>
+            
+
+            <table class="table table-bordered">
+                        <tr>
+                            <th>Comment : </th>
+                            <td>{{ object.requisition_it.comment }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>IT Admin : </th>
+                            <td>
+                                {{ admin_history.first_name }}                           
+                            </td>  
+                        </tr>
+
+                        <tr>
+                            <th>Completion Date : </th>
+                            <td>{{ object.requisition_it.date_updated }}</td>
+                        </tr>
+                    </table>
+
+                    <div>
+                        {% if user.is_staff %}
+                            {% if admin_history == 'not_signed' %}
+                                <a class="btn btn-primary mt-1 mb-1" href="{% url 'req-it-create' object.id %}">
+                                    <i class="fas fa-check me-1"></i> IT Admin Sign
+                                </a>
+                            {% else %}
+                                <a class="btn btn-info mt-1 mb-1" href="{% url 'req-it-update' object.requisition_it.id %}">
+                                    <i class="fas fa-pencil-alt me-1"></i> Update IT Sign
+                                </a>
+                            {% endif %}
+                        {% endif %}
+
+                    </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+{% endblock network %}

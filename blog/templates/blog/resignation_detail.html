@@ -1,0 +1,506 @@
+{% extends "blog/basep.html"%}
+{% block network %}
+
+<style>
+    #user_view {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        }
+    #user_view th {
+        width: 28%;
+        font-size: 16px;
+        padding: 2px;
+    }
+    #user_view td {
+        width: 72%;
+        font-size: 14px;
+        padding: 2px;
+    }
+</style>
+
+<div class="div-shadow">
+           <h3 class="border-bottom mb-4" style="text-align: center; color: darkmagenta; font-size: x-large; font-weight: bold">IT Release Form</h3>
+            <h4 style="color: coral"> Form No :  {{ object }} </h4>
+</div>
+<article class="media content-section">
+   <legend class="border-bottom mb-4" style="text-align: center; color: darkgreen; font-size: large;font-weight: bold">User Details </legend>
+
+   <div class="media-body">
+
+   
+       <div class="row">
+
+           <div class="col-sm-8">
+                
+                <table id="user_view">  
+
+                    <tr>
+                        <th>Name :</th>
+                        <td>{{ user_history.first_name }}</td>
+                    </tr>
+                                      
+                    <tr>
+                        <th>Department :</th>
+                        <td>{{ profile_history.0.department }} </td>
+                    </tr>
+                    <tr>
+                        <th>Designation :</th>
+                        <td>{{ profile_history.0.position }}</td>
+                    </tr>
+                    <tr>
+                        <th>Employee ID :</th>
+                        <td>{{ profile_history.0.emp_id }} </td>
+                    </tr>
+                    <tr>
+                        <th>Contact :</th>
+                        <td>{{ profile_history.0.phone }} || {{ profile_history.0.ext }} </td>
+                    </tr>
+                    <tr>
+                        <th>Address :</th>
+                        <td>{{ profile_history.0.location }} ,  {{ profile_history.0.floor }} </td>
+                    </tr>
+                    <tr>
+                        <th>Date : </th>
+                        <td><small class="text-muted">{{ object.date_posted|date:"d M' Y P" }}</small></td>
+                    </tr>                        
+                </table>
+           </div>
+
+           <div class="col-sm-4">
+            <p>
+                <button class="btn btn-outline-info" data-toggle="collapse" data-target="#side_button" aria-expanded="false" aria-controls="collapseExample">
+                    <i class="glyphicon glyphicon-option-vertical"></i>
+                </button>
+            </p>
+             <div class="collapse" id="side_button">
+                <div class="card card-body">
+                    <a class="btn btn-sm mt-1 mb-1" href="{% url 'resignation-pdf' object.id %}" target="_blank">View as PDF</a>
+                </div>
+             </div>
+
+         </div>
+     </div>
+
+  <div>
+
+  <div>
+        
+
+    <legend class="border-bottom mb-4" style="text-align: center; color: darkgreen; font-size: large; font-weight: bold">Form Details </legend>
+
+    <table class="table table-bordered" style="width: 100%">
+        <thead>
+            <tr style="color: rgb(133, 70, 184);">
+                <th>Accesories</th>
+                <th>Answer / Handed Over To</th>
+                <th>Signed By</th>
+                <th>Comment / Date</th>
+                <th>Button</th>
+            </tr>
+        </thead>
+            
+        <tbody>
+                      
+            <tr>                    
+                <th>Computer Data : </th>
+                <td>{{ object.computer_data }}  || {{ data_receiver_history.first_name }}</td>
+                {% if data_signer == 'not_signed' %}                    
+                    <td>Pending</td>
+                    <td>Pending</td>
+                    <td><a class="btn btn-info btn-sm mt-1 mb-1" 
+                        href="{% url 'resignation-data-create' object.id %}">Sign</a> 
+                    </td>
+                {% else %}
+                    <td> {{ data_signer.first_name }} </td>
+                    <td> {{ object.resignation_data.sign_type }} || {{ object.resignation_data.date_updated }} </td>
+                    <td>
+                        <a class="btn btn-info btn-sm mt-1 mb-1" 
+                            href="{% url 'resignation-data-update' object.resignation_data.id %}"> Update</a>
+                    </td>
+                {% endif %}
+                               
+            </tr>
+           
+            <tr>                    
+                <th>Email Archive : </th>
+                <td>{{ object.email_archive }} || {{ email_archiver_history.first_name }}</td>
+                {% if archive_signer == 'not_signed' %}                    
+                    <td>Pending</td>
+                    <td>Pending</td>
+                    <td><a class="btn btn-info btn-sm mt-1 mb-1" 
+                        href="{% url 'resignation-archive-create' object.id %}">Sign</a> 
+                    </td>
+                {% else %}
+                    <td> {{ archive_signer.first_name }} </td>
+                    <td> {{ object.resignation_archive.sign_type }} || {{ object.resignation_archive.date_updated }} </td>
+                    <td>
+                        <a class="btn btn-info btn-sm mt-1 mb-1" 
+                            href="{% url 'resignation-archive-update' object.resignation_archive.id %}"> Update</a>
+                    </td>
+                {% endif %}
+            </tr>
+
+            <tr>                    
+                <th>IP : {{ object.computer_ip_address }} </th>
+
+                {% if object.common_computer_ip == True %}
+                    <td>Common : Yes|| {{ ip_receiver_history.first_name }}</td>
+                {% else %}
+                    <td>Common : No || {{ ip_receiver_history.first_name }}</td>
+                {% endif %}
+                {% if ip_signer == 'not_signed' %}                    
+                    <td>Pending</td>
+                    <td>Pending</td>
+                    <td><a class="btn btn-info btn-sm" 
+                        href="{% url 'resignation-ip-create' object.id %}">Sign</a> 
+                    </td>
+                {% else %}
+                    <td> {{ ip_signer.first_name }} </td>
+                    <td> {{ object.resignation_ip.sign_type }} || {{ object.resignation_ip.date_updated }} </td>
+                    <td>
+                        <a class="btn btn-info btn-sm" 
+                            href="{% url 'resignation-ip-update' object.resignation_ip.id %}">Update</a>
+                    </td>
+                {% endif %}
+                
+            </tr>
+            <tr>                    
+                <th>IP Phone: {{ object.ip_phone }} </th>
+                {% if object.ip_phone %}
+                    {% if object.common_ip_phone == True %}
+                        <td>Common : Yes || {{ phone_receiver_history.first_name }}</td>
+                    {% else %}
+                        <td>Common : No || {{ phone_receiver_history.first_name }}</td>
+                    {% endif %}
+                    {% if phone_signer == 'not_signed' %}                    
+                        <td>Pending</td>
+                        <td>Pending</td>
+                        <td><a class="btn btn-info btn-sm" 
+                            href="{% url 'resignation-phone-create' object.id %}">Sign</a> 
+                        </td>
+                    {% else %}
+                        <td> {{ phone_signer.first_name }} </td>
+                        <td> {{ object.resignation_phone.sign_type }} || {{ object.resignation_phone.date_updated }} </td>
+                        <td>
+                            <a class="btn btn-info btn-sm" 
+                                href="{% url 'resignation-phone-update' object.resignation_phone.id %}">Update</a>
+                        </td>
+                    {% endif %}
+
+                {% else %}
+                    <td> N/A </td>
+                    <td> N/A </td>
+                    <td> N/A </td>
+                    <td> N/A </td>
+                {% endif %}
+                                 
+            </tr>
+            <tr>                    
+                <th>Printer Owner : </th>
+                {% if object.printer_owner == True %}
+                    <td>Yes || {{ printer_signer.first_name }}</td>
+                    {% if printer_signer == 'not_signed' %}                    
+                        <td>Pending</td>
+                        <td>Pending</td>
+                        <td><a class="btn btn-info btn-sm" 
+                            href="{% url 'resignation-printer-create' object.id %}">Sign</a> 
+                        </td>
+                    {% else %}
+                        <td> {{ printer_signer.first_name }} </td>
+                        <td> {{ object.resignation_printer.sign_type }} || {{ object.resignation_printer.date_updated }} </td>
+                        <td>
+                            <a class="btn btn-info btn-sm" 
+                                href="{% url 'resignation-printer-update' object.resignation_printer.id %}">Update</a>
+                        </td>
+                    {% endif %}
+                {% else %}
+                    <td>No </td>
+                    <td>N/A</td> 
+                    <td>N/A</td>
+                    <td>N/A</td> 
+                {% endif %}                     
+            </tr>
+            <tr>                    
+                <th>Scanner Owner : </th>
+
+                {% if object.scanner_owner == True %}
+                    <td>Yes || {{ scanner_signer.first_name }}</td>
+                    {% if scanner_signer == 'not_signed' %}                    
+                        <td>Pending</td>
+                        <td>Pending</td>
+                        <td><a class="btn btn-info btn-sm" 
+                            href="{% url 'resignation-scanner-create' object.id %}">Sign</a> 
+                        </td>
+                    {% else %}
+                        <td> {{ scanner_signer.first_name }} </td>
+                        <td> {{ object.resignation_scanner.sign_type }} || {{ object.resignation_scanner.date_updated }} </td>
+                        <td>
+                            <a class="btn btn-info btn-sm" 
+                                href="{% url 'resignation-scanner-update' object.resignation_scanner.id %}">Update</a>
+                        </td>
+                    {% endif %}
+                {% else %}
+                    <td>No </td>
+                    <td>N/A</td> 
+                    <td>N/A</td>
+                    <td>N/A</td> 
+                {% endif %}
+                                    
+            </tr>
+            
+           <tr>
+               <th>Recommended HOD : </th>             
+               <td>{{ recommend_hod_history.first_name }}</td>
+               {% if hod_signer == 'not_signed' %}                    
+                    <td>Pending</td>
+                    <td>Pending</td>
+                    <td><a class="btn btn-info btn-sm mt-1 mb-1" 
+                        href="{% url 'resignation-hod-create' object.id %}">Sign</a> 
+                    </td>
+                {% else %}
+                    <td> {{ hod_signer.first_name }} </td>
+                    <td> {{ object.resignation_hod.sign_type }} || {{ object.resignation_hod.date_updated }} </td>
+                    <td>
+                        <a class="btn btn-info btn-sm mt-1 mb-1" 
+                            href="{% url 'resignation-hod-update' object.resignation_hod.id %}"> Update</a>
+                    </td>
+                {% endif %}
+           </tr>
+        </tbody>
+
+    </table>
+    
+
+        <legend class="border-bottom mb-4" style="text-align: center; color: darkgreen; font-size: large; font-weight: bold">IT Processing Section</legend>
+
+        <table class="table table-bordered" style="width: 100%">
+            <tr>                    
+                <th>Internet Access : </th>   
+                {% if object.internet_access == True %}
+                    <td>Yes</td>
+                    {% if internet_signer == 'not_signed' %}                    
+                        <td>Pending</td>
+                        <td>Pending</td>
+                        <td><a class="btn btn-info btn-sm" 
+                            href="{% url 'resignation-internet-create' object.id %}">Sign</a> 
+                        </td>
+                    {% else %}
+                        <td> {{ internet_signer.first_name }} </td>
+                        <td> {{ object.resignation_internet.sign_type }} || {{ object.resignation_internet.date_updated }} </td>
+                        <td>
+                            <a class="btn btn-info btn-sm" 
+                                href="{% url 'resignation-internet-update' object.resignation_internet.id %}">Update</a>
+                        </td>
+                    {% endif %}
+                {% else %}
+                    <td>No </td>
+                    <td>N/A</td> 
+                    <td>N/A</td>
+                    <td>N/A</td> 
+                {% endif %}                     
+            </tr>
+
+            <tr>                    
+                <th>Empower ID : </th>
+                <td>{{ object.empower_id }}</td>
+                {% if object.empower_id %}
+                    {% if empower_signer == 'not_signed' %}                    
+                        <td>Pending</td>
+                        <td>Pending</td>
+                        <td><a class="btn btn-info btn-sm" 
+                            href="{% url 'resignation-empower-create' object.id %}">Sign</a> 
+                        </td>
+                    {% else %}
+                        <td> {{ empower_signer.first_name }} </td>
+                        <td> {{ object.resignation_empower.sign_type }} || {{ object.resignation_empower.date_updated }} </td>
+                        <td>
+                            <a class="btn btn-info btn-sm" 
+                                href="{% url 'resignation-empower-update' object.resignation_empower.id %}">Update</a>
+                        </td>
+                    {% endif %}
+                        
+                {% else %}
+                    <td>N/A</td> 
+                    <td>N/A</td>
+                    <td>N/A</td>
+                {% endif %}                       
+            </tr>
+            <tr>                    
+                <th>Chromeleon ID : </th>
+                <td>{{ object.chromeleon_id }}</td>
+                {% if object.chromeleon_id %}
+                    {% if chromeleon_signer == 'not_signed' %}                    
+                        <td>Pending</td>
+                        <td>Pending</td>
+                        <td><a class="btn btn-info btn-sm" 
+                            href="{% url 'resignation-chromeleon-create' object.id %}">Sign</a> 
+                        </td>
+                    {% else %}
+                        <td> {{ chromeleon_signer.first_name }} </td>
+                        <td> {{ object.resignation_chromeleon.sign_type }} || {{ object.resignation_chromeleon.date_updated }} </td>
+                        <td>
+                            <a class="btn btn-info btn-sm" 
+                                href="{% url 'resignation-chromeleon-update' object.resignation_chromeleon.id %}">Update</a>
+                        </td>
+                    {% endif %}
+                {% else %} 
+                    <td>N/A</td> 
+                    <td>N/A</td>
+                    <td>N/A</td>
+                {% endif %}                       
+            </tr>
+            <tr>                    
+                <th>EQMS ID : </th>
+                <td>{{ object.eqms_id }}</td>
+                {% if object.eqms_id %} 
+                    {% if eqms_signer == 'not_signed' %}                    
+                        <td>Pending</td>
+                        <td>Pending</td>
+                        <td><a class="btn btn-info btn-sm" 
+                            href="{% url 'resignation-eqms-create' object.id %}">Sign</a> 
+                        </td>
+                    {% else %}
+                        <td> {{ eqms_signer.first_name }} </td>
+                        <td> {{ object.resignation_eqms.sign_type }} || {{ object.resignation_eqms.date_updated }} </td>
+                        <td>
+                            <a class="btn btn-info btn-sm" 
+                                href="{% url 'resignation-eqms-update' object.resignation_eqms.id %}">Update</a>
+                        </td>
+                    {% endif %}                
+                {% else %}
+                    <td>N/A</td> 
+                    <td>N/A</td> 
+                {% endif %}                      
+            </tr>
+
+        </table>
+        
+
+            <table class="table table-bordered" style="width: 100%">
+        
+                <tr>                    
+                    <th>Standalone ID : </th>
+                    <td>{{ object.standalone_id }}</td>
+                    {% if object.standalone_id %}                
+                        {% if standalone_signer == 'not_signed' %}                    
+                            <td>Pending</td>
+                            <td>Pending</td>
+                            <td><a class="btn btn-info btn-sm" 
+                                href="{% url 'resignation-standalone-create' object.id %}">Sign</a> 
+                            </td>
+                        {% else %}
+                            <td> {{ standalone_signer.first_name }} </td>
+                            <td> {{ object.resignation_standalone.sign_type }} || {{ object.resignation_standalone.date_updated }} </td>
+                            <td>
+                                <a class="btn btn-info btn-sm" 
+                                    href="{% url 'resignation-standalone-update' object.resignation_standalone.id %}">Update</a>
+                            </td>
+                        {% endif %}  
+                    {% else %}
+                        <td>N/A</td> 
+                        <td>N/A</td>
+                        <td>N/A</td>
+                    {% endif %}                      
+                </tr>
+            </table>
+
+   
+
+        <legend class="border-bottom mb-4" style="text-align: center; color: darkgreen; font-size: large; font-weight: bold">IT Form Closing Section</legend>
+           
+           <table class="table table-bordered" style="width: 100%">
+            <tr>                    
+                <th>Email : </th>
+                <td>{{ user_history.email }}</td>
+                {% if disable_signer == 'not_signed' %}                    
+                    <td>Pending</td>
+                    <td>Pending</td>
+                    <td><a class="btn btn-info btn-sm" 
+                        href="{% url 'resignation-disable-create' object.id %}">Sign</a> 
+                    </td>
+                {% else %}
+                    <td> {{ disable_signer.first_name }} </td>
+                    <td> {{ object.resignation_disable.sign_type }} || {{ object.resignation_disable.date_updated }} </td>
+                    <td>
+                        <a class="btn btn-info btn-sm" 
+                            href="{% url 'resignation-disable-update' object.resignation_disable.id %}">Update</a>
+                    </td>
+                {% endif %}                   
+            </tr>
+            <tr>                    
+                <th>First Review IT : </th>
+                <td>IT Release this person</td>
+                {% if primary_signer == 'not_signed' %}                    
+                    <td>Pending</td>
+                    <td>Pending</td>
+                    <td><a class="btn btn-info btn-sm" 
+                        href="{% url 'resignation-primary-create' object.id %}">Sign</a> 
+                    </td>
+                {% else %}
+                    <td> {{ primary_signer.first_name }} </td>
+                    <td> {{ object.resignation_primary.sign_type }} || {{ object.resignation_primary.date_updated }} </td>
+                    <td>
+                        <a class="btn btn-info btn-sm" 
+                            href="{% url 'resignation-primary-update' object.resignation_primary.id %}">Update</a>
+                    </td>
+                {% endif %}                       
+            </tr>
+            <tr>                    
+                <th>Deletion : </th>
+                <td>Email is deleted </td>
+                {% if deletion_signer == 'not_signed' %}                    
+                    <td>Pending</td>
+                    <td>Pending</td>
+                    <td><a class="btn btn-info btn-sm" 
+                        href="{% url 'resignation-deletion-create' object.id %}">Sign</a> 
+                    </td>
+                {% else %}
+                    <td> {{ deletion_signerdeletion_signer.first_name }} </td>
+                    <td> {{ object.resignation_deletion.sign_type }} || {{ object.resignation_deletion.date_updated }} </td>
+                    <td>
+                        <a class="btn btn-info btn-sm" 
+                            href="{% url 'resignation-deletion-update' object.resignation_deletion.id %}">Update</a>
+                    </td>
+                {% endif %}                    
+            </tr>
+            <tr>                    
+                <th>Closing Review IT : </th>
+                <td>Form Finally Closed </td>
+                {% if final_signer == 'not_signed' %}                    
+                    <td>Pending</td>
+                    <td>Pending</td>
+                    <td><a class="btn btn-info btn-sm" 
+                        href="{% url 'resignation-final-create' object.id %}">Sign</a> 
+                    </td>
+                {% else %}
+                    <td> {{ final_signer.first_name }} </td>
+                    <td> {{ object.resignation_final.sign_type }} || {{ object.resignation_final.date_updated }} </td>
+                    <td>
+                        <a class="btn btn-info btn-sm" 
+                            href="{% url 'resignation-final-update' object.resignation_final.id %}">Update</a>
+                    </td>
+                {% endif %}                   
+            </tr>
+
+       </table>
+ 
+    
+    <div>
+        
+        {% if final_signer %}                
+            <p style="text-align: center;"> !!!...Email ID deleted and Form is Closed...!!! </p>
+        {% else %}
+            <a type="button" class="btn btn-primary btn-lg btn-block" style="background-color: rgb(98, 70, 161);" 
+            href="{% url 'resignation-sign' object.id %}"> Review and Signing</span></a>
+        {% endif %} 
+
+
+   </div>
+</article>
+
+{% endblock %}
+
+
+
+

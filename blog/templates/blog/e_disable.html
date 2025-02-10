@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+        table, th, td {
+          border: 1px solid black;
+          border-collapse: collapse;
+        }
+        th, td {
+          padding: 5px;
+          text-align: left;
+        }
+        </style>
+    </head>
+<body>
+
+    <p>Dear Sir </p>
+
+    <p>As per IT Release Form of <b style="color: #17A2B8">{{ form_id }}</b>, 
+        you have received data and email archive of the following employee on <b>{{ date|date:"d M' Y" }}</b></p>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>{{ author }}</th>
+        </tr>
+        <tr>
+            <th>Designation</th>
+            <td>{{ designation }}</td>
+        </tr>
+        <tr>
+            <th>Employee ID</th>
+            <td>{{ employee_id }}</td>
+        </tr>
+        <tr>
+            <th>Email ID</th>
+            <td>{{ email }}</td>
+        </tr>
+        <tr>
+            <th>Employee ID</th>
+            <td>{{ department }}</td>
+        </tr>
+        <tr>
+            <th>Form Links</th>
+            <td><a class="article-title" href={{ link }}> Visit here for details</a></td>
+        </tr>
+    </table>
+    <p> Please be noted that we are going to delete this email account <b>{{ author }}</b>, 
+        along with all data as you have signed as transferee on <b>{{ date|date:"d M' Y" }}</b>. <br>
+        Please revert back by ASAP, if you have faced any difficulty regarding the 
+        restoration of the email archive of <b>{{ author }}</b>. </p>
+
+    <p>We will execute the email deletion of <b>{{ author }}</b> on
+        <span style="background-color: #FFFF00"><b>{{ deletion_date|date:"d M' Y" }}</b></span>
+        considering that you have restored the email archive successfully.</p>
+
+
+
+    <p>Thank You, </p>
+    <p>
+        <b style="color: #005cbf"> {{ signer }}</b><br>
+        {{ signer_designation }}, {{ signer_department }}<br>
+        Phone : {{ phone }}
+    </p>
+
+    </body>
+</html>

@@ -1,0 +1,424 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block network %}
+<div class="pagetitle">
+    <h1>DFS </h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Users</a></li>
+            <li class="breadcrumb-item">IT Forms</li>
+            <li class="breadcrumb-item">DFS</li>
+            <li class="breadcrumb-item active">Details</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="d-flex flex-column flex-md-row align-items-center mb-3">
+                        <!-- Title Section -->
+                        <h5 class="card-title d-flex align-items-center mb-0">
+                            <i class="bi bi-envelope me-2 text-primary"></i>
+                            File Server Access Activation/ Modification Form
+                        </h5>
+                        <h6 class="eticket-reference ms-md-auto" style="font-weight: bold;">
+                            <i class="fas fa-file-alt me-1"></i>
+                            <span style="text-decoration: underline;">Form No:</span> 
+                            <strong class="btn btn-info btn-sm mb-1 border-light border-1 ">
+                                <strong>{{ object }}</strong>
+                            </strong>
+                        </h6>
+
+                        <!-- E-Ticket Reference (only shown if eticket is available) -->
+                        {% if eticket %}
+                        <h6 class="eticket-reference ms-md-auto" style="font-weight: bold;">
+                            <i class="fas fa-file-alt me-1"></i>
+                            <span style="text-decoration: underline;">E-Ticket Ref:</span> 
+                            <strong class="btn btn-warning btn-sm mb-1 border-light border-1 ">
+                                <a href="{{ ticket_link }}" class="text-dark">
+                                    {{ formatted_ticket_id }}
+                                </a>
+                            </strong>
+                        </h6>
+                        {% endif %}
+
+                        <div class="btn-group" role="group">
+                            {% if object.fileaccess_other_hod.sign_type == "" or object.fileaccess_sign.sign_type == "" or object.fileaccess_other_hod.sign_type == "Disagreed" or object.fileaccess_sign.sign_type == "Disagreed" or   object.fileaccess_hod.sign_type == "Disagreed" %}
+                                <a type="button" class="btn btn-primary" href="{% url 'file-update' object.id %}">Update</a>
+                            {% else %}
+                                <a type="button" class="btn btn-primary" disabled>Update</a>
+                            {% endif %}
+                            <a type="button" class="btn btn-success" href="{% url 'file-pdf' object.id %}" target="_blank">View PDF</a>
+                        </div>
+                    </div>
+
+                    <!-- User Details Section -->
+                    <div>
+                        <h5 class="card-title">
+                            <i class="fas fa-user"></i> <!-- User icon -->
+                            User Details
+                        </h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered">
+                                <tr>
+                                    <th>Name :</th>
+                                    <td>{{ user_history.first_name }}</td>
+                                    <th>Email :</th>
+                                    <td>{{ user_history.email }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Department :</th>
+                                    <td>{{ profile_history.0.department }}</td>
+                                    <th>Designation :</th>
+                                    <td>{{ profile_history.0.position }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Employee ID :</th>
+                                    <td>{{ profile_history.0.emp_id }}</td>
+                                    <th>Contact :</th>
+                                    <td>{{ profile_history.0.phone }} || {{ profile_history.0.ext }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Address :</th>
+                                    <td>{{ profile_history.0.location }}, {{ profile_history.0.floor }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Form Details Section -->
+                    <div>
+                        <h5 class="card-title">
+                            <i class="fas fa-clipboard"></i> <!-- Form-related icon -->
+                            Form Details
+                        </h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered">
+                                <tr>
+                                    {% if other_dept_hod.first_name %}
+                                        <th>Approved By (Head of other Dept.): </th>
+                                        <td>{{ other_dept_hod.first_name }} </td>     
+                                    {% endif %} 
+                                        
+                                </tr>
+                                
+                                <tr>
+                                    <th>Recommended By : </th>             
+                                    <td>{{ recommended_by_history.first_name }}</td>                        
+                                </tr>
+                        
+                                <tr>
+                                    <th>Approved By (Head of Dept.): </th>             
+                                    <td>{{ recommended_hod_history.first_name }}</td>                        
+                                </tr>
+                                
+                
+                                <tr>
+                                    <th>Created Date : </th>
+                                    <td><small class="text-muted">{{ object.date_posted|date:"d M' Y P" }}</small></td>
+                                </tr>
+                                <tr>
+                                    {% if object.date_posted|date:"d M Y P" == object.date_updated|date:"d M Y P" %}
+                                    {% else %}
+                                        <th>Updated Date : </th>
+                                        <td><small class="text-muted">{{ object.date_updated|date:"d M Y P" }}</small></td>
+                                    {% endif %}
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+    <!----------------------------------------------File Link Portion------------------------------>
+        <div class="media-body">
+
+                <table class="table table-bordered" style="text-align: center;">
+                      <thead>
+                            <tr >
+                                <th width="7%" style="text-align: center;">Sl. No.</th>
+                                <th scope="col" style="text-align: center;">Link</th>
+                                <th width="12%" style="text-align: center;">Permission </th>
+                                <th width="10%" style="text-align: center;">Location</th>
+                            </tr>
+                        </thead>
+                          <tbody>
+                          {% for f in object.file_link.all %}
+                            <tr>
+                                <td width="8%">{{ forloop.counter }}</td> 
+                                <td style="text-align: left;"><a href="run:\\fileserver.com\myfiles\{{ f.link_name }}" style="color: blue;"><u>\\fileserver.com\myfiles\{{ f.link_name }}</u></a></td>
+
+                                <td width="12%">{{ f.permission_type }}</td>
+                                <td width="10%">{{ f.location }}</td>
+                            </tr>
+
+                          {% endfor %}
+
+                      </tbody>
+                </table>
+
+        </div>
+                    <!-- Approval & Signature Section -->
+                    <div>
+                        <h5 class="card-title">
+                            <i class="fas fa-file-signature"></i> <!-- Icon for review and signing -->
+                            Approval & Signature
+                        </h5>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <tr style="color: dodgerblue; border-bottom: 1px solid gray">
+                                    <th>Title</th>
+                                    <th>Signer Name</th>
+                                    <th>Sign Type</th>
+                                    <th>Comment</th>
+                                    <th>Sign Date</th>
+                                </tr>
+                                <tr>
+                                    <th>Created By:</th>
+                                    <th>{{ user_history.first_name  }}</th>
+                                    <td>Created</td>
+                                    <td>Proceed</td>
+                                    <td>{{ object.date_posted|date:"d M' Y P" }}</td>
+                                </tr>
+                    
+                                {% if other_dept_hod.first_name %}
+                                <tr>
+                                    <th>Approved By (Head of other Dept.):</th>
+                                    {% if other_hod_history.first_name %}
+                                        <th>{{ other_hod_history.first_name }}</th>
+                                        {% if object.fileaccess_other_hod.sign_type == 'Agreed' %}
+                                            <td style="color: rgb(0, 128, 0); font-weight: bold;">{{ object.fileaccess_other_hod.sign_type }}</td>
+                                        {% else %}
+                                            <td style="color: rgb(255, 0, 0); font-weight: bold;">{{ object.fileaccess_other_hod.sign_type }}</td>
+                                        {% endif %}              
+                                        {% comment %} <td>{{ object.fileaccess_other_hod.sign_type }}</td> {% endcomment %}
+                                        <td>{{ object.fileaccess_other_hod.comment }}</td>
+                                        {% comment %} <td>{{ object.fileaccess_other_hod.date_updated }}</td>    {% endcomment %}
+                                        <td>{{ object.fileaccess_other_hod.date_updated|date:"d M' Y P" }}</td>
+                                    {% else %}
+                                        <td colspan="4" style="color: #f44336; font-weight: bold;">Pending Approved By (Head of other Dept.)</td>
+                                    {% endif %}
+                                </tr>
+                                {% endif %}
+                                
+                    
+                               
+                                <tr>
+                                    <th>Recommended By:</th>
+                    
+                                    {% if signer_history.first_name %}
+                                        <th>{{ signer_history.first_name }}</th>
+                                        
+                                        {% if object.fileaccess_sign.sign_type == 'Agreed' %}
+                                            <td style="color: rgb(0, 128, 0); font-weight: bold;">{{ object.fileaccess_sign.sign_type }}</td>
+                                        {% else %}
+                                            <td style="color: rgb(255, 0, 0); font-weight: bold;">{{ object.fileaccess_sign.sign_type }}</td>
+                                        {% endif %} 
+                                        {% comment %} <td>{{ object.fileaccess_sign.sign_type }}</td> {% endcomment %}
+                                        <td>{{ object.fileaccess_sign.comment }}</td>
+                                        {% comment %} <td>{{ object.fileaccess_sign.date_updated }}</td>    {% endcomment %}
+                                        <td>{{ object.fileaccess_sign.date_updated|date:"d M' Y P" }}</td>
+                                    {% else %}
+                                        <td colspan="4" style="color: #f44336; font-weight: bold;">Pending Recommendation</td>
+                                    {% endif %}
+                                   
+                                </tr>
+                                <tr>
+                                    <th>Approved By (Head of Dept.): </th> 
+                                    {% if hod_history != 'not_signed' %}
+                                        <th>{{ hod_history.first_name }}</th>
+                                        {% if object.fileaccess_hod.sign_type == 'Agreed' %}
+                                            <td style="color: rgb(0, 128, 0); font-weight: bold;">{{ object.fileaccess_hod.sign_type }}</td>
+                                        {% else %}
+                                            <td style="color: rgb(255, 0, 0); font-weight: bold;">{{ object.fileaccess_hod.sign_type }}</td>
+                                        {% endif %} 
+                        {% comment %} 
+                                        <td>{{ object.fileaccess_hod.sign_type }}</td> {% endcomment %}
+                                        <td>{{ object.fileaccess_hod.comment }}</td>
+                                        {% comment %} <td>{{ object.fileaccess_hod.date_updated }}</td>   {% endcomment %}
+                                        <td>{{ object.fileaccess_hod.date_updated |date:"d M' Y P" }}</td> 
+                                    {% else %}
+                                        <td colspan="4" style="color: #f44336; font-weight: bold;">Pending Approved By (Head of Dept.)</td>
+                                    {% endif %}
+                    
+                                   
+                                </tr>
+                    
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- HOD Approval Section -->
+                    <div>
+                        {% if object.file_link.all|length == 0 %}
+            
+                        <div id="blinker">
+                            <h4 style="text-align: center; color: #bd2130;">
+                                Required to Add File Server Link!!!
+                            </h4>
+                        </div>
+                        To Add Folder Link:-
+                        <a class="article-title" style="color: green;" href="{% url 'filelink-create' object.id %}">
+                            <u><b>Click Here</b></u>
+                        </a>
+                        
+                        {% else %}            
+                            {% if alarm == 'execution_needed' %}
+                        
+                            <div style="text-align: center; font-size: x-large;">
+                                <span id="blinker">
+                                    <h4 style="text-align: center; color: #bd2130"> 
+                                        Form correction/update required !!!
+                                    </h4>
+                                </span>
+                            </div>
+                                    <p style="text-align: center; color: red;">Please Update the form Approved By (Head of other Dept.) for Other Dept. File Access</p>
+                          
+                            {% else %}
+            
+                            {% if user == object.other_dept_head %}
+                                {% if other_hod_history == 'not_signed' %}
+                                    <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'file-otherhod-sign-create' object.id %}">Approved By (Head of other Dept.)</a>
+                                {% else %}
+                                    {% if signer_history == 'not_signed' %}
+                                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'file-otherhod-sign-update' object.fileaccess_other_hod.id  %}">Update Approved By (Head of other Dept.)</a>
+                                    {% else %}
+                                        <p>Not allowed to update Approved By (Head of other Dept.) Sign</p>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+            
+                            {% if user == object.recommended_by %}
+                                {% if file_location == 'other' %}
+                                    {% if other_hod_history == 'not_signed' %}                        
+                                        <p>Wait untill Approved By (Head of other Dept.) sign is completed..!!!</p>
+                                    {% else %}
+                                        {% if signer_history == 'not_signed' %}
+                                            <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'filesign-create' object.id %}">Recommend By Sign</a>
+                                        {% else %}
+                                            {% if hod_history == 'not_signed' %}
+                                                <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'filesign-update' object.fileaccess_sign.id %}">Update Recommend By Sign</a>
+                                            {% else %}
+                                                <p>You are not allowed to update your review</p>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endif %}
+            
+                                {% else %}
+                                    {% if signer_history == 'not_signed' %}
+                                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'filesign-create' object.id %}">Recommend By Sign</a>
+                                    {% else %}
+                                        {% if hod_history == 'not_signed' %}
+                                            <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'filesign-update' object.fileaccess_sign.id %}">Update Recommend By Sign</a>
+                                        {% else %}
+                                            <p>Not allowed to update Recommend By Sign</p>
+                                        {% endif %}
+                                    {% endif %}
+            
+                                {% endif %}
+            
+                            {% endif %}
+                            
+                
+                            {% if user == object.recommended_hod %}
+                                {% if signer_history == 'not_signed' %}
+                                    <p>Wait untill Recommend By sign is completed..!!!</p>
+                                {% else %}
+                                    {% if hod_history == 'not_signed' %}
+                                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'filehod-create' object.id %}">Approved By (Head of Dept.) Sign</a>
+                                    {% else %}
+                                        {% if admin_history == 'not_signed' %}
+                                            <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'filehod-update' object.fileaccess_hod.id %}">Update Approved By (Head of Dept.) Sign</a>
+                                        {% else %}
+                                            <p>Not allowed to update Approved By (Head of Dept.) Sign</p>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+            
+                            {% endif %}
+            
+                        {% endif %}
+                
+                
+                    </div>
+
+                    <!-- E-Ticket Information Section -->
+                    {% if eticket %}
+                    <div>
+                        <h5 class="card-title">
+                            <i class="fas fa-file-signature"></i> <!-- Icon for review and signing -->
+                            E-Ticket Information
+                        </h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered">
+                                <tr>
+                                    <th>Ticket Reference</th>
+                                    <td style="font-weight: bold; text-align: center; vertical-align: middle; padding: 15px;">
+                                        <a href="{{ ticket_link }}" class="form-link" aria-label="View ticket with reference {{ formatted_ticket_id }}">
+                                          <b>{{ formatted_ticket_id }}</b> 
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <tr style="color: dodgerblue; border-bottom: 1px solid gray">
+                                <th>eTicket will auto-generate after approval.</th>
+                            </tr>
+                        </table>
+                    </div>
+                    {% endif %}
+
+                    <!-- IT Admin Section (If the LAN request is agreed) -->
+                    {% if object.fileaccess_hod.sign_type == "Agreed" %}
+                    <div>
+                        <h5 class="card-title">
+                            <i class="fas fa-user"></i> <!-- User icon -->
+                            IT Admin Section
+                        </h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered">
+                                <tr>
+                                    <th>Comment : </th>
+                                    <td>{{ object.fileaccess_it.comment }}</td>
+                                </tr>
+                    
+                                <tr>
+                                    <th>IT Admin : </th>
+                                    <td>
+                                        {{ admin_history.first_name }}                           
+                                    </td>  
+                                </tr>
+                    
+                                <tr>
+                                    <th>Completion Date : </th>
+                                    <td>{{ object.fileaccess_it.date_updated }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div>
+                        {% if user.is_staff %}
+                            {% if admin_history == 'not_signed' %}
+                                <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'fileit-create' object.id %}">IT Admin Sign this</a>
+                            {% else %}
+                                <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'fileit-update' object.fileaccess_it.id %}">IT Sign Update</a>
+                            {% endif %}
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

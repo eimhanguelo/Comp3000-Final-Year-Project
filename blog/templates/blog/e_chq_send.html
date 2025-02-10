@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .email-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <p>Dear Concern,</p>
+        
+        <p>Please find the following requisitions for your review and action (Attached are the PDF):</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Sl No.</th>
+                    <th>Form No</th>
+                    <th>Requisition No</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Created On</th>
+                    <th>Approved On</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for requisition in requisitions %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ requisition }}</td> 
+                    <td>{{ requisition.requisition_no }}</td>
+                    <td>{{ requisition.author.first_name }}</td>
+                    <td>{{ requisition.author.profile.department }}</td>
+                    <td>{{ requisition.date_posted|date:"d M' Y P" }}</td>
+                    <td>{{ requisition.requisition_hod_it.date_updated|date:"d M' Y P" }}</td>
+                    <td style="color: green; font-weight: bold;">Approved</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <table>
+            <thead>
+                <tr>
+                    <th>Requested By (IT)</th>
+                    <th>Designation: </th>
+                    <th>Email ID: </th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ user.first_name }}</td> 
+                    <td>{{ users_profile.position.name }}</td>
+                    <td>{{ user.email }}</td> 
+                </tr>
+            </tbody>
+        </table>
+    
+        <p>Thank you.</p>
+        <p><strong>DigitizeIT</strong></p>
+
+        
+    </div>
+</body>
+</html>

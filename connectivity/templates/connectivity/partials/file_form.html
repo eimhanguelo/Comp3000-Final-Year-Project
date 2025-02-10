@@ -1,0 +1,54 @@
+<!-- connectvity/partials/file_form.html -->
+
+{% load crispy_forms_tags %}
+<div hx-target="this" hx-swap="outerHTML">
+    <form method="POST" style="background-color:#F2F4F4; border: 2px solid black; padding: 20px; margin: 0;">
+        {% csrf_token %}
+        <div class="container">
+            <div class="row">
+              <div class="col-12">
+                <div class="form-group mb-3">
+                  {{ form.link_name|as_crispy_field }}
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 col-md-6">
+                <div class="form-group mb-3">
+                  {{ form.permission_type|as_crispy_field }}
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="form-group mb-3">
+                  {{ form.location|as_crispy_field }}
+                </div>
+              </div>
+            </div>
+          </div>
+          
+
+        {% if link %}
+            <button id="update-link-btn" class="btn btn-primary" style="background-color: darkcyan;" type="submit" hx-post="{% url 'update-filelink' link.id %}" onclick="enableSubmitButton()">
+                Update Link
+            </button>
+            <button class="btn btn-danger" hx-get="{% url 'detail-filelink' link.id %}">
+                Cancel
+            </button>
+        {% else %}
+            <button id="save-link-btn" class="btn btn-primary" style="background-color: darkcyan;" type="submit" hx-post="." onclick="enableSubmitButton()">
+                Save Link
+            </button>
+
+        {% endif %}
+    </form>
+</div>
+
+<script>
+    function enableSubmitButton() {
+        var submitButton = document.getElementById('send-mail-btn');
+        if (submitButton) {
+            submitButton.style.display = 'block'; // Make the Submit Now button visible
+            
+        }
+    }
+</script>

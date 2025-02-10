@@ -1,0 +1,33 @@
+{% extends "blog/basep.html"%}
+{% block content %}{% load notifications_tags %}
+
+<h1>Notification Page</h1>
+
+<article class="media content-section">
+    {% notifications_unread as unread_count %}
+    {% if unread_count %}
+    You have <b> {% live_notify_badge %} </b> unread notifications.
+    {% live_notify_list %}
+    {{ live_notify_list|safe }}
+    {% else %}
+        <h3>All is read</h3>
+    {% endif %}
+
+    <h4>Your all notifications</h4>
+    {% for i in user.notifications.read %}
+        {{ i|safe}}<br>
+    {% endfor %}
+    <hr>
+    {% for i in user.notifications.unread %}
+        {{ i|safe }}<br>
+    {% endfor %}
+
+
+</article>
+
+{% endblock %}
+
+
+
+
+

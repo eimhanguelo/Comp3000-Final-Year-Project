@@ -1,0 +1,546 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+<div class="pagetitle">
+    <h1>Eticket</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Users</a></li>
+            <li class="breadcrumb-item active">IT Forms</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+
+<section class="section">
+    <div class="row justify-content-center"> <!-- Added justify-content-center to center the column -->
+        <div class="col-lg-11">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">List of IT Forms</h5>
+                    <div class="row card-title bg-light text-center font-weight-bold border py-2"> <!-- Header Row -->
+                        <div class="col-sm-8 div-shadow">Form Name</div>
+                        <div class="col-sm-2 div-shadow">Preview</div>
+                        <div class="col-sm-2 div-shadow">Create</div>
+                    </div>
+                    
+
+                    <br>
+
+        <!---------------------------------User Account Creation-------------------------------------->
+
+        <div class="row mb-3 ps-5"> 
+                        <div class="col-sm-8 div-shadow p-3"> 
+                            <strong><i class="fas fa-user-plus"></i> Form-1: Mail/User Account Activation Form</strong> <!-- User Plus Icon -->
+                        </div>
+                        <div class="col-sm-2 div-shadow text-center"> <!-- Center align for the button -->
+                            <!-- Button for collapsing content -->
+                            <a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#emp-div" role="button" 
+                               aria-expanded="false" aria-controls="requisition-div" aria-label="Toggle Requisition Details">
+                                <i class="bi bi-book" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                        <div class="col-sm-2 div-shadow text-center"> <!-- Center align for the hidden link -->
+                            <!-- Link for creating new requisition -->
+                            <a class="btn btn-outline-secondary" style="font-size: 20px;" href="{% url 'emp-create' %}"  target="_blank" aria-label="Create New">
+                                <i class="bi bi-pencil" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </div>
+
+
+
+        <div class="collapse" id="emp-div">
+                <article class="media content-section">
+                    <table  class="table datatable table-hover" align="center" style="width:100%; text-align:center;">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center;">Form ID</th>
+                                <th style="text-align: center;">Full Name</th>
+                                <th style="text-align: center;">Created By</th>
+                                <th style="text-align: center;">Created on</th>
+                                <th style="text-align: center;">Show PDF</th>
+                                <th style="text-align: center;">Status</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                        {% for emp in employees %}
+                            <tr>
+                                <td><a class="article-title" style="color: blueviolet" href="{% url 'emp-detail' emp.id %}"><b>{{ emp }}</b></a></td>
+                                <td>{{ emp.fullname }}</td>
+                                <td><a class="mr-2" href="#">{{ emp.author.first_name }}</a></td>                                          
+                                <td class="col-sm-3"><small class="text-muted">{{ emp.date_posted|date:"d M' Y P" }}</small></td>
+                                <td><a class="fa fa-file-pdf-o fa-lg" href="{% url 'emp-pdf' emp.id %}" target="_blank">  View</a></td>
+                                <td colspan="4" style="font-weight: bold;">
+                                    {% if emp.author.first_name and not emp.employee_sign %}
+                                    <i class="fas fa-home"></i> <span style="color: #FFBF00;">Form Created</span>
+
+                                    {% elif emp.employee_sign and emp.employee_sign.sign_type == 'Agreed' and not emp.employee_hod %}
+                                    <i class="fas fa-check-circle" style="color: green; font-size: 15px;"></i><span style="color: green;"> Recommendation Approved</span>
+                                    {% elif emp.employee_sign and emp.employee_sign.sign_type == "Disagreed" and not emp.employee_hod %}
+                                    <i class="fas fa-ban" style="color: red; font-size: 15px;"></i><span style="color: red;"> Recommendation Denied</span>
+                                    {% elif emp.employee_hod and emp.employee_hod.sign_type == 'Agreed' and not emp.employee_hr %}
+                                    <i class="fas fa-check-circle" style="color: green; font-size: 15px;"></i><span style="color: green;"> Approved by HOD</span>
+                                    {% elif emp.employee_hod and emp.employee_hod.sign_type == "Disagreed" and not emp.employee_hr %}
+                                    <i class="fas fa-ban" style="color: red; font-size: 15px;"></i><span style="color: red;"> Rejected by HOD</span>
+                                    {% elif emp.employee_hr and emp.employee_hr.sign_type == 'Agreed' and not emp.employee_it %}
+                                    <i class="fas fa-check-circle" style="color: green; font-size: 15px;"></i><span style="color: green;"> Approved by HR and Eticket Raised</span>
+                                    {% elif emp.employee_hr and emp.employee_hr.sign_type == "Disagreed" and not emp.employee_it %}
+                                    <i class="fas fa-ban" style="color: red; font-size: 15px;"></i><span style="color: red;"> Rejected by HR</span>
+                                    {% elif emp.employee_it %}
+                                    <i class="fa fa-flag-checkered"  style="color: black; font-size: 15px;"></i> <span style="color: green;">Form Closed</span>  
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    
+                </article>
+         </div>
+
+        <p></p>
+
+        <!---------------------------------User Account Modification-------------------------------------->
+
+
+        
+        <div class="row mb-3 ps-5"> 
+            <div class="col-sm-8 div-shadow p-3"> 
+                <strong><i class="fas fa-user-edit"></i> Form-2: Mail/User Account Modification Form</strong> <!-- User Edit Icon -->
+            </div>
+            <div class="col-sm-2 div-shadow text-center"> <!-- Center align for the button -->
+                <!-- Button for collapsing content -->
+                <a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#mail-div" role="button" 
+                   aria-expanded="false" aria-controls="requisition-div" aria-label="Toggle Requisition Details">
+                    <i class="bi bi-book" aria-hidden="true"></i>
+                </a>
+            </div>
+            <div class="col-sm-2 div-shadow text-center"> <!-- Center align for the hidden link -->
+                <!-- Link for creating new requisition -->
+                <a class="btn btn-outline-secondary" style="font-size: 20px;" href="{% url 'mail-create' %}"  target="_blank"  aria-label="Create New">
+                    <i class="bi bi-pencil" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="collapse" id="mail-div">
+                <article class="media content-section">
+                    
+
+                    <table  class="table datatable table-hover" align="center" style="width:100%; text-align:center;">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center;">Form ID</th>
+                                <th style="text-align: center;">Full Name</th>
+                                <th style="text-align: center;">Created By</th>
+                                <th style="text-align: center;">Created on</th>
+                                <th style="text-align: center;">Show PDF</th>
+                                <th style="text-align: center;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for mail in accounts %}
+                                   <tr>
+                                          <td><a class="article-title" style="color: blueviolet" href="{% url 'mail-detail' mail.id %}"><b>{{ mail }}</b></a></td>
+                                          <td><a class="mr-2" href="#">{{ mail.author }}</a></td>
+                                          <td>{{ mail.author.first_name }}</a></td>
+                                          <td class="col-sm-3"><small class="text-muted">{{ mail.date_posted|date:"d M' Y P" }}</small></td>
+                                          <td><a class="fa fa-file-pdf-o fa-lg" href="{% url 'mail-pdf' mail.id %}" target="_blank"> View</a></td>
+                                          <td colspan="4" style="font-weight: bold;">
+                                            {% if mail.author.first_name and not mail.account_sign %}
+                                            <i class="fas fa-home"></i> <span style="color: #FFBF00;">Form Created</span> 
+                                            
+                                            {% elif mail.account_sign and mail.account_sign.sign_type == 'Agreed' and not mail.account_hod %}
+                                            <i class="fas fa-check-circle" style="color: green; font-size: 15px;"></i> <span style="color: green;"> Recommendation Approved</span>
+                                            {% elif mail.account_sign and mail.account_sign.sign_type == "Disagreed" and not mail.account_hod %}
+                                            <i class="fas fa-ban" style="color: red; font-size: 15px;"></i><span style="color: red;"> Recommendation Denied</span>
+                                            {% elif mail.account_hod and mail.account_hod.sign_type == 'Agreed' and not mail.account_hr %}
+                                            <i class="fas fa-check-circle" style="color: green; font-size: 15px;"></i><span style="color: green;"> Approved by HOD</span>
+                                            {% elif mail.account_hod and mail.account_hod.sign_type == "Disagreed" and not mail.account_hr %}
+                                            <i class="fas fa-ban" style="color: red; font-size: 15px;"></i> <span style="color: red;"> Rejected by HOD</span>
+                                            {% elif mail.account_hr and mail.account_hr.sign_type == 'Agreed' and not mail.account_it %}
+                                            <i class="fas fa-check-circle" style="color: green; font-size: 15px;"></i><span style="color: green;"> Approved by HR and Eticket Raised</span>
+                                            {% elif mail.account_hr and mail.account_hr.sign_type == "Disagreed" and not mail.account_it %}
+                                            <i class="fas fa-ban" style="color: red; font-size: 15px;"></i><span style="color: red;"> Rejected by HR</span>
+                                            {% elif mail.account_it %}
+                                            <i class="fa fa-flag-checkered"  style="color: black; font-size: 15px;"></i> <span style="color: green;">Form Closed</span> 
+                                            {% endif %}
+                                        </td>
+                                          
+                                   </tr>
+                        {% endfor %}
+
+                        </tbody>
+                     </table>
+                </article>
+         </div>
+
+        <p></p>
+
+        <!---------------------------------LAN Request-------------------------------------->
+
+        <div class="row mb-3 ps-5"> 
+            <div class="col-sm-8 div-shadow p-3"> 
+                <strong><i class="fas fa-network-wired"></i> Form-3: Request for Computer LAN Connectivity</strong> <!-- Network Wired Icon -->
+            </div>
+            <div class="col-sm-2 div-shadow text-center"> <!-- Center align for the button -->
+                <!-- Button for collapsing content -->
+                <a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#lan1-div" role="button" 
+                   aria-expanded="false" aria-controls="requisition-div" aria-label="Toggle Requisition Details">
+                    <i class="bi bi-book" aria-hidden="true"></i>
+                </a>
+            </div>
+            <div class="col-sm-2 div-shadow text-center"> <!-- Center align for the hidden link -->
+                <!-- Link for creating new requisition -->
+                <a class="btn btn-outline-secondary" style="font-size: 20px;" href="{% url 'lan1-create' %}"  target="_blank" aria-label="Create New">
+                    <i class="bi bi-pencil" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="collapse" id="lan1-div">
+                <article class="media content-section">
+                    <table  class="table datatable table-hover" align="center" style="width:100%; text-align:center;">
+                        <thead>
+                        <tr>
+                            <th style="text-align: center;">ID</th>
+                            <th style="text-align: center;">User</th>
+                            <th style="text-align: center;">Full Name</th>
+                            <th style="text-align: center;">Posted Date</th>
+                            <th style="text-align: center;">Show PDF</th>
+                            <th style="text-align: center;">Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for lan in lanrequest %}
+                            <tr>
+                                <td><a class="article-title" style="color: blueviolet" href="{% url 'lan1-detail' lan.id %}"><b>{{ lan }}</b></a></td>
+                                <td><a class="mr-2" href="#">{{ lan.author }}</a></td>
+                                <td>{{ lan.author.first_name }}</a></td>
+                                <td class="col-sm-3"><small class="text-muted">{{ lan.date_posted|date:"d M' Y P" }}</small></td>
+                                <td><a class=" glyphicon glyphicon-open-file" href="{% url 'lan1-pdf' lan.id %}" target="_blank"> View</a></td>
+                                <td>Ongoing</td>
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                     </table>
+                </article>
+            </div>
+        <p></p>
+        <!---------------------------------LAN transfer---------------------------------------->
+        <div class="row mb-3 ps-5"> 
+            <div class="col-sm-8 div-shadow p-3"> 
+                <strong><i class="fas fa-exchange-alt"></i>  Form-4: User LAN Connectivity Transfer Form</strong> <!-- Exchange Icon -->
+            </div>
+            <div class="col-sm-2 div-shadow text-center"> <!-- Center align for the button -->
+                <!-- Button for collapsing content -->
+                <a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#lan2-div" role="button" 
+                   aria-expanded="false" aria-controls="requisition-div" aria-label="Toggle Requisition Details">
+                    <i class="bi bi-book" aria-hidden="true"></i>
+                </a>
+            </div>
+            <div class="col-sm-2 div-shadow text-center"> <!-- Center align for the hidden link -->
+                <!-- Link for creating new requisition -->
+                <a class="btn btn-outline-secondary" style="font-size: 20px;" href="{% url 'lan2-create' %}"  target="_blank" aria-label="Create New">
+                    <i class="bi bi-pencil" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="collapse" id="lan2-div">
+                <article class="media content-section">
+                    <table  class="table datatable table-hover" align="center" style="width:100%; text-align:center;">
+                        <thead>
+                        <tr>
+                            <th style="text-align: center;">ID</th>
+                            <th style="text-align: center;">User</th>
+                            <th style="text-align: center;">Full Name</th>
+                            <th style="text-align: center;">Posted Date</th>
+                            <th style="text-align: center;">Show PDF</th>
+                            <th style="text-align: center;">Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for lan in lantransfer %}
+                            <tr>
+                                <td><a class="article-title" style="color: blueviolet" href="{% url 'lan2-detail' lan.id %}"><b>{{ lan }}</b></a></td>
+                                <td><a class="mr-2" href="#">{{ lan.author }}</a></td>
+                                <td>{{ lan.author.first_name }}</a></td>
+                                <td class="col-sm-3"><small class="text-muted">{{ lan.date_posted|date:"d M' Y P" }}</small></td>
+                                <td><a class=" glyphicon glyphicon-open-file" href="{% url 'lan2-pdf' lan.id %}" target="_blank"> View</a></td>
+                                <td>Ongoing</td>
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                     </table>
+                </article>
+            </div>
+        <p>
+
+        </p>
+        <!---------------------------------Lan Instrument---------------------------------------->
+
+        
+        <div class="row mb-3 ps-5"> 
+            <div class="col-sm-8 div-shadow p-3"> 
+                <strong><i class="fas fa-plug"></i> Form-5: Request for Instrument LAN Connectivity</strong> <!-- Plug Icon -->
+            </div>
+            <div class="col-sm-2 div-shadow text-center"> <!-- Center align for the button -->
+                <!-- Button for collapsing content -->
+                <a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#lan3-div" role="button" 
+                   aria-expanded="false" aria-controls="requisition-div" aria-label="Toggle Requisition Details">
+                    <i class="bi bi-book" aria-hidden="true"></i>
+                </a>
+            </div>
+            <div class="col-sm-2 div-shadow text-center"> <!-- Center align for the hidden link -->
+                <!-- Link for creating new requisition -->
+                <a class="btn btn-outline-secondary" style="font-size: 20px;" href="{% url 'lan3-create' %}" target="_blank"  aria-label="Create New">
+                    <i class="bi bi-pencil" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="collapse" id="lan3-div">
+                <article class="media content-section">
+                    <table  class="table datatable table-hover" align="center" style="width:100%; text-align:center;">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center;">ID</th>
+                                <th style="text-align: center;">User</th>
+                                <th style="text-align: center;">Full Name</th>
+                                <th style="text-align: center;">Posted Date</th>
+                                <th style="text-align: center;">Show PDF</th>
+                                <th style="text-align: center;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for lan in laninstrument %}
+                                   <tr>
+                                       <td><a class="article-title" style="color: blueviolet" href="{% url 'lan3-detail' lan.id %}"><b>{{ lan }}</b></a></td>
+                                       <td><a class="mr-2" href="#">{{ lan.author }}</a></td>
+                                       <td>{{ lan.author.first_name }}</a></td>
+                                       <td class="col-sm-3"><small class="text-muted">{{ lan.date_posted|date:"d M' Y P" }}</small></td>
+                                       <td><a class="fa fa-file-pdf-o fa-lg" href="{% url 'lan3-pdf' lan.id %}" target="_blank"> View</a></td>
+                                       <td>Ongoing</td>
+                                   </tr>
+                        {% endfor %}
+
+                        </tbody>
+                     </table>
+                </article>
+            </div>
+        <p>
+
+        </p>
+
+
+
+        <!---------------------------------LAN transfer-------------------------------------->
+
+
+        <div class="row mb-3 ps-5"> 
+                    <div class="col-sm-8 div-shadow p-3"> 
+                        <strong><i class="fas fa-arrow-right"></i> Form-6: Instrument LAN Connectivity Transfer</strong> <!-- Arrow Right Icon -->
+                    </div>
+                <div class="col-sm-2 div-shadow text-center"> <!-- Center align for the button -->
+                    <!-- Button for collapsing content -->
+                    <a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#laninstrumenttransfer-div" role="button" 
+                       aria-expanded="false" aria-controls="requisition-div" aria-label="Toggle Requisition Details">
+                        <i class="bi bi-book" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <div class="col-sm-2 div-shadow text-center"> <!-- Center align for the hidden link -->
+                    <!-- Link for creating new requisition -->
+                    <a class="btn btn-outline-secondary" style="font-size: 20px;" href="{% url 'lantransferinstrument-create' %}"  target="_blank" aria-label="Create New">
+                        <i class="bi bi-pencil" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+
+
+<div class="collapse" id="laninstrumenttransfer-div">
+    <article class="media content-section">
+        <table  class="table datatable table-hover" align="center" style="width:100%; text-align:center;">
+            <thead>
+                <tr>
+                    <th style="text-align: center;">ID</th>
+                    <th style="text-align: center;">User</th>
+                    <th style="text-align: center;">Full Name</th>
+                    <th style="text-align: center;">Posted Date</th>
+                    <th style="text-align: center;">Show PDF</th>
+                    <th style="text-align: center;">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for lan in laninstrumenttransfer %}
+                <tr>
+                    <td><a class="article-title" style="color: blueviolet" href="{% url 'lantransferinstrument-detail' lan.id %}"><b>{{ lan }}</b></a></td>
+                    <td><a class="mr-2" href="#">{{ lan.author }}</a></td>
+                    <td>{{ lan.author.first_name }}</a></td>
+                    <td class="col-sm-3"><small class="text-muted">{{ lan.date_posted|date:"d M' Y P" }}</small></td>
+                    <td><a class=" glyphicon glyphicon-open-file" href="{% url 'lantransferinstrument-pdf' lan.id %}" target="_blank"> View</a></td>
+                    <td>Ongoing</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+         </table>
+    </article>
+</div>
+<p>
+
+</p>
+      
+        <!---------------------------------File Server Access Permission----------------------------------- -->
+
+
+        <div class="row mb-3 ps-5"> 
+            <div class="col-sm-8 div-shadow p-3"> 
+                <strong><i class="fas fa-server"></i> Form-7: File Server Access Activation/ Modification Form</strong> <!-- Server Icon -->
+            </div>
+            <div class="col-sm-2 div-shadow text-center"> <!-- Center align for the button -->
+                <!-- Button for collapsing content -->
+                <a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#file-div" role="button" 
+                   aria-expanded="false" aria-controls="requisition-div" aria-label="Toggle Requisition Details">
+                    <i class="bi bi-book" aria-hidden="true"></i>
+                </a>
+            </div>
+            <div class="col-sm-2 div-shadow text-center"> <!-- Center align for the hidden link -->
+                <!-- Link for creating new requisition -->
+                <a class="btn btn-outline-secondary" style="font-size: 20px;" href="{% url 'file-create' %}"  target="_blank" aria-label="Create New file">
+                    <i class="bi bi-pencil" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+
+
+        <div class="collapse" id="file-div">
+                <article class="media content-section">
+                    <table  class="table datatable table-hover" align="center" style="width:100%; text-align:center;">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center;">Form ID</th>
+                                <th style="text-align: center;">Full Name</th>
+                                <th style="text-align: center;">Created By</th>
+                                <th style="text-align: center;">Created on</th>
+                                <th style="text-align: center;">Show PDF</th>
+                                <th style="text-align: center;">Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for f in file %}
+                                   <tr>
+                                       <td><a class="article-title" style="color: blueviolet" href="{% url 'file-detail' f.id %}"><b>{{ f }}</b></a></td>
+                                       <td><a class="mr-2" href="#">{{ f.author }}</a></td>
+                                       <td>{{ f.author.first_name}}</a></td>
+                                       <td class="col-sm-3"><small class="text-muted">{{ f.date_posted|date:"d M' Y P" }}</small></td>
+                                       <td><a class="fa fa-file-pdf-o fa-lg" href="{% url 'file-pdf' f.id %}" target="_blank"> View</a></td>
+
+                                       <td colspan="4" style="font-weight: bold;">
+                                        {% if f.author.first_name and not f.fileaccess_sign and not f.fileaccess_other_hod %}
+                                        <i class="fas fa-home"></i> <span style="color: #FFBF00;">Form Created</span> 
+                                        
+                                        {% elif f.fileaccess_other_hod and f.fileaccess_other_hod.sign_type == 'Agreed' and not f.fileaccess_sign %}
+                                        <i class="fas fa-check-circle" style="color: green; font-size: 15px;"></i> <span style="color: green;"> Approved By (Head of other Dept.)</span>
+
+                                        {% elif f.fileaccess_other_hod and f.fileaccess_other_hod.sign_type == "Disagreed" and not f.fileaccess_sign %}
+                                        <i class="fas fa-ban" style="color: red; font-size: 15px;"></i><span style="color: red;"> Rejected By (Head of other Dept.)</span>
+
+
+                                        {% elif f.fileaccess_sign and f.fileaccess_sign.sign_type == 'Agreed' and not f.fileaccess_hod %}
+                                        <i class="fas fa-check-circle" style="color: green; font-size: 15px;"></i> <span style="color: green;"> Recommendation Approved</span>
+                                        {% elif f.fileaccess_sign and f.fileaccess_sign.sign_type == "Disagreed" and not f.fileaccess_hod %}
+                                        <i class="fas fa-ban" style="color: red; font-size: 15px;"></i><span style="color: red;"> Recommendation Denied</span>
+
+
+                                        {% elif f.fileaccess_hod and f.fileaccess_hod.sign_type == 'Agreed' and not f.fileaccess_it %}
+                                        <i class="fas fa-check-circle" style="color: green; font-size: 15px;"></i><span style="color: green;"> Approved by HOD and Eticket Raised</span>
+                                        {% elif f.fileaccess_hod and f.fileaccess_hod.sign_type == "Disagreed" and not f.fileaccess_it %}
+                                        <i class="fas fa-ban" style="color: red; font-size: 15px;"></i> <span style="color: red;"> Rejected by HOD</span>
+
+                                        {% elif f.fileaccess_it %}
+                                        <i class="fa fa-flag-checkered"  style="color: black; font-size: 15px;"></i> <span style="color: green;">Form Closed</span> 
+                                        {% endif %}
+                                    </td>
+                                   </tr>
+                        {% endfor %}
+
+                        </tbody>
+                     </table>
+                </article>
+            </div>
+        <p></p>
+
+
+                    <div class="row mb-3 ps-5"> 
+                        <div class="col-sm-8 div-shadow p-3"> 
+                            <strong><i class="fas fa-shopping-cart"></i> Form-8: Requisition for ICT Product</strong> <!-- Shopping Cart Icon -->
+                        </div>
+                        <div class="col-sm-2 div-shadow text-center"> <!-- Center align for the button -->
+                            <!-- Button for collapsing content -->
+                            <a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#requisition-div" role="button" 
+                               aria-expanded="false" aria-controls="requisition-div" aria-label="Toggle Requisition Details">
+                                <i class="bi bi-book" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                        <div class="col-sm-2 div-shadow text-center"> <!-- Center align for the hidden link -->
+                            <!-- Link for creating new requisition -->
+                            <a class="btn btn-outline-secondary" style="font-size: 20px;" href="{% url 'requisition-create' %}" aria-label="Create New Requisition">
+                                <i class="bi bi-pencil" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="collapse" id="requisition-div">
+                        <article class="media content-section">
+                            <table  class="table datatable table-hover" align="center" style="width:100%; text-align:center;">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: center;">Form ID</th>
+                                        <th style="text-align: center;">Full Name</th>
+                                        <th style="text-align: center;">Created By</th>
+                                        <th style="text-align: center;">Created on</th>
+                                        <th style="text-align: center;">Show PDF</th>
+                                        <th style="text-align: center;">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for r in requisition %}
+                                        <tr>
+                                            <td><a class="article-title" style="color: blueviolet" href="{% url 'requisition-detail' r.id %}"><b>{{ r }}</b></a></td>
+                                            <td><a class="mr-2" href="#">{{ r.author }}</a></td>
+                                            <td>{{ r.author.first_name }}</td>
+                                            <td class="col-sm-3"><small class="text-muted">{{ r.date_posted|date:"d M' Y P" }}</small></td>
+                                            <td><a class="fa fa-file-pdf-o fa-lg" href="{% url 'requisition-pdf' r.id %}" target="_blank"> View</a></td>
+                                            <td colspan="4" style="font-weight: bold;">
+                                                {% if r.requisition_sign %}
+                                                    {% if r.requisition_sign.sign_type == 'Agreed' %}
+                                                        <i class="fas fa-check-circle" style="color: green; font-size: 15px;"></i> <span style="color: green;">Approved</span>
+                                                    {% elif r.requisition_sign.sign_type == "Disagreed" %}
+                                                        <i class="fas fa-ban" style="color: red; font-size: 15px;"></i> <span style="color: red;">Denied</span>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <i class="fas fa-home"></i> <span style="color: #FFBF00;">Form Created</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                             </table>
+                        </article>
+                    </div> <!-- End of Collapse -->
+                </div> <!-- End of Card Body -->
+            </div> <!-- End of Card -->
+        </div> <!-- End of Column -->
+    </div> <!-- End of Row -->
+</section>
+
+
+
+{% endblock %}

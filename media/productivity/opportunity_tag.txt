@@ -1,0 +1,36 @@
+https://app.clickup.com/3408762/v/fm/380vu-3021
+
+
+***********************************Opportunity Tag (background green)***************************************************
+
+Raiser*:
+
+Idea Giver*:
+
+Superviser (of idea giver)*
+
+Title of the Opportunity*  0-255
+
+Description (What?)*: text
+
+Benefits (Why?)* text
+
+Team Members: dynamic row
+
+Attachment
+
+Date (present Date)*
+
+
+Chat: 
+
+
+------------------------------------------------
+Admin Part
+-------------------------------------------=====
+Admin Name:
+
+Status : On Review/ Nominated for Presentation/ Nominated for Award
+
+Comments : text
+

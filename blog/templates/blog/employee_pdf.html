@@ -1,0 +1,344 @@
+{% load static %}
+
+<html lang="en">
+
+<head>
+    <title>{{ runset }}</title>
+    <style>
+        @page {
+            size: a4 portrait;
+            @frame header_frame {
+                /* Static Frame */
+                -pdf-frame-content: header_content;
+                left: 50pt;
+                width: 512pt;
+                top: 30pt;
+                height: 30pt;
+            }
+
+            @frame content_frame {
+                /* Content Frame */
+                left: 50pt;
+                width: 512pt;
+                top: 30pt;
+                height: 700pt;
+            }
+
+            @frame footer_frame {
+                /* Another static Frame */
+                -pdf-frame-content: footer_content;
+                left: 50pt;
+                width: 512pt;
+                top: 750pt;
+                height: 85pt;
+            }
+        }
+
+        .center {
+            font-size: 15px;
+            margin: auto;
+            width: 100%;
+            font-weight: bold;
+            border: 2px solid black;
+            background-color: lightgrey;
+            padding: 5px;
+            text-align: center;
+        }
+		.type {
+            font-size: 9px;
+            margin: auto;
+            width: 100%;
+            font-weight: bold;
+            font-size: 9px;
+            border: 1px solid black;
+            background-color: lightgrey;
+            padding: 5px;
+            text-align: center;
+        }
+
+		.company {
+            font-size: 10px;
+            margin: auto;
+            font-weight: bold;
+            border: 1px solid black;
+            background-color: lightgrey;
+            padding: 5px;
+            text-align: center;
+        }
+
+        .left {
+            font-size: 10px;
+            margin: auto;
+            width: 10%;
+            font-weight: bold;
+            border: 2px solid black;
+            background-color: lightgrey;
+            padding: 5px;
+            text-align: center;
+        }
+
+        .article {
+            font-size: 10px;
+            padding: 10px;
+            border: 1px solid black;
+            font-size: 12px;
+            height: 320px;
+        }
+
+        #employee {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 12px;
+        }
+
+        #employee td {
+            border: 1px solid black;
+            padding: 2px;
+        }
+
+        hr {
+            width: 90%;
+            margin-left: 0;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <br>
+    <div class="center">
+       MAIL/USER ACCOUNT ACTIVATION FORM
+    </div>
+    <div style="text-align: center">
+        <h1>(DigitizeIT)</h1>
+    </div>
+    <table class="table" style="text-align: left;">
+        <tr>
+            <th class="type">ACCOUNT TYPE (S)</th>
+            <th>&#9632; User Account Activation</th>
+            <th>&#9632; Mail Account Activation</th>
+            <th>&#9632; Mail Group Access</th>
+        </tr>
+        <tr>
+            <td width="16%"></td>
+			<td width="22%">
+				{% if runset.user_activation %}
+					{% for item in runset.user_activation %}
+						{% if user_activation_choices %}
+							{% for key, value in user_activation_choices.items %}
+								{% if key == item %}
+									&bull; {{ value }}<br>
+								{% endif %}
+							{% endfor %}
+						{% endif %}
+					{% endfor %}
+				{% else %}
+					<p>Not Applicable</p>
+				{% endif %}
+			</td>
+
+
+				<td width="38%">
+					{% if runset.mail_activation %}
+						{% for item in runset.mail_activation %}
+							{% if mail_activation_choices %}
+								{% for key, value in mail_activation_choices.items %}
+									{% if key == item %}
+										&bull; {{ value }}<br>
+									{% endif %}
+								{% endfor %}
+							{% endif %}
+						{% endfor %}
+					{% else %}
+						<p>Not Applicable</p>
+					{% endif %}
+				</td>
+			
+				<td width="24%">
+					{% if runset.group_access %}
+						{% for item in runset.group_access %}
+							{% if group_access_choices %}
+								{% for key, value in group_access_choices.items %}
+									{% if key == item %}
+										&bull; {{ value }}<br>
+									{% endif %}
+								{% endfor %}
+							{% endif %}
+						{% endfor %}
+					{% else %}
+						<p>Not Applicable</p>
+					{% endif %}
+				</td>
+
+        </tr>
+    </table>
+    <br>
+    <table id="employee">
+        <tr>
+            <td class="company" width="35%">COMPANY NAME</td>
+            <td width="65%" colspan="2">IT Digitalization System</td>
+        </tr>
+    </table>
+    <br>
+    <div class="center">EMPLOYEE INFORMATION</div>
+    <table id="employee">
+        <tr>
+            <td width="35%">Full Name</td>
+            <td width="65%" colspan="2">{{ runset.fullname }}</td>
+        </tr>
+        <tr>
+            <td width="35%">DESIGNATION</td>
+            <td width="65%" colspan="2">{{ runset.designation }}</td>
+        </tr>
+        <tr>
+            <td width="35%">DEPARTMENT</td>
+            <td width="65%" colspan="2">{{ runset.department }}</td>
+        </tr>
+        <tr>
+            <td width="35%">EMPLOYEE ID</td>
+            <td width="65%" colspan="2">{{ runset.emp_id }}</td>
+        </tr>
+        <tr>
+            <td width="35%">WORK STATION</td>
+            <td width="65%" colspan="2">{{ runset.location }}, {{ runset.floor }}</td>
+        </tr>
+        <tr>
+            <td width="35%">JOINING DATE</td>
+            <td width="65%" colspan="2">{{ runset.emp_join_date|date:"d M' Y" }}</td>
+        </tr>
+        <tr>
+            <td width="35%">CONTACT</td>
+            <td width="40%">MOBILE: {{ runset.phone }}</td>
+            <td width="25%">OFFICE EXTENSION: {{ runset.ext }}</td>
+        </tr>
+    </table>
+    <br>
+    <div class="article">
+        <b>Justification : </b> <br> {{ runset.justification }}
+    </div>
+
+    <br>
+    <br style="line-height:7;">
+    <table style="font-size: medium; text-align: center">
+        <tr>
+            <td style="width: 75%">
+                {{ author_history.first_name }} <br>
+                {{ runset.date_updated|date:"d M' Y | P" }}
+                <hr width="80%">
+                <b>Prepared By</b>
+            </td>
+            {% if runset.employee_sign.sign_type == "Agreed" %}
+            <td style="width: 70%">
+                {{ signer_history.first_name }} <br>
+                {{ runset.employee_sign.date_updated|date:"d M' Y | P" }}
+                <hr width="80%">
+                <b>Recommended By</b>
+            </td>
+            {% elif runset.employee_sign.sign_type == "Disagreed" %}
+            <td style="width: 70%">
+                <b><span style="color:red;">Authorized (Recommended) Unsigned</span></b>
+                <hr width="80%">
+                <b>Recommended By</b>
+            </td>
+            {% else %}
+            <td style="width: 70%">
+                <br> <br>
+                <hr width="80%">
+                <b>Recommended By</b>
+            </td>
+            {% endif %}
+            {% if runset.employee_hod.sign_type == "Agreed" %}
+            <td style="width: 70%">
+                {{ hod_history.first_name }} <br>
+                {{ runset.employee_hod.date_updated|date:"d M' Y | P" }}
+                <hr width="80%">
+                <b>Approved (HOD)</b>
+            </td>
+            {% elif runset.employee_hod.sign_type == "Disagreed" %}
+            <td style="width: 70%">
+                <b><span style="color:red;">Authorized (HOD) Unsigned</span></b>
+                <hr width="80%">
+                <b>Approved (HOD)</b>
+            </td>
+            {% else %}
+            <td style="width: 70%">
+                <br> <br>
+                <hr width="80%">
+                <b>Approved (HOD)</b>
+            </td>
+            {% endif %}
+            {% if runset.employee_hr.sign_type == "Agreed" %}
+            <td style="width: 70%">
+                {{ hr_history.first_name }} <br>
+                {{ runset.employee_hr.date_updated|date:"d M' Y | P" }}
+                <hr width="80%">
+                <b>Approved (HR)</b>
+            </td>
+            {% elif runset.employee_hr.sign_type == "Disagreed" %}
+            <td style="width: 70%">
+                <b><span style="color:red;">Authorized (HR) Unsigned</span></b>
+                <hr width="80%">
+                <b>Approved (HR)</b>
+            </td>
+            {% else %}
+            <td style="width: 70%">
+                <br> <br>
+                <hr width="80%">
+                <b>Approved (HR)</b>
+            </td>
+            {% endif %}
+        </tr>
+    </table>
+    <br>
+    <div class="center">
+        ACCOUNT INFORMTION (To be filled up by IT)
+    </div>
+    <table id="employee">
+        <tr>
+            <td width="30%">MAIL ID (NEW IF ANY)</td>
+            <td width="70%">{{ runset.employee_it.mail_id }}</td>
+        </tr>
+        <tr>
+            <td width="30%">INITIAL MAILBOX SIZE :</td>
+            <td width="70%">{{ runset.employee_it.mail_box }}</td>
+        </tr>
+        <tr>
+            <td width="30%">Comment :</td>
+            <td width="70%">{{ runset.employee_it.admin_comment }}</td>
+        </tr>
+    </table>
+    <br>
+    <br>
+
+	<table style="width: 60%; text-align: center;">
+        <tr>
+            <td style="width: 40%">{{ admin_history.first_name }}</td>
+            <td style="width: 60%; text-align: center;"></td>
+        </tr>
+        <tr>
+            <td style="width: 40%">{{ runset.employee_it.date_signed|date:"d M' Y | P" }}</td>
+            <td style="width: 60%; text-align: center;"></td>
+        </tr>
+        <tr>
+            <td><hr width="100%"></td>
+            <td style="width: 60%"></td>
+        </tr>
+        <tr>
+            <td style="width: 40%"><br><b>IT Admin</b></td>
+            <td style="width: 60%; text-align: center;"></td>
+        </tr>
+        <tr>
+            <td style="width: 40%">(Sign & Date)</td>
+            <td style="width: 60%; text-align: center;"></td>
+        </tr>
+    </table>
+
+
+    <!-- Content for Static Frame 'footer_frame' -->
+    <div id="footer_content">
+        page <pdf:pagenumber></pdf:pagenumber>
+        of <pdf:pagecount></pdf:pagecount>
+    </div>
+</body>
+
+</html>

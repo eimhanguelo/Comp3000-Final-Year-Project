@@ -1,0 +1,67 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+
+<!-- Page Title Section -->
+<div class="pagetitle">
+    <h1>Requisition</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Users</a></li>
+            <li class="breadcrumb-item" aria-current="page">IT Forms</li>
+            <li class="breadcrumb-item active">Requisition Sign</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title d-flex align-items-center gap-2">
+                        <i class="bi bi-pencil-square" aria-hidden="true" title="Edit and Engage in Discussion"></i>
+                        Approved by HOD IT
+                    </h5>
+                    
+                    <div class="card-title pt-3 d-flex align-items-center justify-content-center gap-2 text-center">
+                        <i class="bi bi-chat-dots" aria-hidden="true" title="Real-time chat with engineers and users"></i>
+                        <span>HOD IT Approval for the ICT Requisition</span>
+                    </div>
+
+                    <!-- Form for Assignment -->
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="{{ form.sign_type.id_for_label }}">Sign Type:</label>
+                            <div class="col-sm-10">
+                                {{ form.sign_type|as_crispy_field }}
+                            </div>
+                        </div>
+                    
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="{{ form.comment.id_for_label }}">Comment:</label>
+                            <div class="col-sm-10">
+                                {{ form.comment|as_crispy_field }}
+                            </div>
+                        </div>
+                    
+                        <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="reset" class="btn btn-secondary">Reset</button>
+                        </div>
+                    </form>
+                    
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}
+

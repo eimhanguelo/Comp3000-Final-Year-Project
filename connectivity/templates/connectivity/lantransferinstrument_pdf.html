@@ -1,0 +1,307 @@
+{% load static %}
+
+<html lang="en">
+
+<head>
+    <title>{{ runset }}</title>
+
+    <style>
+        @page {
+            size: A4 portrait;
+            @frame header_frame { /* Static Frame */
+                -pdf-frame-content: header_content;
+                left: 50pt; width: 512pt; top: 30pt; height: 30pt;
+            }
+            @frame content_frame { /* Content Frame */
+                left: 50pt; width: 512pt; top: 30pt; height: 700pt;
+            }
+            @frame footer_frame { /* Another static Frame */
+                -pdf-frame-content: footer_content;
+                left: 50pt; width: 512pt; top: 750pt; height: 85pt;
+            }
+        }
+
+        .center {
+            font-size: 15px;
+            margin: auto;
+            width: 100%;
+            font-weight: bold;
+            border: 2px solid black;
+            background-color: lightgrey;
+            padding: 5px;
+            text-align: center;
+        }
+
+        .article {
+            font-size: 13px;
+            padding: 10px;
+            border: 1px solid black;
+            background-color: #f1f1f1;
+            height: 320px;
+        }
+
+        #employee {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 12px;
+        }
+
+        #employee td {
+            border: 1px solid black;
+            padding: 2px;
+        }
+
+        hr {
+            width: 90%;
+            margin-left: 0;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="text-align: center">
+        <table>
+            <tr>
+				<td><h5 style="color:green; font-size:200%">IT Digitalization System</h5></td>
+            </tr>
+            <tr>
+                <td><h1>DigitizeIT</h1></td>
+            </tr>
+            <tr>
+                <td>A Smart IT Solutions</td>
+            </tr>
+            <tr>
+                <td style="text-align: center; font: italic small-caps bold 12px/30px Georgia, serif; color: darkslateblue">
+                    <h2>Form No: {{ runset }}</h2>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="center">
+        Instrument LAN Connectivity Transfer
+    </div>
+    <br>
+
+    <div class="center">Filled Up By User</div>
+
+    <table id="employee">
+        <tr>
+            <td width="25%"><b>Instrument/Printer Name: </b></td>
+            <td width="75%" colspan="3">{{ runset.current_ip_address.instrument_name }}</td>
+        </tr>
+        <tr>
+            <td width="25%"><b>Instrument ID/Model:</b></td>
+            <td width="75%" colspan="3">{{ runset.current_ip_address.instrument_id }}</td>
+        </tr>
+        <tr>
+            <td width="25%"><b>IP Address: </b></td>
+            <td width="30%">{{ runset.current_ip_address }}</td>
+            <td width="15%"><b>Current Plant: </b></td>
+            <td width="30%">{{ runset.current_location }}, {{ runset.current_floor }}</td>
+        </tr>
+        <tr>
+            <td width="25%"><b>Department: </b></td>
+            <td width="30%">{{ runset.current_department }}</td>
+            <td width="15%"><b>Transfer/Plant:</b></td>
+            <td width="30%">{{ runset.new_location }}, {{ runset.new_floor }} - {{ runset.new_department }}</td>
+        </tr>
+        <tr>
+            <td width="25%"><b>Contact Person Name: </b></td>
+            <td width="30%">{{ runset.contact_person.first_name }}</td>
+            <td width="15%"><b>Mobile No:</b></td>
+            <td width="30%">{{ runset.contact_person.profile.phone }} ;{{ runset.contact_person.profile.ext }}</td>
+        </tr>
+
+
+        {% comment %} <tr>
+            <td width="30%"><b>Transfer Location Plant: </b></td>
+            <td width="25%">{{ runset.new_location }}, {{ runset.new_floor }}</td>
+            <td width="25%"><b>Department: </b></td>
+            <td width="20%">{{ runset.new_department }}</td>
+        </tr>
+        <tr>
+            <td width="30%"><b>Instrument/Printer Name: </b></td>
+            <td width="70%" colspan="3">{{ runset.current_ip_address }}</td>
+        </tr>
+        <tr>
+            <td width="30%"><b>Instrument ID/Model: </b></td>
+            <td width="70%" colspan="3">{{ runset.current_ip_address }}</td>
+        </tr>
+        <tr>
+            <td width="30%"><b>IP Address </b></td>
+            <td width="25%">{{ runset.new_location }}, {{ runset.new_floor }}</td>
+            <td width="25%"><b>Current Plant </b></td>
+            <td width="20%">{{ runset.new_department }}</td>
+        </tr>
+        <tr>
+            <td width="30%"><b>Department</b></td>
+            <td width="25%">{{ runset.new_location }}, {{ runset.new_floor }}</td>
+            <td width="25%"><b>Transfer/Plant:</b></td>
+            <td width="20%">{{ runset.new_department }}</td>
+        </tr>
+        <tr>
+            <td width="30%"><b>Contact Person Name:</b></td>
+            <td width="25%">{{ runset.new_location }}, {{ runset.new_floor }}</td>
+            <td width="25%"><b>Mobile No:</b></td>
+            <td width="20%">{{ runset.new_department }}</td>
+        </tr>
+        <tr>
+            <td width="30%"><b>Current IP Address : </b></td>
+            <td width="70%" colspan="3">{{ runset.current_ip_address }}</td>
+        </tr> {% endcomment %}
+        {% comment %} <tr>
+            <td width="30%"><b>Transferee location old IP(if any): </b></td>
+            <td width="70%" colspan="3">{{ runset.transferee_location_old_ip_address }}</td>
+        </tr>
+        <tr>
+			<td width="30%"><b>Transfer IT Equipment list: </b></td>
+			<td width="70%" colspan="3">
+				{% for product in runset.transfer_list.all %}
+					{{ product.name }}{% if not forloop.last %}, {% endif %}
+				{% endfor %}
+			</td>
+		</tr> {% endcomment %}
+		
+    </table>
+
+    <div class="article">
+        <b>Justification: </b>{{ runset.purpose_of_transfer }}
+    </div>
+    <br style="line-height: 7;">
+<br>
+    <table style="font-size: medium; text-align: center">
+        <tr>
+            <td style="width: 75%">
+                {{ user_history.first_name }} <br>
+                {{ runset.date_updated|date:"d M' Y | P" }}
+                <hr width="80%">
+                <b>Raised By</b><br>
+                <b>User</b>
+            </td>
+
+			{% if runset.lantransfer_hod.sign_type == "Agreed" %}
+				<td style="width: 70%">
+					{{ hod_history.first_name }} <br>
+					{{ runset.lantransfer_hod.date_updated|date:"d M' Y | P" }}
+					<hr width="80%">
+					<b>Recommended By (HOD)</b><br>
+					<b>Head Of Dept.</b>
+				</td>
+			{% elif runset.lantransfer_hod.sign_type == "Disagreed" %}
+				<td style="width: 70%">
+					<b><span style="color:red;">Authorized (HOD) Unsigned</span></b>
+					<hr width="80%">
+					<b>Recommended By (HOD)</b><br>
+					<b>Head Of Dept.</b>
+				</td>
+			{% else %}
+				<td style="width: 70%">
+					<br><br>
+					<hr width="80%">
+					<b>Recommended By (HOD)</b><br>
+					<b>Head Of Dept.</b>
+				</td>
+			{% endif %}
+
+
+			{% if runset.lantransfer_hr.sign_type == "Agreed" %}
+				<td style="width: 70%">
+					{{ hr_history.first_name }} <br>
+					{{ runset.lantransfer_hr.date_updated|date:"d M' Y | P" }}
+					<hr width="80%">
+					<b>Approved By (HR)</b><br>
+					<b>Head Of HRD</b>
+				</td>
+
+				{% elif runset.lantransfer_hr.sign_type == "Disagreed" %}
+				<td style="width: 70%">
+					<b><span style="color:red;">Authorized (HR) Unsigned</span></b>
+					<hr width="80%">
+					<b>Approved By (HR)</b><br>
+					<b>Head Of HRD</b>
+				</td>
+			{% else %}
+				<td style="width: 70%">
+					<br><br>
+					<hr width="80%">
+					<b>Approved By (HR)</b><br>
+					<b>Head Of HRD</b>
+				</td>
+			{% endif %}
+        </tr>
+    </table>
+<br>
+    <br>
+    <div class="center">
+		Filled Up By IT
+    </div>
+
+    <br>
+
+    <table id="employee">
+        <tr>
+            <td width="30%"><b>Provide IP Address (if require): </b></td>
+            <td width="20%">{{ runset.laninstrumenttransfer_it.required_ip_address }}</td>
+            <td width="30%"><b>VLAN</b></td>
+            <td width="20%">{{ runset.current_ip_address.vlan  }}</td>
+        </tr>
+        <tr>
+            <td width="30%"><b>Current Switch Name :</b></td>
+            <td width="20%">{{ runset.current_ip_address.switch_name }}</td>
+            <td width="30%"><b>Current Port:</b></td>
+            <td width="20%">{{ runset.current_ip_address.switch_port }}</td>
+        </tr>
+        <tr>
+            <td width="30%"><b>Required Switch Name: </b></td>
+            <td width="20%">{{ runset.laninstrumenttransfer_it.required_ip_address.switch_name }}</td>
+            <td width="30%"><b>Required Port: </b></td>
+            <td width="20%">{{ runset.laninstrumenttransfer_it.required_ip_address.switch_port }}</td>
+        </tr>
+        <tr>
+            <td width="30%"><b>Comment : </b></td>
+            <td width="70%" colspan="3">{{ runset.laninstrumenttransfer_it.comment }}</td>
+        </tr>
+    </table>
+    <br>
+
+    <table>
+        <tr>
+            <td width="60%"></td>
+            <td style="text-align: center; width: 40%">{{ runset.laninstrumenttransfer_it.admin.first_name }}</td>
+        </tr>
+        <tr>
+            <td width="60%"></td>
+            <td style="text-align: center; width: 40%">{{ runset.laninstrumenttransfer_it.date_updated|date:"d M' Y | P" }}</td>
+        </tr>
+        <tr>
+            <td width="60%"></td>
+            <td><hr width="100%"></td>
+        </tr>
+		<br>
+        <tr>
+			
+			<td width="70%"></td>
+			<td style="text-align: center; width: 30%;">
+				<br>
+				<b>Reviewed By</b><br>
+				<b>IT Admin</b>
+			</td>
+		</tr>
+		
+    </table>
+
+		<!-- Content for Static Frame 'footer_frame' -->
+		<!-- Content for Static Frame 'footer_frame' -->
+		<div id="footer_content" style="text-align: center; font-family: Arial, sans-serif; color: #333; padding: 20px; border-top: 1px solid #ddd;">
+			<p style="margin: 0; font-size: 14px; color: #666; line-height: 1.5;">
+				Page <pdf:pagenumber></pdf:pagenumber> of <pdf:pagecount></pdf:pagecount>
+			</p>
+			</div>
+
+	
+	</body>
+	
+	</html>

@@ -1,0 +1,290 @@
+{% load static %}
+
+<html lang="en">
+
+<head>
+
+	<title> {{ runset }}</title>
+
+	<style>
+
+		  @page {
+			size: a4 portrait;
+			@frame header_frame {           /* Static Frame */
+				-pdf-frame-content: header_content;
+				left: 50pt; width: 512pt; top: 30pt; height: 30pt;
+			}
+			@frame content_frame {          /* Content Frame */
+				left: 50pt; width: 512pt; top: 30pt; height: 700pt;
+			}
+			@frame footer_frame {           /* Another static Frame */
+				-pdf-frame-content: footer_content;
+				left: 50pt; width: 512pt; top: 750pt; height: 85pt;
+			}
+		}
+
+		  .center {
+			  font-size: 15px;
+			  margin: auto;
+			  width: 100%;
+			  font-weight: bold;
+			  border: 2px solid black;
+			  background-color: lightgrey;
+			  padding: 5px;
+			  text-align: center;
+			}
+
+
+		.article {
+			font-size: 10px;
+			padding: 10px;
+			border: 1px solid black;
+			background-color: #f1f1f1;
+			height: 320px;
+		}
+		#employee {
+				  font-family: Arial, Helvetica, sans-serif;
+				  border-collapse: collapse;
+				  width: 100%;
+				  font-size: 12px;
+
+				}
+
+		#employee td {
+				  border: 1px solid black;
+				  padding: 2px;
+				}
+		hr {
+		  width:90%;
+		  margin-left:0;
+		  text-align:left;
+		}
+
+
+	</style>
+
+</head>
+	<body>
+		<!-- Content for Static Frame 'header_frame' -->
+		<!-- Content for Static Frame 'header_frame' -->
+		<div style="text-align: center">
+			<table>
+				<tr>
+					<td><h5 style="color:green; font-size:200%">IT Digitalization System</h5></td>
+		  		</tr>
+				<tr>
+					<td><h1>DigitizeIT</h1></td>
+		  		</tr>
+				<tr>
+					<td>A Smart IT Solutions</td>
+		  		</tr>
+				<tr>
+					<td style="text-align: center; font: italic small-caps bold 12px/30px Georgia, serif; color: darkslateblue">
+						<h2>Form No: {{ runset }}</h2></td>
+				</tr>
+
+			</table>
+		</div>
+
+
+		<div class="center">
+			File Server Access Activation/ Modification Form
+		</div>
+		<br>
+
+		
+		<div class="center">EMPLOYEE INFORMATION</div>
+
+		<table id="employee">
+
+			<tr>
+				<td width="35%">Full Name</td>
+				<td width="65%" colspan="2">{{ user_history.first_name }}</td>
+			</tr>
+			
+			<tr>
+				<td width="35%">Email</td>
+				<td width="65%" colspan="2">{{ user_history.email }}</td>
+			</tr>
+
+			<tr>
+				<td width="35%">DESIGNATION</td>
+				<td width="65%" colspan="2">{{ profile_history.0.position }}</td>
+			</tr>
+			<tr>
+				<td width="35%">DEPARTMENT</td>
+				<td width="65%" colspan="2">{{ profile_history.0.department }}</td>
+			</tr>
+			<tr>
+				<td width="35%">EMPLOYEE ID</td>
+				<td width="65%" colspan="2">{{ profile_history.0.emp_id }}</td>
+			</tr>
+			<tr>
+				<td width="35%">Contact</td>
+				<td width="40%">Phone : {{ profile_history.0.phone }}</td>
+				<td width="25%">EXT : {{ profile_history.0.ext}}</td>
+			</tr>
+			<tr>
+				<td style="width: 35%;">Date:</td>
+				<td style="width: 65%;" colspan="2">{{ runset.date_posted }}</td>
+			</tr>
+		
+		</table>
+
+        <br>
+        <p class="center">File Links</p>
+        <table id="employee">
+            <tr>
+				<td width="7%" style="text-align: center;"><b>Sl. No.</b></th>
+                <td style="text-align: center;"><b>Link</b></td>
+                <td width="12%" style="text-align: center;"><b>Permission</b></td>
+                <td width="10%" style="text-align: center;"><b>Location</b></td>
+            </tr>
+
+            {% for f in runset.file_link.all %}
+                <tr>
+					<td width="7%" style="text-align: center;">{{ forloop.counter }}</td> 
+					<td><a href="\\fileserver.com\myfiles\{{ f.link_name }}"><u>\\fileserver.com\myfiles\{{ f.link_name }}</u></a></td>
+                    <td width="12%" style="text-align: center;">{{ f.permission_type }}</td>
+                    <td width="10%" style="text-align: center;">{{ f.location }}</td>
+                </tr>
+            {% endfor %}
+            
+        </table>
+
+		<br style="line-height: 4;">
+		<p class="center">Other HOD Sign Section</p>
+        <table id="employee">
+		  	<tr>
+				<td width="30%">Sign : </td>
+				{% if other_hod_history == 'not_signed' %}
+					<td width="70%"></td>
+				{% else %}
+					<td width="40%"> {{ other_hod_history.first_name }} </td>
+					<td width="30%"> {{ runset.fileaccess_other_hod.date_updated|date:"d M' Y | P" }} </td>
+				{% endif %}
+		  	</tr>
+		</table>
+
+		<br style = "line-height:7;">
+
+		<table style="font-size: medium; text-align: center">
+
+			<tr>
+				<td style="width: 75%">
+					{{ user_history.first_name  }} <br>
+					{{ runset.date_posted|date:"d M' Y | P" }}
+					<hr width="80%">
+					<b>Raised By</b>
+				</td>
+
+
+			{% if runset.fileaccess_sign.sign_type == "Agreed" %}
+				<td style="width: 70%">					
+					{{ signer_history.first_name }} <br>
+					{{ runset.fileaccess_sign.date_updated|date:"d M' Y | P" }}
+					<hr width="80%">
+					<b>Recommended By</b>
+				</td>
+			{% elif runset.fileaccess_sign.sign_type == "Disagreed" %}
+				<td style="width: 70%">	
+					<b><span style="color:red;">Authorized (Recommended) Unsigned</span></b>				
+					<hr width="80%">
+					<b>Recommended By</b>
+				</td>
+			{% else %}
+				<td style="width: 70%">	
+					<br> <br>				
+					<hr width="80%">
+					<b>Recommended By</b>
+				</td>
+			{% endif %}
+
+			{% if runset.fileaccess_hod.sign_type == "Agreed" %}
+				<td style="width: 70%">
+					{{ hod_history.first_name }} <br>
+					{{ runset.fileaccess_hod.date_updated|date:"d M' Y | P" }}
+					<hr width="80%">
+					<b>Approved By (HOD)</b>
+				</td>
+			{% elif runset.fileaccess_hod.sign_type == "Disagreed" %}
+				<td style="width: 70%">	
+					<b><span style="color:red;">Authorized Approved By (HOD) Unsigned</span></b>				
+					<hr width="80%">
+					<b>Approved By (HOD)</b>
+				</td>
+			{% else %}
+				<td style="width: 70%">	
+					<br> <br>				
+					<hr width="80%">
+					<b>Approved By (HOD)</b>
+				</td>
+			{% endif %}
+
+
+
+
+
+
+			 </tr>
+		 </table>
+
+		<br>
+        <p class="center">Admin Section</p>
+        <table id="employee">
+		  	<tr>
+				<td width="30%">Comment : </td>
+				<td width="70%"> {{ runset.fileaccess_it.comment }} </td>
+		  	</tr>
+		</table>
+		<br>
+
+		<table>
+
+			<tr>
+				<td width="60%"> </td>
+				<td style=" text-align: center; width: 40%">{{ admin_history.first_name }}</td>
+			</tr>
+			<tr>
+				<td width="60%"> </td>
+				<td style=" text-align: center; width: 40%">{{ runset.fileaccess_it.date_updated|date:"d M' Y | P" }}</td>
+			</tr>
+			<tr>
+				<td width="60%" ></td>
+				<td><hr width="100%"></td>
+			</tr>
+			<tr>
+				<td width="60%"> </td>
+				<td style=" text-align: center; width: 40%" ><br>IT Admin</td>
+			</tr>
+		</table>
+
+
+		
+
+
+
+
+	<!-- Content for Static Frame 'footer_frame' -->
+		<div id="footer_content">
+			
+			Page <pdf:pagenumber></pdf:pagenumber>
+			of <pdf:pagecount></pdf:pagecount>
+			{% comment %} <p style="text-align: center">This is system generated copy does not required any additional ball point writing</p> {% endcomment %}
+			{% comment %} <p style="text-align: center; font: italic small-caps bold 12px/30px Georgia, serif; color: darkslateblue">
+				&copy; Copyright Square InformatiX Limited. Contact: Ext: 3092/3099
+			</p> {% endcomment %}
+
+
+		</div>
+
+
+
+
+
+
+
+	</body>
+
+
+</html>

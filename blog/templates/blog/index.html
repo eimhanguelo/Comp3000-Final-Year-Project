@@ -1,0 +1,162 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SPL IT Websites</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'vendor/simple-line-icons/css/simple-line-icons.css' %}" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/landing-page.min.css' %}" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-light bg-light static-top">
+      <div class="container">
+        <img href="{% url 'front' %}" style="width: 80px; height: 80px; align-content: flex-start" src="{% static 'img/Microsoft.gif' %}" alt="">
+        <img style="width: 670px; height: 80px" src="{% static 'img/sil.png' %}" alt="">
+        <a href="{% url 'roster-home' %}">IT Duty Roster</a>
+        {% if user.is_authenticated %}
+          <a href="{% url 'logout' %}">Logout</a>
+        {% endif %}
+        <!-- <a class="btn btn-lg btn-block btn-link" style="height: 100%; width: 100%;  color: rgb(217, 222, 226);" 
+                        href="{% url 'roster-home' %}">IT Duty Rosters</a> -->
+      </div>
+    </nav>
+
+    <!-- Masthead -->
+     
+    <header class="masthead text-white text-center" >
+    {% comment %} <header class="masthead text-white text-center" style="background-image: url('{% static "img/ict7.jpg" %}')"; > {% endcomment %}
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-9 mx-auto">
+            <h1 class="mb-5">"Welcome to IT Digitalization System IT Form Automation and E-Ticketing platform."</h1>
+          </div>
+          {% comment %} {% include 'blog/inactivity_timer.html' %} {% endcomment %}
+
+          {% if user.is_authenticated %}
+          <div class="container">
+            <div class="col-sm">
+                <p style="background-color: #f7f7f7; border-radius: 5px; padding: 10px;">
+                  {% if user.is_staff and user.profile.emp_id and user.profile.department.name and user.profile.location.name %}
+                        <!-- Staff user -->
+                        <a class="btn btn-block btn-lg btn-outline-info" href="{% url 'admin-home' %}">
+                            Hi, <span style="color: green;"><b>{{ user.first_name }}</b></span> &gt;&gt;
+                            <span style="color: blue; text-decoration: underline;">Click Here</span>
+                        </a>
+      
+                    {% elif user.profile.emp_id is none or user.profile.department.name is none or user.profile.location.name is none %}
+                        <!-- User with emp_id or department, but location is null -->
+                        <a class="btn btn-block btn-lg btn-outline-info" href="{% url 'profile' %}">
+                            Hi {{ user.first_name }} &gt;&gt; Click Here
+                        </a>
+        
+                    {% else %}
+                        <!-- Default case for regular users -->
+                        <a class="btn btn-block btn-lg btn-outline-info" href="{% url 'user-home' user.username %}">
+                            Hi {{ user.first_name }} &gt;&gt; Click Here
+                        </a>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        
+          {% else %}
+          <div class="container">
+              <div class="row">
+                <div class="col-sm-12">
+                  <a class="btn btn-block btn-lg btn-primary" href="{% url 'login' %}">Sign In</a>
+                </div>
+
+              </div>
+          </div>
+          {% endif%}
+
+
+        </div>
+      </div>
+    </header>
+
+    {% comment %} <!-- Testimonials -->
+    <section class="testimonials text-center bg-light">
+      <div class="container">
+        <h2 class="mb-5">What IT people are saying...</h2>
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+              <img class="img-fluid rounded-circle mb-3" src="{% static 'img/amir.jpg' %}" alt="">
+              <h5 style="color: rgb(31, 82, 52);">Md. Amirul Islam</h5>
+              <h6>System Admin</h6>
+              
+              <p class="font-weight-light mb-0">"If you participate to make a data warehouse, IT will give you a smarter way"</p>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+              <img class="img-fluid rounded-circle mb-3" src="{% static 'img/mohiudden.jpg' %}" alt="">
+              <h5 style="color: rgb(39, 31, 82);">Sarker Mohiudden Ahmed</h5>
+              <h6>Manager</h6>
+              <p class="font-weight-light mb-0">"We are changing the world with technology"</p>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+              <img class="img-fluid rounded-circle mb-3" src="{% static 'img/tusar1.jpg' %}" alt="">
+              <h5 style="color: rgb(31, 82, 52);">Munshi Muzahid Hasan Tushar</h5>
+              <h6>System Admin</h6>
+              <p class="font-weight-light mb-0">"It's a tragic that we recognized our self worth from external validation"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section> {% endcomment %}
+
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <div class="col-lg-12 text-center text-lg-left">
+              <ul class="list-inline">
+                <li><u style="color: rgb(139, 57, 194); font-style: italic; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Developed By:</u></li>
+                <li><h5 style="color: rgb(139, 57, 194); font-style: italic; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">DigitizeIT</h5></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col">
+            <div class="col-lg-12 text-center">
+              <p class="text-muted small" style="color: rgb(139, 57, 194); font-style: italic; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">&copy; All rights reserved by DigitizeIT</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+    
+
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+  </body>
+
+</html>

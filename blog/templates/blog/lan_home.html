@@ -1,0 +1,91 @@
+{% extends "blog/base.html"%}
+{% load crispy_forms_tags %}
+{% block network %}
+
+<div class="pagetitle">
+    <h1>Network</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Users</a></li>
+            <li class="breadcrumb-item active">Network</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="row justify-content-center"> <!-- Added justify-content-center to center the column -->
+        <div class="col-lg-11">
+          <div class="card">
+              <div class="card-body">
+                  <h5 class="card-title d-flex align-items-center">
+                      <i class="glyphicon glyphicon-edit me-2"></i>
+                      Master Network Inventory
+                  </h5>
+                  
+                  <!-- Button to Create E-Ticket -->
+                  <div class="mb-3">
+                      <a href="{% url 'lan-create' %}" 
+                         class="btn btn-outline-success btn-lg w-100 d-flex align-items-center justify-content-center">
+                          <i class="glyphicon glyphicon-edit me-2"></i>  
+                          Create Now
+                      </a>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+
+
+
+<section class="section">
+    <div class="row justify-content-center"> <!-- Added justify-content-center to center the column -->
+        <div class="col-lg-11">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Network Inventory List</h5>
+
+                    <!-- Default Table -->
+                    <table class="table datatable table-hover">
+                        <thead>
+                            <tr>
+                                
+                                <th>IP</th>
+                                <th>User</th>
+                                <th>Location</th>
+                                <th>Switch Name</th>
+                                <th>Switch Port</th>
+                                <th>IP Used</th>
+                                <th>Remarks</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for l in lans %}
+                                <tr>
+                                    <td><a class="article-title" style="color: blueviolet" href="{% url 'lan-detail' l.id %}">
+                                        <b>{{ l.ip_address}}</b></a>
+                                    </td>
+                                    <td> {{l.used_by.first_name }}</td>
+                                    <td> {{ l.location }} </td>                        
+                                    <td>{{ l.switch_name }}</td>
+                                    <td>{{ l.switch_port }}</td>
+                                    {% if l.ip_used == True %}
+                                        <td style="color: green;"><b>Yes</b></td>
+                                    {% else %}
+                                        <td style="color: rgb(160, 8, 8);"><b>No</b></td>
+                                    {% endif %}
+                                    <td>{{ l.remarks }}</td>
+                                </tr>
+                            {% endfor %}
+            
+                            </tbody>
+                         </table>
+                    <!-- End Default Table Example -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

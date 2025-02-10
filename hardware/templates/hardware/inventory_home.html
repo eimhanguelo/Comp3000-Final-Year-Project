@@ -1,0 +1,216 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% block network %}
+
+<div class="pagetitle">
+    <h1>Hardware</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Admins</a></li>
+            <li class="breadcrumb-item active">Hardware</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section dashboard">
+    <div class="row justify-content-center text-center">
+        <div class="col-lg-11">
+            <div class="row g-4">
+
+                <!-- Reserved Hardware Card -->
+                <div class="col-xxl-3 col-md-3">
+                    <div class="card info-card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title d-flex align-items-center justify-content-center">
+                                <i class="bi bi-pc-display me-2" aria-hidden="true"></i>
+                                Hardwares
+                                <span class="badge bg-danger text-white ms-2">
+                                    <i class="bi bi-exclamation-octagon me-1" aria-hidden="true"></i> Raised
+                                </span>
+                            </h5>
+                            <div class="d-flex align-items-center justify-content-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center bg-danger text-light" style="width: 60px; height: 60px;">
+                                    <i class="fas fa-hourglass-start" title="Raised Hardwares" aria-label="Raised Hardwares" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Raised Hardwares" aria-hidden="true"></i>
+                                </div>
+                                <div class="ps-4">
+                                    <h6 class="mb-0">{{ total_raised|default:0 }}</h6>
+                                    <span class="badge border-dark border-1 text-dark">Raised Hardwares</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End Reserved Hardware Card -->
+
+                <!-- In Use Hardware Card -->
+                <div class="col-xxl-3 col-md-3">
+                    <div class="card info-card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title d-flex align-items-center justify-content-center">
+                                <i class="bi bi-pc-display me-2" aria-hidden="true"></i>
+                                Hardwares
+                                <span class="badge bg-success text-white ms-2">
+                                    <i class="bi bi-check-circle me-1" aria-hidden="true"></i> CHQ
+                                </span>
+                            </h5>
+                            <div class="d-flex align-items-center justify-content-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center bg-success text-light" style="width: 60px; height: 60px;">
+                                    <i class="fas fa-wrench" title="CHQ Hardwares" aria-label="CHQ Hardwares" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Currently in CHQ" aria-hidden="true"></i>
+                                </div>
+                                <div class="ps-4">
+                                    <h6 class="mb-0">{{ total_chq|default:0 }}</h6>
+                                    <span class="badge border-dark border-1 text-dark">CHQ Hardwares</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End In Use Hardware Card -->
+
+                <!-- Repair Hardware Card -->
+                <div class="col-xxl-3 col-md-3">
+                    <div class="card info-card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title d-flex align-items-center justify-content-center">
+                                <i class="bi bi-pc-display me-2" aria-hidden="true"></i>
+                                Hardwares
+                                <span class="badge bg-warning text-dark ms-2">
+                                    <i class="bi bi-exclamation-triangle me-1" aria-hidden="true"></i> Stock
+                                </span>
+                            </h5>
+                            <div class="d-flex align-items-center justify-content-center mt-3">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center bg-warning text-dark" style="width: 60px; height: 60px;">
+                                    <i class="fas fa-cogs" title="Stock Hardwares" aria-label="Stock Hardwares" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Stock Hardwares" aria-hidden="true"></i>
+                                </div>
+                                <div class="ps-4">
+                                    <h6 class="mb-0">{{ total_added|default:0 }}</h6>
+                                    <span class="badge border-dark border-1 text-dark">Stock Hardwares</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End Repair Hardware Card -->
+
+                <!-- Decommissioned Hardware Card -->
+                <div class="col-xxl-3 col-md-3">
+                    <div class="card info-card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title d-flex align-items-center justify-content-center">
+                                <i class="bi bi-pc-display me-2" aria-hidden="true"></i>
+                                Hardwares
+                                <span class="badge bg-secondary text-white ms-2">
+                                    <i class="bi bi-archive me-1" aria-hidden="true"></i> Delivered
+                                </span>
+                            </h5>
+                            <div class="d-flex align-items-center justify-content-center mt-3">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center bg-secondary text-light" style="width: 60px; height: 60px;">
+                                    <i class="fas fa-trash-alt" title="Decommissioned Hardwares" aria-label="Delivered Hardwares" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Successfully Delivered Hardwares" aria-hidden="true"></i>
+                                </div>
+                                <div class="ps-4">
+                                    <h6 class="mb-0">{{ total_delivered|default:0 }}</h6>
+                                    <span class="badge border-dark border-1 text-dark">Delivered Hardwares</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End Decommissioned Hardware Card -->
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title d-flex align-items-center">
+                        <i class="glyphicon glyphicon-list-alt me-2"></i>
+                        Master Hardware Inventory
+                    </h5>
+                    <div class="mb-3">
+                        <a href="{% url 'inventory-create' %}" class="btn btn-outline-success btn-lg w-100 d-flex align-items-center justify-content-center">
+                            <i class="glyphicon glyphicon-edit me-2"></i>  
+                            Create New Hardware
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="row justify-content-center"> <!-- Added justify-content-center to center the column -->
+        <div class="col-lg-11">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">List of Hardwares</h5>
+
+                    <!-- Default Table -->
+                    <table class="table datatable table-hover">
+                        <thead>
+                            <tr>
+                                <th>S.N.</th>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>System Req. No</th>
+                                <th>Status</th>
+                                <th>User</th>
+                                <th>Location</th>
+                                <th>Reference</th>
+                                <th>Chalan</th>               
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            {% for l in inventory %}
+                            <tr>
+                                <td><i style="color: darkblue;font-size: medium;" class="fab fa-product-hunt">{{ l.id }}</i></td>
+                                <td><a class="article-title" style="color: blueviolet" href="{% url 'inventory-detail' l.id %}">
+                                    <b>{{ l.product }}</b></a>
+                                </td>
+                                <td>{{ l.quantity }} {{ l.unit_type }}</td>
+                                <td>
+                                    {% if l.requisition is None %}
+                                        <a class="article-title" style="color: rgb(12, 99, 66)" href="#">
+                                            <b>{{ l.requisition }} </b>
+                                        </a>
+                                    {% else %}
+                                        <a class="article-title" style="color: rgb(12, 99, 66)" href="{% url 'requisition-detail' l.requisition.id %}">
+                                            <b>{{ l.requisition }} </b>
+                                        </a>
+                                    {% endif %}
+                                </td>
+                             
+                                {% if l.product_condition == 'Requisition Raised' %}
+                                    <td style="color: rgb(57, 159, 177);"><b>{{ l.product_condition }}</b></td>
+                                {% elif l.product_condition == 'Sent to CHQ' %}
+                                    <td style="color: rgb(180, 143, 63);"><b>{{ l.product_condition }}</b></td>
+                                {% elif l.product_condition == 'In Stock' %}
+                                    <td style="color: rgb(37, 172, 71);"><b>{{ l.product_condition }}</b></td>
+                                {% elif l.product_condition == 'Delivered' %}
+                                    <td style="color: rgb(84, 30, 210);"><b>{{ l.product_condition }}</b></td>
+                                {% else %}
+                                    <td style="color: rgb(210, 30, 99);"><b>{{ l.product_condition }}</b></td>
+                                {% endif %}
+                                <td> {{ l.used_by.first_name }}</td>
+                                <td> {{ l.used_by.profile.floor }} <br> {{ l.used_by.profile.location }}</td>
+                                <td>{{ l.reference }}</td> 
+                                {% if l.attachment %}
+                                    <td><a href="{{ l.attachment.url }}" download>{{ l.chalan }}</a></td>
+                                {% else %}
+                                    <td>No Chalan Copy</td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <!-- End Default Table Example -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,14 @@
+.cke_editor {
+    max-width: 100%;       /* Ensure the editor adjusts to the container */
+    box-sizing: border-box; /* Consistent padding and borders */
+}
+
+.cke_contents {
+    min-height: 200px;     /* Prevent the editor from collapsing too small */
+}
+
+@media (max-width: 768px) {
+    .cke_editor {
+        width: 100%;       /* Full width on smaller screens */
+    }
+}

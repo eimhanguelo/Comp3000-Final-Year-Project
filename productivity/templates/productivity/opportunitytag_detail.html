@@ -1,0 +1,183 @@
+{% extends "blog/basep.html"%}
+{% block content %}
+    <style>
+        #user_view {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+            }
+        #user_view th {
+            width: 28%;
+            font-size: 16px;
+            padding: 2px;
+        }
+        #user_view td {
+            width: 72%;
+            font-size: 14px;
+            padding: 2px;
+        }
+    </style>
+
+    <div class="div-shadow" style="background-color: rgb(177, 226, 228);">
+               <h3 class="border-bottom mb-4" style="text-align: center; color: darkmagenta; font-size: x-large; font-weight: bold; ">Suggestion Box : Opportunity Tag</h3>
+                <h4 style="color: rgb(221, 102, 22)"> Form No :  {{ object }} </h4>
+    </div>
+   <article class="media content-section">
+       <legend class="border-bottom mb-4" style="text-align: center; color: darkgreen; font-size: large;font-weight: bold">Idea Giver Details </legend>
+
+       <div class="media-body">
+       
+           <div class="row">
+
+               <div class="col-sm-8">
+                    
+                    <table id="user_view" class="table-hover">                     
+
+                        <tr>
+                            <th>Name :</th>
+                            <td>{{ idea_giver_history.first_name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Email :</th>
+                            <td>{{ idea_giver_history.email }}</td>
+                        </tr>                              
+                        <tr>
+                            <th>Department :</th>
+                            <td>{{ profile_history.0.department }} </td>
+                        </tr>
+                        <tr>
+                            <th>Designation :</th>
+                            <td>{{ profile_history.0.position }}</td>
+                        </tr>
+                        <tr>
+                            <th>Employee ID :</th>
+                            <td>{{ profile_history.0.emp_id }} </td>
+                        </tr>
+                        <tr>
+                            <th>Contact :</th>
+                            <td>{{ profile_history.0.phone }} || {{ profile_history.0.ext }} </td>
+                        </tr>
+                        <tr>
+                            <th>Address :</th>
+                            <td>{{ profile_history.0.location }} ,  {{ profile_history.0.floor }} </td>
+                        </tr>
+                        <tr>
+                            <th>Supervisor : </th>
+                            <td>{{ supervisor_history.first_name }}</td>
+                        </tr>                            
+                    </table>
+               </div>
+
+
+               <div class="col-sm-4">
+                  <p>
+                      <button class="btn btn-outline-info" data-toggle="collapse" data-target="#side_button" aria-expanded="false" aria-controls="collapseExample">
+                          <i class="glyphicon glyphicon-option-vertical"></i>
+                      </button>
+                  </p>
+                   <div class="collapse" id="side_button">
+                      <div class="card card-body">
+                        {% if admin_history == 'not_signed' %}
+                            <a class="btn btn-outline-info btn-sm mt-1 mb-1" href="{% url 'opportunity-tag-update' object.id %}">Update</a><br>
+                        {% else %}
+                            <a class="btn btn-outline-info btn-sm mt-1 mb-1" disabled>Update</a><br>
+                        {% endif %}
+                          <a class="btn btn-sm mt-1 mb-1" href="#" target="_blank">View as PDF</a>
+                      </div>
+                   </div>
+
+               </div>
+           </div>
+
+        <div>
+
+           <legend class="border-bottom mb-4" style="text-align: center; color: darkgreen; font-size: large; font-weight: bold">Suggestion Details </legend>
+           
+              <table id="user_view" class="table table-hover table-bordered">
+                  <tr>
+                        <th>Title :  </th>
+                        <td><b>{{ object.title }}</b></td>
+                  </tr>
+                  <tr>
+                      <th>Descritption (What?): </th>
+                      <td>{{ object.description }}</td>
+                  </tr>
+                  <tr>
+                      <th>Benefits (Why?) : </th>
+                      <td>{{ object.benefits }}</td>
+                  </tr>
+                  <tr>
+                    <th>Attachment : </th>
+                    {% if object.attahment %}
+                        <td><a href="{{ object.attachment.url }}" download> View Here</a></td>
+                    {% else %}
+                        <td>No Attachment</td>
+                    {% endif %}
+                   </tr>
+
+                  <tr>
+                      <th>Author : </th>                                      
+                      <td>{{ author_history.first_name }}</td>
+                  </tr>
+                  <tr>
+                      <th>Created Date : </th>
+                      <td><small class="text-muted">{{ object.date_posted|date:"d M' Y P" }}</small></td>
+                  </tr>
+                  <tr>
+                    <th>Updated Date : </th>
+                    <td><small class="text-muted">{{ object.date_updated|date:"d M' Y P" }}</small></td>
+                </tr>
+
+              </table>
+
+          </div>
+       </div>
+   </article>
+
+    <article class="media content-section">
+        <legend class="border-bottom mb-4" style="text-align: center; color: darkgreen; font-size: large; font-weight: bold">Productivity Admin Section</legend>
+
+        <table style="width: 100%">
+
+            <tr>
+                <th>Productivity Admin : </th>
+                <td>
+                    {{ admin_history.first_name }}                           
+                </td>  
+            </tr>
+
+            <tr>
+                <th>Status : </th>
+                <td>{{ object.opportunity_tag.status }}</td>
+            </tr>
+
+            <tr>
+                <th>Comment : </th>
+                <td>{{ object.opportunity_tag.comments }}</td>
+            </tr>
+            <tr>
+                <th>Updated Date : </th>
+                <td>{{ object.opportunity_tag.date_signed }}</td>
+            </tr>
+            
+        </table>
+        <hr>
+
+        <div>
+                {% if user.profile.is_productivity_admin %}
+                {% if admin_history == 'not_signed' %}
+                    <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'opportunity-tag-admin-create' object.id %}">Productivity Admin Sign</a>
+                {% else %}
+                    <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'opportunity-tag-admin-update' object.opportunity_tag.id %}">Productivity Admin Update</a>
+                
+                {% endif %}
+            {% endif %}
+        </div>
+    </article>
+
+
+
+{% endblock %}
+
+
+

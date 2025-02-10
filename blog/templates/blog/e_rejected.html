@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Form Rejection Notification</title>
+    <style>
+        .rejected {
+            font-weight: bold;
+            color: red;
+            font-size: 20px;
+        }
+
+        .signature {
+            color: #005cbf;
+            font-weight: bold;
+        }
+
+        .info {
+            font-weight: bold;
+            font-size: 20px;
+            color: #17A2B8;
+        }
+
+        .form {
+            font-weight: bold;
+            font-size: 20px;
+            color: #00008B;
+        }
+    </style>
+</head>
+<body>
+
+    <p>Hi {{ author }},</p>
+
+    <p>
+        Unfortunately, Form No. <a class="form" href="{{ link }}">{{ form_id }}</a> 
+        has been 
+        <span class="rejected">Rejected</span>. 
+        Please make the necessary changes and resubmit it.
+    </p>
+
+    <p>
+        For more details, Please check the form: 
+        <a class="info" href="{{ link }}">Click Here</a>.
+    </p>
+
+    <p>Thanks for your understanding.</p>
+
+    <p>
+        Sincerely,<br>
+        <span class="signature">{{ signer }}</span>
+    </p>
+
+</body>
+</html>

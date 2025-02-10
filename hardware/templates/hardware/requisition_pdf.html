@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ runset }}</title>
+	<style>
+		@page {
+			size: A4 portrait;
+			font-size: 12px;
+	
+			@frame header_frame {
+				/* Static Frame */
+				-pdf-frame-content: header_content;
+				left: 30pt;
+				width: 512pt;
+				top: 30pt;
+				height: 30pt;
+			}
+			@frame content_frame {
+				/* Content Frame */
+				left: 30pt;
+				width: 535pt;
+				top: 30pt; /* Adjusted top to 60pt for better spacing */
+				height: 650pt; /* Adjusted height to 650pt for better spacing */
+			}
+			@frame footer_frame {
+				/* Another static Frame */
+				-pdf-frame-content: footer_content;
+				left: 30pt;
+				width: 512pt;
+				top: 750pt;
+				height: 85pt;
+			}
+		}
+	
+		.center {
+			margin: auto;
+			width: 100%;
+			font-weight: bold;
+			border: 1px solid black;
+			background-color: lightgrey;
+			padding: 5px;
+			text-align: center;
+			font-family: Calibri, Arial, Helvetica, sans-serif;
+			font-size: 12px;
+		}
+	
+		#employee {
+			font-family: Calibri, Arial, Helvetica, sans-serif;
+			border-collapse: collapse;
+			width: 100%;
+		}
+	
+		#employee td {
+			border: 1px solid black;
+			padding: 3px; /* Adjust the value as needed */
+			text-align: center; /* Center-align content within table cells */
+		}
+	
+		.box {
+			border: 1px solid black;
+			padding: 1px 1px;
+			float: right; /* Align box to the right side */
+			margin-top: 5px; /* Adjust top margin for spacing */
+			margin-right: 5px; /* Adjust right margin for spacing */
+		}
+        .front12 {
+            font-size: 12px; 
+        }
+
+        .hint {
+            opacity: 0.2; /* Adjust the opacity as needed */
+             color: #C0C0C0;/* Adjust the color as needed */
+            font-size: 10px; /* Adjust the font size as needed */
+        }
+        
+        .hint1 {
+            opacity: 1; /* Adjust the opacity as needed */
+            color: #C0C0C0; /* Dark gray color */
+        }
+        
+        
+	</style>
+	
+	
+</head>
+<body class="front12">
+    <div>
+        <table>
+            <tr>
+                <td>Requisition No: {{ runset.requisition_no }}</td>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <table>
+            <tr>
+                <td style="text-align: left;"> Date: {{ runset.date_posted|date:"d M Y" }}</td>
+                <td style="text-align: right;">
+                    {% if runset.requisition_type == "new" %}
+                        <table >
+                            <tr>
+                                <td>New</td>
+                            </tr>
+                        </table>
+                    {% else %}
+                        Repair
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+    <div style="text-align: center;">
+        <table>
+            <tr>
+                <td style="font-size:16px">IT Digitalization System</td>
+            </tr>
+            <tr>
+                <td style="font-size:14px">(Requisition for ICT Product)</td>
+            </tr>
+        </table>
+    </div>
+    
+    <div>
+        <table>
+            <tr>
+                <td style="text-align: left;">Name: {{ user_history.first_name }}</td>
+                <td>Designation: {{ profile_history.0.position }}</td>
+                <td>Email ID: {{ user_history.email }}</td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td style="text-align: left;" width="15%">Emp. ID: {{ profile_history.0.emp_id }}</td>
+                <td width="15%">Dept.: {{ profile_history.0.department }}</td>
+                <td width="30%">Ext./Mob no: {{ profile_history.0.ext }}/{{ profile_history.0.phone }}</td>
+                <td width="20%">Location: {{ profile_history.0.location }}</td>
+                <td width="20%">Cost Center: {{ runset.cost_center }}</td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                {% if runset.has_product_with_asset_no %}
+                    <td style="text-align: left;"> New Asset no: {{ runset.requisition_accountant.new_asset_no }}</td>
+                {% else %}
+                    <td style="text-align: left;">New Asset no: N/A </td>
+                {% endif %}
+                <td>HMS No: <span class="hint">(To given by hardware section)</span></td>
+                <td>P.R No: <span class="hint">(To given by hardware section)</span></td>     
+            </tr>
+        </table>
+    </div>
+    <br>
+    <table id="employee" style="text-align: center;">
+        <tr>
+            <td width="6%">Sl. No.</td>
+            <td >Name of item <br> <span class="hint1">(Technical description, if any)</span> </td>
+            <td width="8%">Quantity</td>
+            <td width="12%">Date of <br> Last issue</td>
+            <td width="15%">Remarks</td>
+        </tr>
+        {% for f in runset.requisition_inventory.all %}
+        <tr>
+            <td width="6%">{{ forloop.counter }}</td> <!-- Use forloop.counter for dynamic row numbering -->
+            <td > {{ f.product }} 
+                {% if f.details %}
+                    ({{ f.details }})
+                {% else %}
+                {% endif %}
+            <td width="8%">{{ f.quantity }}</td>
+           <td width="12%">
+                {% if f.date_of_last_issue %}
+                    {{ f.date_of_last_issue|date:"d M' Y" }}
+                {% else %}
+                    N/A
+                {% endif %}
+            </td>
+            <td width="15%">  {% if f.remarks %}
+                {{ f.remarks }}
+            {% else %}
+                N/A
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+
+    <table style="font-size: medium; text-align: center;">
+        <tr>
+            <td style="width: 75%;">
+                {{ user_history.first_name }} <br>
+                {{ runset.date_updated|date:"d M Y | P" }}
+                <br>
+                <b>.......................................</b>
+                Requisition raised by
+            </td>
+
+            {% if not runset.is_recommended_by_hod_same %}
+                {% if runset.requisition_sign.sign_type == "Agreed" %}
+                    <td style="width: 70%;">
+                        {{ signer_history.first_name }} <br>
+                        {{ runset.requisition_sign.date_updated|date:"d M Y | P" }}
+                        <br>
+                        <b>.......................................</b>
+                        Recommended By
+                    </td>
+                {% elif runset.requisition_sign.sign_type == "Disagreed" %}
+                    <td style="width: 70%;">
+                        <br><br>
+                        <b><span style="color:red;">Authorized (Recommended) Unsigned</span></b>
+                        <br>
+                        <b>.......................................</b>
+                        Recommended By
+                    </td>
+                {% else %}
+                    <td style="width: 70%;">
+                        <br><br><br>
+                        <b>.......................................</b>
+                        Recommended By
+                    </td>
+                {% endif %}
+            {% else %}
+                {% if runset.requisition_hod.sign_type == "Agreed" %}
+                    <td style="width: 70%;">
+                        <br>
+                        <span class="check-icon">&#10003;</span>
+                        <br>
+                        <b>.......................................</b>
+                        Recommended By
+                    </td>
+                {% else %}
+                    <td style="width: 70%;">
+                        <br> <br> <br>         
+                        <b>.......................................</b>
+                        Recommended By
+                    </td>
+                {% endif %}
+            {% endif %}
+            
+
+            
+            {% if runset.requisition_hod.sign_type == "Agreed" %}
+            <td style="width: 70%;"><br>
+                {{ hod_history.first_name }} <br>
+                {{ runset.requisition_hod.date_updated|date:"d M Y | P" }}
+                <b>.......................................</b>
+                Approved By<br>
+                (Head of Department)
+            </td>
+            {% elif runset.requisition_hod.sign_type == "Disagreed" %}
+            <td style="width: 70%;">	
+                <br> <br>
+                <b><span style="color:red;">Authorized (HOD) Unsigned</span></b>				
+                <b>.......................................</b>
+                Approved By<br>
+                (Head of Department)
+            </td>
+            {% else %}
+            <td style="width: 70%;">	
+                <br> <br>	<br> <br>				
+                <b>.......................................</b>
+                Approved By<br>
+                (Head of Department)
+            </td>
+            {% endif %}
+
+            {% if runset.has_product_with_asset_no %}
+                {% if not runset.is_HR_Super %}    
+                    {% if runset.requisition_hr.sign_type == "Agreed" %}    
+                        <td style="width: 70%;">                
+                            {{ hr_history.first_name }} <br>
+                            {{ runset.requisition_hr.date_updated|date:"d M Y | P" }}
+                            <b>.......................................</b>
+                            Approved By (HRD)
+                        </td>
+                    {% elif runset.requisition_hr.sign_type == "Disagreed" %}
+                        <td style="width: 70%;">    
+                            <br>
+                            <b><span style="color:red;">Authorized (HRD) Unsigned</span></b>                
+                            <b>.......................................</b>
+                            Approved By (HRD)
+                        </td>
+                    {% else %}
+                        <td style="width: 70%;">    
+                            <br> <br> <br>            
+                            <b>.......................................</b>
+                            Approved By (HRD)
+                        </td>
+                    {% endif %}
+
+                {% else %}
+                    {% if runset.requisition_hod.sign_type == "Agreed" %}
+                        <td style="width: 70%;">    
+                            <br>
+                            <span class="check-icon">&#10003;</span>
+                            <br> 
+                            <b>.......................................</b>
+                            Approved By (HRD)
+                        </td>
+                    {% else %}
+                        <td style="width: 70%;">    
+                            <br> <br> <br>          
+                            <b>.......................................</b>
+                            Approved By (HRD)
+                        </td>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+
+            
+            {% if runset.requisition_hod_it.sign_type == "Agreed" %}	
+            <td style="width: 70%;">				
+                {{ hodit_history.first_name }} <br>
+                {{ runset.requisition_hod_it.date_updated|date:"d M Y | P" }}
+                <b>.......................................</b>
+                Approved By (IT)
+            </td>
+            {% elif runset.requisition_hod_it.sign_type == "Disagreed" %}
+            <td style="width: 70%;">	
+                <br> 
+                <b><span style="color:red;">Authorized (IT) Unsigned</span></b>				
+                <b>.......................................</b>
+                Approved By (IT)
+            </td>
+            {% else %}
+            <td style="width: 70%;">	
+                <br> <br> <br>	
+                <b>.......................................</b>
+                Approved By (IT)
+            </td>
+            {% endif %}
+        </tr>
+    </table>
+
+    <br>
+
+    
+	
+    
+	<!-- Content for Static Frame 'footer_frame' -->
+	<div id="footer_content">
+
+        <table style="font-size: medium; width: 100%; margin: 0 auto;">
+            <tr>
+                <td style="text-align: center; width: 100%;">
+                    <p  style="text-align: center; font-family: Arial, sans-serif; color: #333; padding: 20px; border-top: 1px solid #ddd;">
+                        Page <pdf:pagenumber></pdf:pagenumber> of <pdf:pagecount></pdf:pagecount>
+                    </p>
+                </td>
+            </tr> 
+            
+        </table> 
+
+        <table style="font-size: medium; width: 100%; margin: 0 auto;">
+
+            <tr>
+               
+                <td style="width: 30%; text-align: center;">
+                        <p>
+                           Ref No:  {{ runset }}
+                        </p>
+                    </td>
+                    <td style="width: 40%; text-align: center;">
+                        <p>
+                            Printed by: {{ printer_by }}
+                        </p>
+                       
+                    </td>
+                    <td style="width: 30%; text-align: center;">
+                        <p>
+                            Printed On: {{ current_datetime|date:"d M Y, g:i a" }}
+                        </p>
+                    </td>
+                </td>
+            </tr>  
+        </table> 
+        <table style="font-size: medium; width: 100%; margin: 0 auto;"> 
+            <tr>
+                <td colspan="2" style="width: 100%; text-align: center;">
+                    <p style="font-family: Arial, sans-serif; color: #333; padding-top: 10px;">
+                        This is a system-generated report and does not require a signature.
+                    </p>
+                </td>
+            </tr>
+            
+        </table> 
+		</div>
+</body>
+
+</html>

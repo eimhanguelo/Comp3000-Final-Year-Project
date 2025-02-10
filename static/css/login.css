@@ -1,0 +1,133 @@
+/* Basic styling for form-box */
+.form-box {
+    background-color: rgba(55, 55, 55, 0.5); 
+    box-shadow: -3px -3px 9px #aaa9a9a2, 3px 3px 7px rgba(144, 179, 214, 0.671); 
+    border-radius: 12px; 
+    padding: 30px; 
+    text-align: center; 
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* Header text styling */
+.login-header {
+    color: #f1f1f1;
+    margin-bottom: 20px;
+}
+
+.login-header h1 {
+    font-size: 3em;
+    margin: 0;
+    color: #17a2b8;
+}
+
+.login-header h2 {
+    margin: 10px 0;
+    font-size: 1.4em;
+}
+
+/* Error messages styling */
+.alert {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Form group styling */
+.form-group {
+    margin-bottom: 15px;
+    position: relative;
+}
+
+/* Username container styling */
+.username-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.username-container .form-control {
+    flex: 1;
+    border-radius: 5px 0 0 5px;
+    padding: 10px;
+    border: 2px solid #ddd;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.username-container .form-control[readonly] {
+    border-radius: 0 5px 5px 0;
+    background-color: #f1f1f1;
+    color: black;
+    white-space: nowrap;
+    font-weight: bold;
+}
+
+/* Password field styling */
+.form-control {
+    font-weight: bold;
+    text-align: left;
+    border-radius: 5px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-control:focus {
+    border-color: #17a2b8;
+    box-shadow: 0 0 5px rgba(23, 162, 184, 0.5);
+}
+
+/* Button styling */
+.btn-submit {
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #17a2b8;
+    color: white;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background-color 0.4s, transform 0.3s;
+}
+
+.btn-submit:hover {
+    background-color: #138496;
+    transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .form-box {
+        padding: 30px 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .form-box {
+        padding: 20px 10px;
+    }
+
+    .login-header h1 {
+        font-size: 1.8em;
+    }
+
+    .login-header h2 {
+        font-size: 0.9em;
+    }
+
+    .btn-submit {
+        padding: 8px 16px;
+    }
+}
+
+/* Header image styling */
+.login-image {
+    width: 80px;
+    height: auto;
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+.login-image:hover {
+    transform: scale(1.1);
+    opacity: 0.8;
+}

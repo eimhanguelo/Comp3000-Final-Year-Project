@@ -1,0 +1,51 @@
+{% extends "blog/basef.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+
+    <div class="content-section">    
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Opportunity Tag Creation Form</legend>
+                 {{ form|crispy }} 
+             </fieldset>
+
+            <div class="form-group">
+                <button class="btn btn-outline-info"  type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <!--------------------------------------select2---------------------------->
+    <script type="text/javascript" src="{% static 'blog/jquery-3.5.1.min.js' %}"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $('#id_idea_giver, #id_supervisor').select2({
+                ajax: {
+                    url: '{% url 'display_name' %}',
+                    dataType: 'json',
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data, function (item) {
+                                return {id: item.id, text: item.first_name};
+                            })
+                        };
+                    }
+                },
+                minimumInputLength: 1,
+                placeholder: 'Assign the Person',
+            });
+        });
+
+
+    </script>
+
+
+{% endblock content %}
+
+
