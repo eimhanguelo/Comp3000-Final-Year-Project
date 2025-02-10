@@ -1,0 +1,112 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+<!-- Page Title Section -->
+<div class="pagetitle">
+    <h1>Eticket</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Users</a></li>
+            <li class="breadcrumb-item" aria-current="page">Eticket</li>
+            <li class="breadcrumb-item active">Create</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<!-- Form Section -->
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title d-flex align-items-center">
+                        <i class="bi bi-pencil-square me-2"></i>
+                        Support Request via E-ticket
+                    </h5>
+
+                    <!-- Support Request Form -->
+                    <form method="POST" novalidate id="supportRequestForm">
+                        {% csrf_token %}
+
+                        <!-- Problem Category Field -->
+                        <div class="mb-3 row">
+                            <label for="id_problem_category" class="col-sm-3 col-form-label">Problem Category * :</label>
+                            <div class="col-sm-8">
+                                {{ form.problem_category|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <!-- IP Address Field -->
+                        <div class="mb-3 row">
+                            <label for="id_ip_address" class="col-sm-3 col-form-label">IP Address (If Any):</label>
+                            <div class="col-sm-8">
+                                {{ form.ip_address|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <!-- Reference Form Field -->
+                        <div class="mb-3 row">
+                            <label for="id_reference_form" class="col-sm-3 col-form-label">Reference Form (If Any):</label>
+                            <div class="col-sm-8">
+                                {{ form.reference_form|as_crispy_field }}
+                            </div>
+                        </div>
+
+                         <!-- Reference Form Field -->
+                         <div class="mb-3 row">
+                            <label for="id_reference_form" class="col-sm-3 col-form-label">Reference Attachment (If Any):</label>
+                            <div class="col-sm-8">
+                                {{ form.eticket_attachment|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <!-- Problem Description Field -->
+                        <div class="mb-3 row">
+                            <label for="id_problem_description" class="col-sm-3 col-form-label">Problem Description * :</label>
+                            <div class="col-sm-8">
+                                <div>
+                                    {{ form.media }}
+                                    {{ form.problem_description|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Checkbox Confirmation -->
+                        <div class="mb-3 row">
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="gridCheck" required>
+                                    <label class="form-check-label" for="gridCheck">
+                                        Confirm information accuracy
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit and Reset Buttons -->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary rounded-pill" id="submitButton">Submit Now</button>
+                            <button type="reset" class="btn btn-secondary rounded-pill">Reset</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- JavaScript for validation -->
+<script>
+    document.getElementById('supportRequestForm').addEventListener('submit', function(event) {
+        var checkbox = document.getElementById('gridCheck');
+        if (!checkbox.checked) {
+            event.preventDefault(); // Prevent form submission
+            alert('Please check the box to confirm submission.'); // Alert user
+        }
+    });
+</script>
+
+{% endblock %}

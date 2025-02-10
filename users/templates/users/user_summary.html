@@ -1,0 +1,162 @@
+{% extends "blog/basep.html"%}
+{% block content %}
+   <style>
+        #user_view {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+            }
+        #user_view th {
+            width: 35%;
+            font-size: 16px;
+            padding: 2px;
+        }
+        #user_view td {
+            width: 65%;
+            font-size: 14px;
+            padding: 2px;
+        }
+    </style>
+
+    <div class="div-shadow">
+               <h3 class="border-bottom mb-4" style="text-align: center; color: darkmagenta; font-size: x-large; font-weight: bold">CISCO Phone Inventory Detail - {{ object.id }}</h3>
+    </div>
+   
+
+    <article class="media content-section">
+        <legend class="border-bottom mb-4" style="text-align: center; color: darkgreen; font-size: large; font-weight: bold">Phone Details</legend>
+        
+        <div class="media-body">
+
+            <div class="row">
+ 
+                <div class="col-sm-8">
+ 
+                    <table id="user_view">
+
+                        <tr>
+                            <th>User :</th>
+                            <th>{{ object.username }}</td>
+                        </tr>
+        
+                        <tr>
+                            <th>Model :</th>
+                            <td>{{ object.model }}</td>
+                        </tr>
+                        <tr>
+                            <th>Power Adpater :</th>
+                            <td>{{ object.power_adapter }}</td>
+                        </tr>
+                        
+                        <tr>
+                            <th>IP :</th>
+                            <td>{{ object.provided_ip }}</td>
+                        </tr>
+                        <tr>
+                            <th>Switch Port :</th>
+                            <td>{{ object.switch_port }}</td>
+                        </tr>
+        
+                        <tr>
+                            <th>EXT :</th>
+                            <td>{{ object.ext }}</td>
+                        </tr>
+                        <tr>
+                            <th>Disiplay :</th>
+                            <td>{{ object.display_name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Condition :</th>
+                            <td>{{ object.phone_condition }}</td>
+                        </tr>
+                        <tr>
+                            <th>Phone Status :</th>
+                            <td>{{ ip_status }} {{ ssss }}</td>
+                        </tr>
+                        <tr>
+                            <th>Employee ID :</th>
+                            <td>{{ object.emp_id }}</td>
+                        </tr>
+                        <tr>
+                            <th>Name:</th>
+                            <td>{{ object.name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Position :</th>
+                            <td>{{ object.position }}</td>
+                        </tr>
+                        <tr>
+                            <th>Remarks : </th>
+                            <td>{{ object.remarks }}</td>
+                        </tr>
+                        <tr>
+                            <th>Location :</th>
+                            <td>{{ object.location }}, {{ object.floor }} </td>
+                        </tr>
+                        <tr>
+                            <th>Created by : </th>
+                            <td>{{ object.creator.first_name }}</td>
+                        </tr>                     
+    
+                    </table>
+                </div>
+ 
+ 
+                <div class="col-sm-4">
+                    <p>
+                        <button class="btn btn-outline-info" data-toggle="collapse" data-target="#side_button" aria-expanded="false" aria-controls="collapseExample">
+                            <i class="glyphicon glyphicon-option-vertical"></i>
+                        </button>
+                    </p>
+                     <div class="collapse" id="side_button">
+                        <div class="card card-body">
+                            <a class="btn btn-outline-info btn-sm mt-1 mb-1" href="{% url 'phone-update' object.id %}">Update</a><br>
+                        </div>
+                     </div>
+  
+                 </div>
+            </div>
+ 
+         <div>
+
+    </article>
+    <!----------------------------------------------Last Modified Details----------------------------->
+
+    <article class="media content-section">
+        <legend class="border-bottom mb-4" style="text-align: center; color: darkgreen; font-size: large; font-weight: bold">History : Last Used </legend>
+
+
+        <table style="width: 100%">
+
+            <tr style="color: dodgerblue; border-bottom: 1px solid gray">
+                <th>EXT</th>
+                <th>IP</th>
+                <th>Display</th>
+                <th>Condition</th>
+                <th>Modified By</th>
+                <th>Date</th>
+            </tr>
+
+            {% for o in object.history.all %}
+                <tr>
+                    <td>{{ o.ext }}</td>
+                    <td>{{ o.provided_ip }}</td>
+                    <td>{{ o.display_name }}</td>
+                    <td>{{ o.phone_condition }}</td>
+                    <td>{{ o.history_user }}</td>
+                    <td>{{ o.date_updated|date:"d M' Y | P" }}</td>
+                </tr>
+            {% endfor %}
+
+            
+        </table>
+
+
+    </article>
+
+
+
+{% endblock %}
+
+
+

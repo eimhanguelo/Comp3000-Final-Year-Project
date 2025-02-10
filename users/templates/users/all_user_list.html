@@ -1,0 +1,72 @@
+{% extends "blog/base.html" %}
+
+{% block network %}
+
+{% load static %}
+<div class="pagetitle">
+    <h1>Contact</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Users</a></li>
+            <li class="breadcrumb-item active">Contact </li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+
+<section class="section">
+    <div class="row justify-content-center"> <!-- Added justify-content-center to center the column -->
+        <div class="col-lg-11">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Contact Directory</h5>
+
+                    <!-- Default Table -->
+                    <table class="table datatable table-hover">
+                        <thead>
+                            <th>Image</th>
+                            <th>User</th>
+                            <th>Name</th>
+                            <th>Department</th>
+                            <th>Designation</th>
+                            <th>Location</th>
+                            <th>Floor</th>
+                            <th>Phone</th>        
+                            <th>Extention</th>
+                        </thead>
+                        <tbody>
+                            {% for l in user_list %}
+                    <tr>
+                        <td>
+                            {% if l.profile.image %}
+                                <img src="{{ l.profile.image.url }}" alt="{{ l.username }}" style="width: 50px; height: 50px; object-fit: cover;">
+                            {% else %}
+                                <img src="{% static 'img/spplc_Logo.jpg' %}" alt="Profile image" style="width: 50px; height: 50px; object-fit: cover;">
+                            {% endif %}
+                        </td>
+                        
+                        <td><a class="article-title" style="color: blueviolet" href="#">
+                            <b>{{ l }}</b></a>
+                        </td>
+                        <td>{{ l.first_name }}</td>
+                        <td>{{ l.profile.department }}</td>
+                        <td>{{ l.profile.position }}</td>
+                        <td>{{ l.profile.location }}</td>
+                        <td>{{ l.profile.floor }}</td>
+                        <td>{{ l.profile.phone }}</td>
+                        <td>{{ l.profile.ext }}</td>
+                    </tr>
+                {% endfor %}
+                           
+                        </tbody>
+                    </table>
+                    <!-- End Default Table Example -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+

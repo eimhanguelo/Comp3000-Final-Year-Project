@@ -1,0 +1,31 @@
+{% extends "blog/basef.html" %}
+{% load static %}
+{% block network %}
+
+        <div class="content-section">
+            <legend class="border-bottom mb-4">Assign engineer for {{ eticket }}</legend>
+
+            <button type="button"  class="btn btn-primary" style="background-color: #F0E68C; color: slateblue;"
+             hx-get="{% url 'assign-form' %}" hx-swap="beforeend" hx-target="#assignform" >
+                <i class="fas fa-plus"> Assign Engineer</i>
+            </button>
+
+            <!-- <a class="btn btn-primary" href="{% url 'ticket-detail' eticket.id %}">Go to Ticket</a> -->
+          
+            <div id="assignform"></div>
+            <div>
+                {% for assign in assigns %}
+                    {% include 'ticket/partials/assign_detail.html' %}
+                {% endfor %}
+            </div>
+
+        </div>
+
+
+        <!--------------------------------------select2---------------------------->
+        <script type="text/javascript" src="{% static 'blog/jquery-3.5.1.min.js' %}"></script>
+
+
+       
+
+{% endblock %}

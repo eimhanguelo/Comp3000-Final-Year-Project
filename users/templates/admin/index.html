@@ -1,0 +1,140 @@
+{% extends 'admin/index.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="module">
+        <h2>LDAP User/Profile Sync</h2>
+        <!-- Button to trigger the sync -->
+        <br>
+        <div>
+            <a href="#" 
+               class="button" 
+               id="sync-ldap-button"
+               onclick="syncLdapUsers(event)">
+                Sync LDAP Users
+            </a>
+        </div>
+        
+        <!-- Loading spinner and status message displayed while syncing -->
+        <div id="sync-status" style="display:none; text-align: center;">
+            <div class="spinner-wrapper">
+                <!-- Using the correct static path to the Hourglass.gif -->
+                <img src="{% static 'admin/img/Hourglass.gif' %}" alt="Processing..." class="spinner"> <!-- Adjust the path to match your directory structure -->
+                <p>Processing...</p>
+                <p class="processing-message">Please wait.</p> <!-- Updated message -->
+            </div>
+        </div>
+
+        <!-- Success/Error message container -->
+        <div id="sync-message" style="display:none; margin-top: 20px; font-size: 18px; text-align: center;">
+            <!-- Success or error message will appear here -->
+        </div>
+    </div>
+
+    {{ block.super }}
+
+    <style>
+        .spinner-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .spinner {
+            width: 50px;  /* Adjust the size of the GIF */
+            height: 50px;
+            margin-bottom: 20px;
+        }
+
+        #sync-status p {
+            font-size: 18px; /* Larger font for better visibility */
+            color: #3498db;  /* Blue color for better emphasis */
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: bold; /* Bold text to make the message stand out */
+            text-transform: uppercase; /* Makes the text more impactful */
+            letter-spacing: 1px; /* Adds a little space between letters for a modern look */
+            animation: fadeIn 0.5s ease-in-out; /* Smooth fade-in effect */
+        }
+
+        .processing-message {
+            font-size: 16px; /* Slightly smaller than the main message */
+            color: #666; /* Lighter color for the 'Please wait' part */
+            margin-top: 10px;
+            font-style: italic; /* Italic style for emphasis */
+            animation: slideIn 0.5s ease-out; /* Adds a slide-in effect */
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            0% { transform: translateY(10px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Success message styling */
+        .success-message {
+            color: green;
+            font-weight: bold;
+        }
+
+        /* Error message styling */
+        .error-message {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+
+    <script type="text/javascript">
+        function syncLdapUsers(event) {
+            event.preventDefault();  // Prevent the default anchor link behavior
+
+            // Get elements for status, button, and message container
+            const syncStatus = document.getElementById('sync-status');
+            const syncButton = document.getElementById('sync-ldap-button');
+            const syncMessage = document.getElementById('sync-message');
+
+            // Clear any previous messages
+            syncMessage.style.display = 'none';
+
+            // Show the sync status and spinner
+            syncStatus.style.display = 'block';
+
+            // Disable the sync button to prevent multiple clicks
+            syncButton.disabled = true;
+
+            // Send a fetch request to the sync-ldap-users URL
+            fetch("/sync-ldap-users/")
+                .then(response => response.json())
+                .then(data => {
+                    // Hide the spinner once the response is received
+                    syncStatus.style.display = 'none';
+
+                    // Show success message in the container
+                    syncMessage.style.display = 'block';
+                    syncMessage.textContent = data.message || 'LDAP Sync successful!';  // Fallback message if no message is returned
+                    syncMessage.className = 'success-message';  // Add success styling
+
+                    // Enable the sync button again
+                    syncButton.disabled = false;
+                })
+                .catch(error => {
+                    // Hide the spinner
+                    syncStatus.style.display = 'none';
+
+                    // Show error message in the container
+                    syncMessage.style.display = 'block';
+                    syncMessage.textContent = 'An error occurred during sync: ' + error.message;
+                    syncMessage.className = 'error-message';  // Add error styling
+
+                    // Enable the sync button again
+                    syncButton.disabled = false;
+                });
+        }
+    </script>
+{% endblock %}

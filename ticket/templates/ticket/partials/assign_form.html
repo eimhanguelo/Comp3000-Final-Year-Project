@@ -1,0 +1,45 @@
+{% load crispy_forms_tags %}
+<div hx-target="this" hx-swap="outerHTML">
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="form-group col-md-6 mb-0">
+              {{ form.engineer|as_crispy_field }}              
+            </div>
+        </div>        
+
+        <button class="btn btn-primary" style="background-color: darkcyan;" type="submit" hx-post="">
+            add
+        </button>
+
+
+    </form>
+
+
+
+    <script>
+        $(document).ready(function () {
+            $('#id_engineer').select2({
+                ajax: {
+                    url: '{% url 'display_name' %}',
+                    dataType: 'json',
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data, function (item) {
+                                return {id: item.id, text: item.first_name};
+                            })
+                        };
+                    }
+                },
+                minimumInputLength: 1,
+                placeholder: 'Search for a display name',
+                allowClear: true,
+            });
+        });
+    
+    </script>
+
+</div>
+
+

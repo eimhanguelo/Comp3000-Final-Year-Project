@@ -1,0 +1,133 @@
+{% extends "blog/base.html" %}
+
+{% block network %}
+
+
+<div class="pagetitle">
+    <h1>Eticket</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Users</a></li>
+            <li class="breadcrumb-item active">Eticket</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+
+<section class="section">
+    <div class="row justify-content-center"> <!-- Added justify-content-center to center the column -->
+        <div class="col-lg-11">
+          <div class="card">
+              <div class="card-body">
+                  <h5 class="card-title d-flex align-items-center">
+                      <i class="glyphicon glyphicon-edit me-2"></i>
+                      E-Ticket Creation
+                  </h5>
+                  
+                  <!-- Button to Create E-Ticket -->
+                  <div class="mb-3">
+                      <a href="{% url 'ticket-create' %}" 
+                         class="btn btn-outline-success btn-lg w-100 d-flex align-items-center justify-content-center">
+                          <i class="glyphicon glyphicon-edit me-2"></i>  
+                          Create E-Ticket
+                      </a>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+
+<section class="section">
+    <div class="row justify-content-center"> <!-- Added justify-content-center to center the column -->
+        <div class="col-lg-11">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">My List of Etickets</h5>
+
+                    <!-- Default Table -->
+                    <table class="table datatable table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Ticket Number</th>
+                                <th>Created By</th>
+                                <th>Date Created</th>
+                                <th>Current Status</th>
+                                <th>Assigned Engineer</th>
+                                <th>Position in Queue</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% comment %} {% if tickets %} {% endcomment %}
+                                {% for ticket in tickets %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>
+                                            <a class="article-title" style="color: blueviolet" href="{% url 'ticket-detail' ticket.id %}">
+                                                <b>{{ ticket }}</b>
+                                            </a>
+                                        </td>
+                                        <td>{{ ticket.ticket_raiser.first_name }}</td>
+                                        <td><small>{{ ticket.date_raised|date:"d M' y P" }}</small></td>
+
+                                        {% if ticket.status == 'Pending' %}
+                                        <td class="text-center">
+                                            <span class="badge bg-warning text-dark"><i class="bi bi-exclamation-triangle me-1"></i>Pending</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge bg-danger"><i class="bi bi-exclamation-octagon me-1"></i> Unassigned</span>
+                                        </td>
+
+                                            <td>0</td>
+                                        {% elif ticket.status == 'Solved' %}
+                                            <td class="text-center">
+                                                <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Solved</span>
+                                            </td>
+                                            <td class="text-center">
+                                                <span  class="badge bg-info text-dark"><i class="bi bi-info-circle me-1"></i>{{ ticket.e_solve.solver.first_name }}</span>
+                                            </td>
+                                           
+                                            <td>N</td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                            {% comment %} {% else %}
+                                <tr>
+                                    <td colspan="7" class="text-center">No tickets found.</td>
+                                </tr>
+                            {% endif %}
+
+                            {% for ticket in engineer_queue %}
+                                {% if user == ticket.ticket_raiser %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>
+                                            <a class="article-title" style="color: blueviolet" href="{% url 'ticket-detail' ticket.id %}">
+                                                <b>{{ ticket }}</b>
+                                            </a>
+                                        </td>
+                                        <td>{{ ticket.ticket_raiser.first_name }}</td>
+                                        <td><small>{{ ticket.date_raised|date:"d M' y P" }}</small></td>
+                                        
+                                        <td class="text-center">
+                                            <span  class="badge bg-primary"><i class="bi bi-star me-1"></i>Working</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span  class="badge bg-info text-dark"><i class="bi bi-info-circle me-1"></i>{{ ticket.ticket_engineer.first_name }}</span>
+                                        </td>
+                                        <td>{{ ticket.row_number }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %} {% endcomment %}
+                        </tbody>
+                    </table>
+                    <!-- End Default Table Example -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

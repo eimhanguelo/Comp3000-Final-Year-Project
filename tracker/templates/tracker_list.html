@@ -1,0 +1,92 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% block network %}
+
+<div class="pagetitle">
+    <h1>Tracker</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Admin</a></li>
+            <li class="breadcrumb-item active">Tracker</li>
+        </ol>
+    </nav>
+</div>
+<!-- End Page Title -->
+
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title d-flex align-items-center">
+                        <i class="glyphicon glyphicon-edit me-2"></i>
+                        IT Tracker List
+                    </h5>
+                    
+                    <!-- Button to Create E-Ticket -->
+                    <div class="mb-3">
+                        <a href="{% url 'tracker_create' %}" 
+                           class="btn btn-outline-success btn-lg w-100 d-flex align-items-center justify-content-center">
+                            <i class="glyphicon glyphicon-edit me-2"></i>
+                            Create Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Tracker List</h5>
+
+                    <!-- Default Table -->
+                    <table class="table datatable table-hover">
+                        <thead>
+                            <tr>
+                                <th>SL.</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Remarks</th>
+                                <th>Created By</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for tracker in trackers %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>
+                                        <a class="article-title" style="color: blueviolet" href="{% url 'tracker_detail' tracker.pk %}">
+                                            <b>{{ tracker.category }}</b>
+                                        </a>
+                                    </td>
+                                    <td>{{ tracker.description }}</td>
+                                    <td>{{ tracker.remarks }}</td>
+                                    <td><b>{{ tracker.created_by.username }}</b></td>
+                                    <td>{{ tracker.created_at }}</td>
+                                    <td>
+                                        {% if tracker.created_at != tracker.updated_at %}
+                                            {{ tracker.updated_at }}
+                                        {% else %}
+                                            Not Updated
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <!-- End Default Table -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

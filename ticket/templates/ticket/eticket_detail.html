@@ -1,0 +1,863 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<style>
+    .chat-container {
+        display: flex;
+        flex-direction: column;
+        max-height: 500px;
+        overflow-y: auto;
+        padding: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
+    
+    .message-item {
+        display: flex;
+        margin-bottom: 0.75rem;
+        max-width: 75%;
+        clear: both;
+    }
+    
+    .message-item.sent {
+        align-self: flex-end;
+        justify-content: flex-end;
+    }
+    
+    .message-item.received {
+        align-self: flex-start;
+        justify-content: flex-start;
+    }
+    
+    .message-content {
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        line-height: 1.4;
+        position: relative;
+    }
+    
+    .message-item.sent .message-content {
+        background-color: #d1f1ff;
+        color: #005580;
+        border-bottom-right-radius: 0;
+    }
+    
+    .message-item.received .message-content {
+        background-color: #e9ecef;
+        color: #333;
+        border-bottom-left-radius: 0;
+    }
+    
+    .message-content small {
+        display: block;
+        font-size: 0.7rem;
+        color: #888;
+        margin-top: 0.25rem;
+    }
+    .updates-container {
+        max-height: 500px;
+        overflow-y: auto;
+        padding: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+    }
+    
+    .update-item {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        margin-bottom: 0.75rem;
+        background-color: #ffffff;
+    }
+    
+    .update-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+    
+    .admin-name {
+        font-weight: bold;
+        color: rgb(80, 135, 255);
+    }
+    
+    .update-timestamp {
+        font-size: 0.8rem;
+        color: #888;
+    }
+    
+    .update-content {
+        font-size: 0.9rem;
+        line-height: 1.4;
+        color: #333;
+        margin-top: 0.5rem;
+    }
+    
+    .no-updates {
+        text-align: center;
+        font-style: italic;
+        color: #777;
+    }
+    
+</style>
+<!-- Page Title Section -->
+<div class="pagetitle">
+    <h1>Eticket Details</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Users</a></li>
+            <li class="breadcrumb-item " aria-current="page">Eticket</li>
+            <li class="breadcrumb-item active" aria-current="page">Details</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<!-- Form Section -->
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-ticket-fill"></i> E-Ticket Overview</h5>
+
+                    <!-- Default Tabs -->
+                    <ul class="nav nav-tabs d-flex" id="myTabJustified" role="tablist">
+                        <li class="nav-item flex-fill" role="presentation">
+                            <button class="nav-link w-100 active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-justified" type="button" role="tab" aria-controls="home-justified" aria-selected="true" title="View ticket details">
+                                <i class="bi bi-house"></i> Home
+                            </button>
+                        </li>
+
+                        {% if user.is_staff %}
+                        <li class="nav-item flex-fill" role="presentation">
+                            <button class="nav-link w-100" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-justified" type="button" role="tab" aria-controls="profile-justified" aria-selected="false" title="View user contact details">
+                                <i class="bi bi-person"></i> User's Contact
+                            </button>
+                        </li>
+                        {% endif %}
+
+                        {% if eticket.e_assign.exists %}
+                        <li class="nav-item flex-fill" role="presentation">
+                            <button class="nav-link w-100" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-justified" type="button" role="tab" aria-controls="contact-justified" aria-selected="false" title="View message discussions">
+                                <i class="bi bi-chat-dots"></i> Message Center
+                            </button>
+                        </li>
+                        {% endif %}
+
+                        {% if user.is_staff and eticket.e_assign.exists %}
+                        <li class="nav-item flex-fill" role="presentation">
+                            <button class="nav-link w-100" id="update-tab" data-bs-toggle="tab" data-bs-target="#update-justified" type="button" role="tab" aria-controls="update-justified" aria-selected="false" title="View internal updates">
+                                <i class="bi bi-arrow-repeat"></i> Engineers Internal Update
+                            </button>
+                        </li>
+                        {% endif %}
+
+                        {% if  eticket.e_solve %}
+                            <li class="nav-item flex-fill" role="presentation">
+                                <button class="nav-link w-100" id="summary-tab" data-bs-toggle="tab" data-bs-target="#summary-justified" type="button" role="tab" aria-controls="summary-justified" aria-selected="false" title="View Ticket Summary">
+                                    <i class="bi bi-file-earmark-text"></i> E-Ticket Summary
+                                </button>
+                            </li>
+                        {% endif %}
+                    </ul>
+
+                    <div class="tab-content pt-2" id="myTabJustifiedContent">
+                        <!-- Home Tab Content -->
+                        <div class="tab-pane fade show active" id="home-justified" role="tabpanel" aria-labelledby="home-tab">
+                            <h5 class="card-title">Ticket Details</h5>
+                            <table class="table table-striped table-hover table-bordered">
+                                <tbody>
+                                    <tr><th>Ticket No:</th><td class="font-weight-bold text-danger">{{ formatted_ticket_id }}</td></tr>
+                                    <tr>
+                                        <th>Status:</th>
+                                        <td>
+                                            {% if object.e_solve.solve_type == 'solved' %}
+                                                <span class="badge bg-success align-items-center">
+                                                    <i class="bi bi-check-circle me-1"></i> Solved
+                                                </span>
+                                            {% elif object.e_solve.solve_type == 'closed' %}
+                                                <span class="badge bg-secondary align-items-center">
+                                                    <i class="bi bi-x-circle me-1"></i> Closed
+                                                </span>
+                                            {% elif not eticket.e_assign.exists %}
+                                                <span class="badge bg-warning text-dark">
+                                                    <i class="bi bi-exclamation-triangle me-1"></i>Waiting Assignment
+                                                </span>
+                                            {% else %}
+                                                <span class="badge bg-primary">
+                                                    <i class="bi bi-star me-1"></i> In Progress
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    
+                                    
+                                    <tr>
+                                        <th>Form Reference:</th>
+                                        <td class="btn btn-outline-info badge border-dark border-1 text-dark">
+                                            {% if object.form_link and object.created_via == 'AUTOMATED' %}
+                                                <a href="{{ object.form_link }}">{{ object.reference_form }}</a>
+                                            {% else %}
+                                                {{ object.reference_form }}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr><th>IP Address:</th><td>{{ object.ip_address }}</td></tr>
+                                    <tr><th>Category:</th><td>{{ object.problem_category }}</td></tr>
+                                    <tr><th>Description:</th><td>{{ object.problem_description|safe }}</td></tr>
+                                    <tr>
+                                        <th>Attachment:</th>
+                                        <td>
+                                            {% if object.eticket_attachment %}
+                                                <a href="{{ object.eticket_attachment.url }}" target="_blank" rel="noopener noreferrer" style="font-weight: bold; text-decoration: underline;">
+                                                    View Attachment
+                                                </a>
+                                            {% else %}
+                                                No attachment available.
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" style="text-align: left; padding-right: 10px;">
+                                            Created On:
+                                        </th>
+                                        <td style="display: flex; align-items: center;">
+                                            <span aria-hidden="true" style="margin-right: 5px;">📅</span>
+                                            <span>{{ object.date_raised|date:"j M 'y \\a\\t g:i A" }}</span>
+                                            <span class="badge bg-info text-dark" style="margin-left: 8px;">
+                                                <i class="bi bi-info-circle me-1"></i> 
+                                                {{ object.date_raised|timesince }} ago
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+
+                            <div class="btn-container d-flex justify-content-center gap-2 mt-3">
+                                {% if user.is_staff and admin_history == 'not_signed' %}
+                                    <a href="{% url 'eassisn-create' object.id %}"
+                                       class="btn btn-primary d-flex align-items-center gap-1 px-3 py-2"
+                                       title="Assign this ticket to an engineer">
+                                       <i class="bi bi-person-plus-fill"></i> Assign Engineer
+                                    </a>
+                                {% endif %}
+                            
+                                {% if admin_history == 'not_signed' and user.is_staff %}
+                                    <a href="{% url 'esolve-create' object.id %}"
+                                       class="btn btn-success d-flex align-items-center gap-1 px-3 py-2"
+                                       title="Mark this ticket as resolved">
+                                       <i class="bi bi-check-circle-fill"></i> Resolve Ticket
+                                    </a>
+                                {% endif %}
+                            </div>
+                            
+
+                            <h5 class="card-title">Assigned Engineers</h5>
+                            {% if eticket.e_assign.exists %}
+                            <table class="table table-striped table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>#</th><th>Name</th><th>Designation</th><th>Email</th><th>Contact</th><th>Assigned On</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% with latest_assigned=eticket.e_assign.last %}
+                                        <!-- Latest Assigned Engineer -->
+                                        <tr class="table-success">
+                                            <td>1</td>
+                                            <td>{{ latest_assigned.engineer.first_name }}</td>
+                                            <td>{{ latest_assigned.engineer.profile.position }}</td>
+                                            <td>{{ latest_assigned.engineer.email }}</td>
+                                            <td>
+                                                <i class="bi bi-phone"></i> {{ latest_assigned.engineer.profile.phone }}<br>
+                                                <i class="bi bi-telephone"></i> Ext. {{ latest_assigned.engineer.profile.ext }}
+                                            </td>
+                                            <td>{{ latest_assigned.date_assigned}}</td>
+                                        </tr>
+
+                                        <!-- Check if there are Previous Assigned Engineers -->
+                                        {% if eticket.e_assign.count > 1 %}
+                                            <tr class="table-info">
+                                                <th colspan="6" class="text-center">Previous Assigned Engineers</th>
+                                            </tr>
+                                            {% for a in eticket.e_assign.all %}
+                                                {% if a != latest_assigned %}
+                                                    <tr class="table-secondary">
+                                                        <td>{{ forloop.counter }}</td>
+                                                        <td>{{ a.engineer.first_name }}</td>
+                                                        <td>{{ a.engineer.profile.position }}</td>
+                                                        <td>{{ a.engineer.email }}</td>
+                                                        <td>
+                                                            <i class="bi bi-phone"></i> {{ a.engineer.profile.phone }}<br>
+                                                            <i class="bi bi-telephone"></i> Ext. {{ a.engineer.profile.ext }}
+                                                        </td>
+                                                        <td>{{ a.date_assigned }}</td>
+                                                    </tr>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endwith %}
+                                </tbody>
+                            </table>
+                            {% else %}
+                                <div class="alert alert-warning text-center" role="alert">No engineers assigned</div>
+                            {% endif %}
+                            
+                        </div><!-- End Home Tab Content -->
+
+                        <!-- Profile Tab Content -->
+                        <div class="tab-pane fade" id="profile-justified" role="tabpanel" aria-labelledby="profile-tab">
+                            <h5 class="card-title">Profile of Ticket Raiser</h5>
+                            <table class="table table-striped table-hover table-bordered">
+                                <tbody>
+                                    <tr><th>Raised By:</th><td>{{ object.ticket_raiser.first_name }}</td></tr>
+                                    <tr><th>Email:</th><td>{{ object.ticket_raiser.email }}</td></tr>
+                                    <tr><th>Designation:</th><td>{{ object.ticket_raiser.profile.position }}</td></tr>
+                                    <tr><th>Department:</th><td>{{ object.ticket_raiser.profile.department }}</td></tr>
+                                    <tr><th>Contact:</th><td><i class="bi bi-phone"></i> Phone {{ object.ticket_raiser.profile.phone }} __  <i class="bi bi-telephone"></i> Ext {{ object.ticket_raiser.profile.ext }}</td></tr>
+                                    <tr><th>Address:</th><td>{{ object.ticket_raiser.profile.location }}, {{ object.ticket_raiser.profile.floor }}</td></tr>
+                                </tbody>
+                            </table>
+                        </div><!-- End Profile Tab Content -->
+
+                        <!-- Contact Tab Content -->
+                        <div class="tab-pane fade" id="contact-justified" role="tabpanel" aria-labelledby="contact-tab">
+                            <h5 class="card-title">Discussion History</h5>
+                            <div class="chat-container">
+                                {% if eticket.e_discuss.exists %}
+                                    {% for d in eticket.e_discuss.all %}
+                                        <div class="message-item {% if d.discusser == user %}sent{% else %}received{% endif %}">
+                                            <div class="message-content">
+                                                <strong>{{ d.discusser.first_name }}</strong>
+                                                <p>{{ d.discussion }}</p>
+                                                <small>{{ d.date_discussed|date:"d M Y P" }}</small>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                <div class="alert alert-info text-center">No messages found.</div>
+                                {% endif %}
+                            </div>
+                            <div class="btn-container">
+                                {% if admin_history == 'not_signed' %}
+                                    <a class="btn btn-success" href="{% url 'ediscuss-create' object.id %}">
+                                        <i class="bi bi-chat"></i> Start New Discussion
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Update Tab Content -->
+                        <div class="tab-pane fade" id="update-justified" role="tabpanel" aria-labelledby="update-tab">
+                            <h5 class="card-title">Internal Updates</h5>
+                            <div class="updates-container">
+                                {% if eticket.e_internal.exists %}
+                                    {% for d in eticket.e_internal.all %}
+                                    <div class="update-item">
+                                        <div class="update-header">
+                                            <h6 class="admin-name">{{ d.admin.first_name }}</h6>
+                                            <small class="update-timestamp">{{ d.date_discussed|date:"d M Y P" }}</small>
+                                        </div>
+                                        <p class="update-content">{{ d.discussion }}</p>
+                                    </div>
+                                    {% endfor %}
+                                {% else %}
+                                <div class="alert alert-info text-center">No updates available.</div>
+                                {% endif %}
+                            </div>
+                            <div class="btn-container">
+                                {% if admin_history == 'not_signed' %}
+                                    <a class="btn btn-primary" href="{% url 'einternal-create' object.id %}">
+                                        <i class="bi bi-pencil"></i> Add Update
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="summary-justified" role="tabpanel" aria-labelledby="update-tab">
+                            <h5 class="card-title">E-Ticket Summary</h5>
+                            <div class="table-container p-3 rounded bg-light border">
+                                <table class="table table-borderless table-hover align-middle">
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row" class="text-primary fw-bold">
+                                                <i class="bi bi-person-fill me-2" aria-hidden="true"></i> Solver Name:
+                                            </th>
+                                            <td>{{ object.e_solve.solver.first_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row" class="text-primary fw-bold">
+                                                <i class="bi bi-envelope-fill me-2" aria-hidden="true"></i> Contact:
+                                            </th>
+                                            <td>
+                                                <a href="mailto:{{ object.e_solve.solver.email }}" aria-label="Email">{{ object.e_solve.solver.email }}</a><br>
+                                                <i class="bi bi-phone-fill" aria-hidden="true"></i> {{ object.e_solve.solver.profile.phone }}<br>
+                                                <i class="bi bi-telephone-fill" aria-hidden="true"></i> Ext. {{ object.e_solve.solver.profile.ext }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row" class="text-primary fw-bold">
+                                                <i class="bi bi-gear-fill me-2" aria-hidden="true"></i> Solve Type:
+                                            </th>
+                                            <td>{{ object.e_solve.solve_type }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row" class="text-primary fw-bold">
+                                                <i class="bi bi-chat-left-text-fill me-2" aria-hidden="true"></i> Note:
+                                            </th>
+                                            <td>{{ object.e_solve.note }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row" class="text-primary fw-bold">
+                                                <i class="bi bi-calendar-fill me-2" aria-hidden="true"></i> Created On:
+                                            </th>
+                                            <td>{{ object.date_raised|date:"d M' Y P" }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row" class="text-primary fw-bold">
+                                                <i class="bi bi-calendar-check me-2" aria-hidden="true"></i> Solved On:
+                                            </th>
+                                            <td>{{ object.e_solve.date_solved|date:"d M' Y P" }}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th scope="row" class="text-primary fw-bold">
+                                              <i class="bi bi-calendar me-2" aria-hidden="true"></i> Total Duration:
+                                            </th>
+                                            <td>
+                                              <span>{{ object.date_raised|timesince:object.e_solve.date_solved }}</span>
+                                            </td>
+                                          </tr>
+                                          
+                                          
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div><!-- End Tab Content -->
+                </div><!-- End Card Body -->
+            </div><!-- End Card -->
+        </div><!-- End Col -->
+    </div><!-- End Row -->
+</section><!-- End Section -->
+{% endblock %}
+
+
+{% comment %} {% extends "blog/basef.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    .section {
+        margin-bottom: 30px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .section-heading {
+        text-align: center;
+        color: darkgreen;
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        cursor: pointer;
+    }
+
+    .table {
+        overflow-x: auto;
+    }
+
+    .table-container {
+        overflow-x: auto;
+        display: none; /* Hide tables by default */
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+    .btn-container {
+        text-align: right;
+        margin-top: 10px;
+    }
+
+    .btn {
+        margin-left: 10px;
+        padding: 8px 16px;
+        font-size: 14px;
+        border-radius: 4px;
+        text-decoration: none;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-info {
+        background-color: #5bc0de;
+    }
+
+    .btn-info:hover {
+        background-color: #2aabd2;
+    }
+
+    .btn-danger {
+        background-color: #d9534f;
+    }
+
+    .btn-danger:hover {
+        background-color: #c9302c;
+    }
+
+    .btn-success {
+        background-color: #5cb85c;
+    }
+
+    .btn-success:hover {
+        background-color: #4cae4c;
+    }
+
+    .btn-primary {
+        background-color: #337ab7;
+    }
+
+    .btn-primary:hover {
+        background-color: #286090;
+    }
+
+    .btn-link {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    .btn-link:hover {
+        text-decoration: underline;
+    }
+
+    .attachment-link {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    .attachment-link:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Add event listeners to section headings for toggling visibility
+        const sectionHeadings = document.querySelectorAll(".section-heading");
+        sectionHeadings.forEach(heading => {
+            heading.addEventListener("click", function() {
+                const tableContainer = this.nextElementSibling;
+                tableContainer.style.display = tableContainer.style.display === "none" ? "block" : "none";
+            });
+        });
+    });
+</script>
+
+
+<article class="section">
+    <h2 class="section-heading">
+        <i class="fas fa-user-tie"></i> 
+        <span>User Details</span>
+        <i class="fa-solid fa-eye" style="margin-left: 50px;"></i>
+    </h2>
+    
+    <div class="table">
+        <table>
+            <tr>
+                <th>Raised By:</th>
+                <td>{{ object.ticket_raiser.first_name }}</td>
+            </tr>
+            <tr>
+                <th>Email:</th>
+                <td>{{ object.ticket_raiser.email }}</td>
+            </tr>
+            <tr>
+                <th>Department:</th>
+                <td>{{ object.ticket_raiser.profile.department }}</td>
+            </tr>
+            <tr>
+                <th>Contact:</th>
+                <td>{{ object.ticket_raiser.profile.phone }} || {{ object.ticket_raiser.profile.ext }}</td>
+            </tr>
+            <tr>
+                <th>Address:</th>
+                <td>{{ object.ticket_raiser.profile.location }}, {{ object.ticket_raiser.profile.floor }}</td>
+            </tr>
+        </table>
+    </div>
+</article>
+
+
+<article class="section">
+    <h2 class="section-heading">
+        <i class="fas fa-file-alt"></i> 
+        <span> Ticket Details</span>
+        <i class="fa-solid fa-eye" style="margin-left: 50px;"></i>
+    </h2>
+    <div class="table">
+        <table>
+            <tr>
+                <th>Ticket No:</th>
+                <td style="font-weight: bold;">
+                    <span style="color: #800000;">{{ formatted_ticket_id }}</span>
+                </td>
+            </tr>
+            <tr>
+                <th>Status:</th>
+                <td>{{ object.status }}</td>
+            </tr>
+
+            
+            <tr class="form-row">
+                <th>Form Ref:</th>
+                {% if object.form_link and object.created_via == 'AUTOMATED' %}
+                    <td style="font-weight: bold;">
+                        <a href="{{ object.form_link }}" class="form-link">
+                            {{ object.reference_form }}
+                        </a>
+                    </td>
+                {% else %}
+                    <td style="font-weight: bold;">
+                        <a>
+                            {{ object.reference_form }}
+                        </a>
+                    </td>
+                {% endif %}
+            </tr>
+            <style>
+                .form-link {
+                    color: #008000;
+                    text-decoration: none;
+                    padding: 8px 12px;
+                    border: 2px solid #008000;
+                    border-radius: 4px;
+                    transition: background-color 0.3s, color 0.3s, transform 0.3s;
+                    display: inline-block;
+                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+                }
+            
+                .form-link:hover {
+                    background-color: #e0f7e0; /* Light green background on hover */
+                    color: #005700; /* Darker green on hover */
+                    transform: translateY(-2px); /* Lift effect on hover */
+                }
+            </style>
+               
+            <tr>
+                <th>IP Address:</th>
+                <td>{{ object.ip_address }}</td>
+            </tr>
+            <tr>
+                <th>Category:</th>
+                <td>{{ object.problem_category }}</td>
+            </tr>
+            <tr>
+                <th>Description:</th>
+                <td>{{ object.problem_description|safe }}</td>
+            </tr>
+            <tr>
+                <th>Attachment:</th>
+                <td>
+                    {% if object.eticket_attachment %}
+                        <a href="{{ object.eticket_attachment.url }}" target="_blank" rel="noopener noreferrer" style="font-weight: bold; text-decoration: underline;">
+                            View Attachment
+                        </a>
+                    {% else %}
+                        No attachment available.
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    </div>
+</article>
+
+<article class="section">
+    <h2 class="section-heading">
+        <i class="fas fa-user-cog"></i> 
+        Working Engineer 
+        <i class="fa-solid fa-eye" style="margin-left: 50px;"></i>
+    </h2>
+    <div class="table-container">
+        <table>
+            {% if eticket.e_assign.exists %}
+                <tr>
+                    <th>Serial</th>
+                    <th>Name</th>
+                    <th>Designation</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                </tr>
+                {% for a in eticket.e_assign.all %}
+                    {% if forloop.last %}
+                        <tr style="color:green; font-weight: bold;">
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ a.engineer.first_name }}</td>
+                            <td>{{ a.engineer.profile.position }}</td>
+                            <td>{{ a.engineer.email }}</td>
+                            <td style="padding: 10px;">
+                                <span style="font-weight: bold;">
+                                   <i class="glyphicon glyphicon-phone"></i> Phone: 
+                                </span> 
+                                {{ a.engineer.profile.phone }}<br>
+                                <span style="font-weight: bold;">
+                                    <i class="glyphicon glyphicon-phone-alt"></i> Ext. 
+                                </span> 
+                                {{ a.engineer.profile.ext }}
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                <tr style="background-color: bisque;">
+                    <th colspan="5">Previous Assigned Engineer</th>
+                </tr>
+                {% for a in eticket.e_assign.all %}
+                    {% if not forloop.last %}
+                        <tr style="color:blueviolet; font-weight: bold;">
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ a.engineer.first_name }}</td>
+                            <td>{{ a.engineer.profile.position }}</td>
+                            <td>{{ a.engineer.email }}</td>
+                            <td style="padding: 10px;">
+                                <span style="font-weight: bold;">
+                                   <i class="glyphicon glyphicon-phone"></i> Phone: 
+                                </span> 
+                                {{ a.engineer.profile.phone }}<br>
+                                <span style="font-weight: bold;">
+                                    <i class="glyphicon glyphicon-phone-alt"></i> Ext. 
+                                </span> 
+                                {{ a.engineer.profile.ext }}
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="5">No engineers assigned</td>
+                </tr>
+            {% endif %}
+        </table>
+    </div>
+    <div class="btn-container">
+        {% if user.is_staff and admin_history == 'not_signed' %}
+            <a class="btn btn-info mt-1 mb-1" href="{% url 'eassisn-create' object.id %}">Assign / Forward to <i class="glyphicon glyphicon-arrow-right"></i></a>
+        {% endif %}
+    </div>
+</article>
+
+
+<article class="section">
+    <h2 class="section-heading">
+        <i class="fa-solid fa-list"></i> 
+        Ticket Summary  
+        <i class="fa-solid fa-eye" style="margin-left: 50px;"></i>
+    </h2>
+    <div class="table-container">
+        <table>
+            <tr>
+                <th>Solver name:</th>
+                <td>{{ object.e_solve.solver.first_name }}</td>
+            </tr>
+            <tr>
+                <th>Contact</th>
+                <td>{{ object.e_solve.solver.email }} || {{ object.e_solve.solver.profile.phone }} || {{ object.e_solve.solver.profile.ext }}</td>
+            </tr>
+            <tr>
+                <th>Solve Type:</th>
+                <td>{{ object.e_solve.solve_type }}</td>
+            </tr>
+            <tr>
+                <th>Note:</th>
+                <td>{{ object.e_solve.note }}</td>
+            </tr>
+            <tr>
+                <th>Solved Time:</th>
+                <td>{{ object.e_solve.date_solved|date:"d M' Y P" }}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="btn-container">
+        {% if admin_history == 'not_signed' and user.is_staff %}
+            <a class="btn btn-danger" href="{% url 'esolve-create' object.id %}"> <i class="fa-solid fa-check"></i> Resolve</a>
+        {% endif %}
+    </div>
+</article>
+
+
+<article class="section">
+    <h2 class="section-heading">
+        <i class="fa-brands fa-rocketchat"></i> 
+        Discussion Panel User vs Engineer 
+        <i class="fa-solid fa-eye" style="margin-left: 50px;"></i>
+    </h2>
+
+    <div class="table-container">
+        {% if eticket.e_discuss.exists %}
+            {% for d in eticket.e_discuss.all %}
+                <h5 style="color: coral">{{ d.discusser.first_name }}</h5>
+                <h6>{{ d.discussion }}</h6>
+                <small>at {{ d.date_discussed|date:"d M' Y P" }}</small>
+                <hr>
+            {% endfor %}
+        {% else %}
+            <p>No discussions found</p>
+        {% endif %}
+    </div>
+    <div class="btn-container">
+        {% if admin_history == 'not_signed' %}
+            <a class="btn btn-success" href="{% url 'ediscuss-create' object.id %}"><i class="fa-regular fa-comment"></i> Start Discussion</a>
+        {% endif %}
+    </div>
+</article>
+
+{% if user.is_staff %}
+
+<article class="section">
+    <h2 class="section-heading">
+        <i class="fas fa-sync-alt"></i> 
+        Internal Update 
+        <i class="fa-solid fa-eye" style="margin-left: 50px;"></i>
+    </h2>
+        <div class="table-container">
+            {% for d in eticket.e_internal.all %}
+                <div class="border-bottom mb-4">
+                    <h4 style="color: rgb(80, 135, 255)">{{ d.admin.first_name }}</h4>
+                    <p>{{ d.discussion }}</p>
+                    <small>Updated at {{ d.date_discussed|date:"d M Y P" }}</small>
+                </div>
+            {% empty %}
+                <p>No internal updates</p>
+            {% endfor %}
+        </div>
+        <div class="btn-container">
+            {% if admin_history == 'not_signed' %}
+                <a class="btn btn-primary" href="{% url 'einternal-create' object.id %}"><i class="fa-solid fa-pen-nib"></i>  Update</a>
+            {% endif %}
+        </div>
+    </article>
+{% endif %}
+{% endblock %} {% endcomment %}

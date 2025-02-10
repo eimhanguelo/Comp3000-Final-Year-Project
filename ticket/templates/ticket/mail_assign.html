@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Assignment Notification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #4CAF50;
+            font-size: 20px;
+            margin-bottom: 20px;
+            text-decoration: underline; /* Underline the heading */
+        }
+
+        .content {
+            text-align: left;
+            margin: 20px auto;
+            max-width: 600px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            width: 30%; /* Adjust th column width to 30% */
+        }
+
+        td {
+            width: 70%; /* Adjust td column width to 70% */
+        }
+
+        a {
+            color: #007BFF; /* Default link color */
+            text-decoration: none; /* No underline by default for links */
+            font-weight: bold;
+        }
+
+        /* Remove underline for Ticket ID links */
+        td a {
+            text-decoration: none; /* Prevent underline on Ticket ID */
+        }
+
+        /* Apply underline only to the "Click here" link */
+        td a.click-here {
+            text-decoration: underline; /* Always underline this link */
+        }
+
+        /* Hover effect for other links */
+        a:hover {
+            text-decoration: underline; /* Underline only on hover for other links */
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        /* Remove background color for specific paragraphs */
+        .content p {
+            background-color: transparent; /* Remove background color */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 20px;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            table th, table td {
+                font-size: 14px;
+                padding: 8px;
+            }
+        }
+
+        .escalation-matrix {
+            background-color: transparent; /* Remove background color */
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+        }
+
+        .escalation-matrix ul {
+            padding-left: 20px;
+        }
+
+        .escalation-matrix li {
+            
+            margin-bottom: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>E-Ticket Assigned Successfully!</h1>
+
+    <div class="content">
+        <p>Dear <strong style="color: coral;">{{ ticket_raiser_name }}</strong>,</p>
+
+        <p>Your support ticket has been successfully assigned to the following engineer. Below are the details of the assignment:</p>
+
+        <table style="margin: 0 auto;">
+          <tr >
+              <th style="text-align: center;">Engineer Name</th>
+              <th style="text-align: center;">Phone Number</th>
+              <th style="text-align: center;">Extension</th>
+          </tr>
+          <tr>
+              <td style="text-align: center;">{{ engineer }}</td>
+              <td style="text-align: center;">{{ phone }}</td>
+              <td style="text-align: center;">{{ ext }}</td>
+          </tr>
+        </table>
+        
+              <!-- E-Ticket Escalation Matrix Section -->
+              <div class="escalation-matrix">
+                <strong style="color: green;">Escalation Matrix:</strong>
+                <ul>
+                    <li><strong>Step 1:</strong> <b style="color: #158372;">Assigned Engineer:</b> {{ engineer }} </li>
+                    <li><strong>Step 2:</strong> <b style="color: #158372;">Support Supervisor:</b> {{supervisor_name}} (on {{month}})</li>
+                </ul>
+            </div>
+    
+        <h2>Ticket Details:</h2>
+        <table>
+            <tr>
+                <th>Author's Name: </th>
+                <td>{{ ticket_raiser_name }}</td>
+            </tr>
+            <tr>
+                <th>Ticket Number:</th>
+                <td><b style="color: #007BFF;">{{ ticket_no }}</b></td>
+
+            </tr>
+            <tr>
+                <th>Problem Category:</th>
+                <td>{{ problem_category }}</td>
+            </tr>
+            <tr>
+                <th>Problem Details:</th>
+                <td>{{ problem_description|safe }}</td>
+            </tr>
+            <tr>
+                <th>View Ticket Status:</th>
+                <td><a href="{{ link }}" class="click-here" style="color: green;">Click Here</a></td>
+            </tr>
+        </table>
+
+        <p>We will notify you as soon as the engineer has made progress or resolved the issue. You can always check your ticket status using the link above.</p>
+    </div>
+    <br>
+
+    <div class="footer">
+        <p>Thank you for your patience and cooperation!</p>
+        <p><strong>DigitizeIT</strong></p>
+    </div>
+
+</body>
+</html>

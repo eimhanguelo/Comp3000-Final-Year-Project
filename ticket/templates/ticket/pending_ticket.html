@@ -1,0 +1,77 @@
+{% extends "blog/basep.html"%}
+{% load crispy_forms_tags %}
+{% block network %}
+{% load static %}
+
+<div> Form {{ form }} eticket : {{ eticket }}</div>
+
+<div class="card card-body">
+    <h1>Pending Tickets</h1>
+    <article class="media content-section">
+        <table id=""  class="display table table-striped table-bordered" align="center"  style="width:100%">
+            <thead>
+            <tr>
+                <th>Ticket No</th>
+                <th>User</th>
+                <th>Problem Category</th>
+                <th>Start date</th>
+                <th>Status</th>
+                <th>Assigned To</th>
+            </tr>
+
+            </thead>
+            <tbody>    
+                {% for t in tickets %}
+                   <tr>
+                        <td><a class="article-title" style="color: blueviolet" href="{% url 'ticket-detail' t.id %}"> <b>{{ t }}</b></a></td>
+                        <td>{{ t.ticket_raiser.first_name }}</td>
+                        <td align="left" ><a data-toggle="popover" data-trigger="hover" data-content="cfc" title="{{ t.problem_description }}" data-html="true">{{ t.problem_category }}</a>
+                        <td><small>{{ t.date_raised|date:"d M' y P" }}</small></td>
+
+                        <td style="color: chocolate"><b>Pending </b></td>
+                        <!-- <td><a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'assign-engineer' t.id %}">Assigning</a></td> -->
+                        <td>
+
+                    
+                                <button type="button"  class="btn btn-primary" style="background-color: #F0E68C; color: slateblue;"
+                                 hx-get="{% url 'assign-form' %}" hx-swap="beforeend" hx-target="#assignform" >
+                                    <i class="fas fa-plus"> Assign Engineer</i>
+                                </button>
+                              
+                                <div id="assignform"></div>
+                                <div>
+                                    {% for assign in assigns %}
+                                        {% include 'ticket/partials/assign_detail.html' %}
+                                    {% endfor %}
+                                </div>
+
+                    
+                    
+                            <!--------------------------------------select2---------------------------->
+                            <script type="text/javascript" src="{% static 'blog/jquery-3.5.1.min.js' %}"></script>
+                    
+                    
+                        </td>
+                       
+                   </tr>
+                {% endfor %}
+
+            </tbody>
+         </table>
+    </article>
+</div>
+
+
+    
+
+    
+
+
+    
+
+
+
+{% endblock %}
+
+
+

@@ -1,0 +1,95 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block network %}
+
+<div class="pagetitle">
+    <h1>Tracker</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'front' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">Admin</a></li>
+            <li class="breadcrumb-item">Tracker</li>
+            <li class="breadcrumb-item active">Details</li>
+        </ol>
+    </nav>
+</div>
+
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title d-flex align-items-center">
+                        <i class="bi bi-card-checklist me-2 text-primary"></i> Create Tracking Notes
+                    </h5>
+                    <form method="POST" class="p-4">
+                        {% csrf_token %}
+
+                        <!-- Section: Basic Information -->
+                        <h6 class="text-primary">Basic Information</h6>
+                        <hr class="my-3">
+                        <div class="row mb-3">
+                            <!-- Category field -->
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label for="id_category" class="form-label">
+                                            <i class="bi bi-tags me-1 text-info"></i>Category
+                                        </label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        {{ form.category|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Description field -->
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label for="id_description" class="form-label">
+                                            <i class="bi bi-card-text me-1 text-info"></i>Description
+                                        </label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        {{ form.description|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Remarks field -->
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label for="id_remarks" class="form-label">
+                                            <i class="bi bi-chat-text me-1 text-info"></i>Remarks
+                                        </label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        {{ form.remarks|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button Section -->
+                        <div class="text-center py-4">
+                            <a href="{% url 'tracker_list' %}" class="btn btn-outline-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-outline-success rounded-pill" aria-label="Submit Form">
+                                <i class="bi bi-check-circle me-2"></i> Submit
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock network %}
